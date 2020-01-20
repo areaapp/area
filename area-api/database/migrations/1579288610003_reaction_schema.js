@@ -8,7 +8,6 @@ class ReactionSchema extends Schema {
     this.create('reactions', (table) => {
       table.increments()
       table.timestamps()
-      table.integer('reaction_id').unsigned()
       table.string('name', 255).notNullable()
       table.string('desc', 255).notNullable()
       table.string('args', 255).notNullable()
