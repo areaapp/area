@@ -8,7 +8,7 @@ class ActionSchema extends Schema {
     this.create('actions', (table) => {
       table.increments()
       table.timestamps()
-      table.integer('id').unsigned()
+      table.integer('action_id').unsigned()
       table.string('name', 255).notNullable()
       table.string('desc', 255).notNullable()
       table.string('args', 255).notNullable()

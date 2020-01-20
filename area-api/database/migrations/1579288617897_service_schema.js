@@ -8,7 +8,7 @@ class ServiceSchema extends Schema {
     this.create('services', (table) => {
       table.increments()
       table.timestamps()
-      table.integer('id').unsigned()
+      table.integer('service_id').unsigned()
       table.string('name', 255).notNullable()
       table.string('desc', 255).notNullable()
       table.string('color', 255).notNullable()
