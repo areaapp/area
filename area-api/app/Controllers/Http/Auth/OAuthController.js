@@ -24,67 +24,57 @@ class OAuthController {
 
         return response.json({
             status: 'success',
-            data: service.authorizeUrl
+            data: service.getAuthorizeUrl(params.clientType)
         });
     }
 
-    getAccessTokenUrl({ params, response }) {
-        if (!(params.serviceName in Services)) {
-            return response.status(404).json({
-                status: 'error',
-                message: 'Service not found'
-            });
+    async signin({ auth, params, request, response }) {
+        const paramNames = ['authCode', 'clientType'];
+        const parameters = request.only(paramNames);
+
+        for (let paramName of paramNames) {
+            if (typeof parameters[paramName] === 'undefined') {
+                return response.status(400).json({
+                    status: 'error',
+                    message: paramName + ' invalid'
+                });
+            }
         }
 
         const service = Services[params.serviceName];
-
-        if (service.authType !== 'oauth') {
-            return response.status(400).json({
-                status: 'error',
-                message: 'This service does not use OAuth authentication'
-            });
-        }
+        const accessToken = await service.getAccessToken({
+            code: parameters.authCode,
+            clientType: parameters.clientType
+        });
+        const serviceUser = await service.getUser(accessToken);
 
         return response.json({
             status: 'success',
-            data: service.accessTokenUrl
+            data: accessToken
         });
-    }
-
-
-    async signin({ auth, request, response }) {
-        const serviceName = request.input('service', null);
-        const accessToken = request.input('accessToken', null);
-
-        if (serviceName === null || accessToken === null) {
-            return response.status(400).json({
-                status: 'error',
-                message: 'Service or access_token invalid'
-            });
-        }
-
-        const service = Services[serviceName];
-        const serviceUser = await service.getUser(accessToken);
 
         try {
             const user = await User.findByOrFail('email', serviceUser.email);
+
+            console.log(user);
+
             const jwt = await auth.generate(user);
 
             return response.json({
                 status: 'success',
-                data: token
-            });
+                data: jwt
+        });
         } catch (err) {
             const userInfos = {
                 username: serviceUser.username,
                 email: serviceUser.email,
-                login_source: serviceName
+                login_source: params.service
             };
 
             const user = await User.create(userInfos);
 
             const serviceInfos = {
-                name: serviceName,
+                name: params.serviceName,
                 oauth_token: accessToken,
                 oauth_refresh_token: null
             };

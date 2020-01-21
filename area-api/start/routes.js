@@ -17,6 +17,8 @@
 const Route = use('Route')
 const User = use('App/Models/User')
 const Service = use('App/Models/Service')
+const ApiInfos = require('../oauth.config.js');
+const axios = require('axios');
 
 Route.group(() => {
     /**
@@ -52,10 +54,9 @@ Route.group(() => {
     Route.post('signin', 'Auth/AuthController.signin');
 
 
-    Route.post('oauth/signin', 'Auth/OAuthController.signin');
+    Route.post('oauth/signin/:serviceName', 'Auth/OAuthController.signin');
 
-    Route.get('oauth/authorize/:serviceName', 'Auth/OAuthController.getAuthorizeUrl');
-    Route.get('oauth/access_token/:serviceName', 'Auth/OAuthController.getAccessTokenUrl');
+    Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl');
 }).prefix('auth');
 
 Route.group(() => {
@@ -93,6 +94,12 @@ Route.get('services', async ({ response }) => {
 });
 
 
+Route.get('test', ({ response }) => {
+    return response.json({
+        status: 'success',
+        data: ApiInfos
+    });
+});
 
 
 
@@ -103,8 +110,12 @@ Route.get('services', async ({ response }) => {
 
 
 
-
-Route.get('/auth/social/callback/:serviceName', ({ params, request }) => {
+Route.get('/auth/social/callback/:serviceName', async ({ params, request }) => {
     console.log(params.serviceName);
     console.log(request.all());
+
+    await axios.post('http://localhost:8081/auth/oauth/signin/' + params.serviceName, {
+        authCode: request.all().code,
+        clientType: 'web'
+    });
 });

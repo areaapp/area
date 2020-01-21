@@ -72,32 +72,6 @@ class AuthController {
             });
         }
     }
-
-
-    /**
-     * Signin a user
-     *
-     * @function socialSigninOrSignup
-     * @param {Object} request - Request
-     * @param {Object} response - Response
-     * @return response
-     */
-    async socialSigninOrSignup({ auth, session, request, params, response}) {
-        const { serviceName, clientUrl } = request.only([
-            'service',
-            'clientUrl'
-        ]);
-
-        if (!(serviceName in Services) || Services[serviceName].authType !== 'oauth') {
-            return resonse.status(400).json({
-                status: 'error',
-                message: 'Service not found or not available for signin/signup'
-            });
-        }
-
-        session.put('clientUrl', clientUrl);
-        response.redirect('/auth/social/redirect/' + serviceName);
-    }
 }
 
 module.exports = AuthController

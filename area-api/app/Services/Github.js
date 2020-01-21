@@ -1,15 +1,45 @@
 'use strict'
 
-const Env = use('Env');
 const axios = require('axios');
+const querystring = require('querystring');
+const ApiInfos = require('../../oauth.config.js');
 
 module.exports = {
-     authType: 'oauth',
-     name: 'Github',
-     description: 'plus tard',
-     baseUrl: 'www.github.com',
-     authorizeUrl: "https://github.com/login/oauth/authorize?scope=user&client_id=",
-     accessTokenUrl: 'https://github.com/login/oauth/access_token',
+    authType: 'oauth',
+    name: 'Github',
+    description: 'plus tard',
+    baseUrl: 'www.github.com',
+    authorizeUrl: "https://github.com/login/oauth/authorize",
+    accessTokenUrl: 'https://github.com/login/oauth/access_token',
+    scopeSeparator: '%20',
+    scopes: [
+        'user'
+    ],
+
+    getAuthorizeUrl(clientType) {
+        const scopes = 'scope=' + this.scopes.join(this.scopeSeparator);
+        const client_id = 'client_id=' + ApiInfos[clientType].github.client_id;
+        const redirect_uri = 'redirect_uri=' + ApiInfos[clientType].github.redirect_uri;
+        const url = this.authorizeUrl + '?' + [scopes, client_id, redirect_uri].join('&');
+        return url;
+    },
+
+    async getAccessToken({ code, clientType }) {
+        const data = querystring.stringify({
+            client_id: ApiInfos[clientType].github.client_id,
+            client_secret: ApiInfos[clientType].github.client_secret,
+            code,
+            grant_type: 'authorization_code',
+            redirect_uri: ApiInfos[clientType].github.redirect_uri
+        });
+
+        try {
+            const response = await axios.post(this.accessTokenUrl,data);
+            return response.data.access_token;
+        } catch (err) {
+            console.log(err);
+        }
+    },
 
     async getUser(access_token) {
         const url = "https://api.github.com/user";
