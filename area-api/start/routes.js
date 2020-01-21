@@ -54,7 +54,7 @@ Route.group(() => {
 
     Route.post('oauth/signin', 'Auth/OAuthController.signin');
 
-    Route.get('oauth/authorization/:serviceName', 'Auth/OAuthController.getAuthorizeUrl');
+    Route.get('oauth/authorize/:serviceName', 'Auth/OAuthController.getAuthorizeUrl');
     Route.get('oauth/access_token/:serviceName', 'Auth/OAuthController.getAccessTokenUrl');
 }).prefix('auth');
 
@@ -105,5 +105,6 @@ Route.get('services', async ({ response }) => {
 
 
 Route.get('/auth/social/callback/:serviceName', ({ params, request }) => {
-    console.log(params.serviceName + '  ' + request.all().code);
+    console.log(params.serviceName);
+    console.log(request.all());
 });

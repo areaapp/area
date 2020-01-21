@@ -6,9 +6,9 @@ const axios = require('axios');
 module.exports = {
      authType: 'oauth',
      name: 'Github',
-     desc: 'plus tard',
+     description: 'plus tard',
      baseUrl: 'www.github.com',
-     authorizeUrl: "https://github.com/login/oauth/authorize?scope=user",
+     authorizeUrl: "https://github.com/login/oauth/authorize?scope=user&client_id=",
      accessTokenUrl: 'https://github.com/login/oauth/access_token',
 
     async getUser(access_token) {

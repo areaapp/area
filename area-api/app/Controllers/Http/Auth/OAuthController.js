@@ -5,7 +5,7 @@ const Service = use('App/Models/Service');
 const User = use('App/Models/User');
 
 class OAuthController {
-    getAuthorizationUrl({ params, response }) {
+    getAuthorizeUrl({ params, response }) {
         if (!(params.serviceName in Services)) {
             return response.status(404).json({
                 status: 'error',
