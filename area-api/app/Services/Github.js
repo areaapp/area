@@ -19,26 +19,21 @@ module.exports = {
     getAuthorizeUrl(clientType) {
         const scopes = 'scope=' + this.scopes.join(this.scopeSeparator);
         const client_id = 'client_id=' + ApiInfos[clientType].github.client_id;
-        const redirect_uri = 'redirect_uri=' + ApiInfos[clientType].github.redirect_uri;
-        const url = this.authorizeUrl + '?' + [scopes, client_id, redirect_uri].join('&');
+        const url = this.authorizeUrl + '?' + [scopes, client_id].join('&');
         return url;
     },
 
     async getAccessToken({ code, clientType }) {
-        const data = querystring.stringify({
+        const data = {
             client_id: ApiInfos[clientType].github.client_id,
             client_secret: ApiInfos[clientType].github.client_secret,
-            code,
-            grant_type: 'authorization_code',
-            redirect_uri: ApiInfos[clientType].github.redirect_uri
-        });
+            code
+        };
 
-        try {
-            const response = await axios.post(this.accessTokenUrl,data);
-            return response.data.access_token;
-        } catch (err) {
-            console.log(err);
-        }
+        const response = await axios.post(this.accessTokenUrl, data, {
+            headers: {'Accept': 'application/json'}
+        });
+        return response.data.access_token;
     },
 
     async getUser(access_token) {

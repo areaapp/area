@@ -42,39 +42,48 @@ class OAuthController {
         }
 
         const service = Services[params.serviceName];
-        const accessToken = await service.getAccessToken({
-            code: parameters.authCode,
-            clientType: parameters.clientType
-        });
+        let accessToken = null;
+        try {
+            accessToken = await service.getAccessToken({
+                code: parameters.authCode,
+                clientType: parameters.clientType
+            });
+        } catch (err) {
+            return response.status(400).json({
+                status: 'error',
+                message: 'Cannot retreive access_token'
+            });
+        }
         const serviceUser = await service.getUser(accessToken);
 
-        return response.json({
-            status: 'success',
-            data: accessToken
-        });
+        const userService = await Service.query()
+              .where('email', serviceUser.email)
+              .where('name', params.serviceName)
+              .first();
 
-        try {
-            const user = await User.findByOrFail('email', serviceUser.email);
-
+        if (userService !== null) {
+            const user = await userService.user().fetch();
             console.log(user);
-
             const jwt = await auth.generate(user);
 
             return response.json({
                 status: 'success',
                 data: jwt
-        });
-        } catch (err) {
+            });
+
+        } else {
             const userInfos = {
                 username: serviceUser.username,
                 email: serviceUser.email,
-                login_source: params.service
+                password: null,
+                login_source: params.serviceName
             };
 
             const user = await User.create(userInfos);
 
             const serviceInfos = {
                 name: params.serviceName,
+                email: serviceUser.email,
                 oauth_token: accessToken,
                 oauth_refresh_token: null
             };

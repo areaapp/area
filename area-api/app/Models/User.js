@@ -46,6 +46,10 @@ class User extends Model {
     static get updatedAtColumn () {
         return null;
     }
+
+    static get hidden() {
+        return ['password'];
+    }
 }
 
 module.exports = User

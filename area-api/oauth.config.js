@@ -21,6 +21,11 @@ module.exports = {
             client_id: 'smm2hzu9tfazz1c83my2pfvm859cim',
             client_secret: '3roms3nf98f0xnkmxhzmhfmg6e4rc9',
             redirect_uri: 'http://localhost:8081/auth/social/callback/twitch'
+        },
+        dropbox: {
+            client_id: 'g7mmh6rxdwvughb',
+            client_secret: 'yazpg66z6gaxome',
+            redirect_uri: 'http://localhost:8081/auth/social/callback/dropbox'
         }
     },
 

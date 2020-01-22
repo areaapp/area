@@ -70,7 +70,7 @@ Route.group(() => {
      * @apiParam {String} token OAuth token of the service
      * @apiParam {String} refresh_token OAuth refresh_token of the service
      */
-    Route.post('services/:name', 'UserServiceController.addService').middleware('auth');
+    Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
 }).prefix('me');
 
 
@@ -93,11 +93,26 @@ Route.get('services', async ({ response }) => {
     });
 });
 
+Route.get('user/:id', async ({ params, response }) => {
+    const service = await Service.find(params.id);
 
-Route.get('test', ({ response }) => {
+    const user = await service.user().fetch();
+
+    console.log(user);
+
     return response.json({
         status: 'success',
-        data: ApiInfos
+        data: user
+    });
+});
+
+Route.get('test', async ({ response }) => {
+    const t = await Service.first();
+
+    console.log(t);
+    return response.json({
+        status: 'success',
+        data: t
     });
 });
 
@@ -114,8 +129,8 @@ Route.get('/auth/social/callback/:serviceName', async ({ params, request }) => {
     console.log(params.serviceName);
     console.log(request.all());
 
-    await axios.post('http://localhost:8081/auth/oauth/signin/' + params.serviceName, {
-        authCode: request.all().code,
-        clientType: 'web'
-    });
+    // await axios.post('http://localhost:8081/auth/oauth/signin/' + params.serviceName, {
+    //     authCode: request.all().code,
+    //     clientType: 'web'
+    // });
 });

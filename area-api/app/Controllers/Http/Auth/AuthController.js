@@ -51,8 +51,7 @@ class AuthController {
      * @param {Object} response - Response
      * @return response
      */
-    async signin({ auth, request, params, response}) {
-        console.log('signin');
+    async signin({ auth, request, response}) {
         const { email, password } = request.only([
             'email',
             'password',

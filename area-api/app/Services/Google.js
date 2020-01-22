@@ -6,10 +6,10 @@ const ApiInfos = require('../../oauth.config.js');
 
 module.exports = {
     authType: 'oauth',
-     name: 'Gooel',
-     description: 'plus tard',
-     baseUrl: 'www.google.com',
-     authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+    name: 'Google',
+    description: 'plus tard',
+    baseUrl: 'www.google.com',
+    authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
     accessTokenUrl: 'https://oauth2.googleapis.com/token',
     scopeSeparator: '%20',
     scopes: [

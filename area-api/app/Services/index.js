@@ -5,4 +5,5 @@ module.exports = {
     'office': require('./Office.js'),
     'twitch': require('./Twitch.js'),
     'google': require('./Google.js'),
+    'dropbox': require('./Dropbox.js'),
 };
