@@ -14,11 +14,9 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
-const User = use('App/Models/User')
-const Service = use('App/Models/Service')
-const ApiInfos = require('../oauth.config.js');
-const axios = require('axios');
+const Route = use('Route');
+const User = use('App/Models/User');
+const Service = use('App/Models/Service');
 
 Route.group(() => {
     /**
@@ -50,12 +48,51 @@ Route.group(() => {
      * @apiSuccess {String} type Type
      * @apiSuccess {String} token Token
      * @apiSuccess {String} refreshToken Refresh token
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "type": "bearer",
+     *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE4LCJpYXQiOjE1NzI3MTU5ODJ9.L3oN-1dy9CiV2Uijaq8tAhuJ4Y4Sxlxs2dnaOg9ZWYA",
+     *       "refreshToken": null
+     *     }
      */
     Route.post('signin', 'Auth/AuthController.signin');
 
 
+    /**
+     * @api {post} /auth/oauth/signin/:service Signup/Signin a user with a oauth service
+     * @apiName ServiceSignin
+     * @apiGroup Auth
+     * @apiParam {String} service Service used to authenticate
+     * @apiParam {String} authCode OAuth code got from authorize url
+     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
+     *
+     * @apiSuccess {String} token Token
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "type": "bearer",
+     *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE4LCJpYXQiOjE1NzI3MTU5ODJ9.L3oN-1dy9CiV2Uijaq8tAhuJ4Y4Sxlxs2dnaOg9ZWYA",
+     *       "refreshToken": null
+     *     }
+     */
     Route.post('oauth/signin/:serviceName', 'Auth/OAuthController.signin');
 
+
+    /**
+     * @api {get} /auth/oauth/authorize_url/:service/:clientType Get authorization url for a service
+     * @apiName authorize_url
+     * @apiGroup Auth
+     * @apiParam {String} service service name
+     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
+     *
+     * @apiSuccess {String} authorize_url
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "https://www.dropbox.com/oauth2/authorize?client_id=00000&redirect_uri=http://localhost:8081/callback&response_type=code"
+     *     }
+     */
     Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl');
 }).prefix('auth');
 
@@ -67,61 +104,11 @@ Route.group(() => {
      * @apiGroup User
      * @apiHeader {String} authorization Bearer \<token\>
      * @apiParam {String} name Name of the service
-     * @apiParam {String} token OAuth token of the service
-     * @apiParam {String} refresh_token OAuth refresh_token of the service
+     * @apiParam {String} authCode OAuth code got from authorize url
+     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
      */
     Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
 }).prefix('me');
-
-
-
-Route.get('users', async ({ response }) => {
-    const users = await User.all();
-
-    return response.json({
-        status: 'success',
-        data: users
-    });
-});
-
-Route.get('services', async ({ response }) => {
-    const services = await Service.all();
-
-    return response.json({
-        status: 'success',
-        data: services
-    });
-});
-
-Route.get('user/:id', async ({ params, response }) => {
-    const service = await Service.find(params.id);
-
-    const user = await service.user().fetch();
-
-    console.log(user);
-
-    return response.json({
-        status: 'success',
-        data: user
-    });
-});
-
-Route.get('test', async ({ response }) => {
-    const t = await Service.first();
-
-    console.log(t);
-    return response.json({
-        status: 'success',
-        data: t
-    });
-});
-
-
-
-
-
-
-
 
 
 
