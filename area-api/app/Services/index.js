@@ -6,4 +6,5 @@ module.exports = {
     'twitch': require('./Twitch.js'),
     'google': require('./Google.js'),
     'dropbox': require('./Dropbox.js'),
+    'spotify': require('./Spotify.js'),
 };

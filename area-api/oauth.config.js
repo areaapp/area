@@ -26,7 +26,12 @@ module.exports = {
             client_id: 'g7mmh6rxdwvughb',
             client_secret: 'yazpg66z6gaxome',
             redirect_uri: 'http://localhost:8081/auth/social/callback/dropbox'
-        }
+        },
+        spotify: {
+            client_id: 'ec2600463a664ce5a7ed5b9861e8ecfa',
+            client_secret: 'e06c2ba9269d4f018ff616af65350155',
+            redirect_uri: 'http://localhost:8081/auth/social/callback/imgur'
+        },
     },
 
     android: {
