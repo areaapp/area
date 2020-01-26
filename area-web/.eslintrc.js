@@ -20,7 +20,7 @@ module.exports = {
         "no-param-reassign": ["error", { "props": false }],
         "no-console": ["warn", { allow: ["warn", "error"] }],
         "indent": ["warn", 4],
-        "semi": "warn",
+        "semi": [1, "always"],
         "vue/singleline-html-element-content-newline": "off",
         "vue/require-prop-types": "off"
     },
