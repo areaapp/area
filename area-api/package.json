@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node ace test"
+      "test": "node ace test",
+      "doc": "apidoc -i start -f start/routes.js -o ../volumes/docs/api"
   },
   "keywords": [
     "adonisjs",

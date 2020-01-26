@@ -1,14 +1,15 @@
 'use strict'
 
 const axios = require('axios');
-const querystring = require('querystring');
 const ApiInfos = require('../../oauth.config.js');
 
 module.exports = {
     authType: 'oauth',
-    name: 'Github',
+    name: 'github',
+    displayName: 'Github',
     description: 'plus tard',
     baseUrl: 'www.github.com',
+    irregularAccessToken: true,
     authorizeUrl: "https://github.com/login/oauth/authorize",
     accessTokenUrl: 'https://github.com/login/oauth/access_token',
     scopeSeparator: '%20',
@@ -16,47 +17,51 @@ module.exports = {
         'user'
     ],
 
-    getAuthorizeUrl(clientType) {
-        const scopes = 'scope=' + this.scopes.join(this.scopeSeparator);
-        const client_id = 'client_id=' + ApiInfos[clientType].github.client_id;
-        const url = this.authorizeUrl + '?' + [scopes, client_id].join('&');
-        return url;
-    },
-
-    async getAccessToken({ code, clientType }) {
+    async getAccessToken(code, clientType) {
         const data = {
-            client_id: ApiInfos[clientType].github.client_id,
-            client_secret: ApiInfos[clientType].github.client_secret,
-            code
+            client_id: ApiInfos[clientType][this.name].client_id,
+            client_secret: ApiInfos[clientType][this.name].client_secret,
+            code,
+            grant_type: 'authorization_code',
+            redirect_uri: ApiInfos[clientType][this.name].redirect_uri
         };
 
-        const response = await axios.post(this.accessTokenUrl, data, {
-            headers: {'Accept': 'application/json'}
-        });
-        return response.data.access_token;
+        try {
+            const response = await axios.post(this.accessTokenUrl, data, {
+                headers: {'Accept': 'application/json'}
+            });
+            return response.data.access_token;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
     },
 
     async getUser(access_token) {
         const url = "https://api.github.com/user";
-        const response = await axios.get(url, {
-            headers: {'Authorization': 'token ' + access_token}
-        });
 
-        const email = await this.getEmail(access_token);
-        response.data.email = email.email;
+        try {
+            const response = await axios.get(url, {
+                headers: {'Authorization': 'token ' + access_token}
+            });
 
-        const user = {
-            username: response.data.login,
-            email: response.data.email,
+            const email = await this.getEmail(access_token);
+            response.data.email = email.email;
+
+            return {
+                username: response.data.login,
+                email: response.data.email,
+            }
+        } catch (err) {
+            console.log(err);
+            return null;
         }
-
-        return user;
     },
 
     async getEmail(access_token) {
         const emailUrl = "https://api.github.com/user/emails";
         const emailResponse = await axios.get(emailUrl, {
-            headers: {'Authorization': 'token ' + access_token}
+            headers: {'Authorization': 'Bearer ' + access_token}
         });
 
         return emailResponse.data.find(email => email.verified && email.primary);

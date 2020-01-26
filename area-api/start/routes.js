@@ -17,15 +17,19 @@
 const Route = use('Route');
 const User = use('App/Models/User');
 const Service = use('App/Models/Service');
+const axios = require('axios');
 
 Route.group(() => {
     /**
-     * @api {post} /auth/signin Signin a user
-     * @apiName Signin
+     * @api {post} /auth/signup Signup a user using basic authentication
+     * @apiName Signup
      * @apiGroup Auth
+     * @apiParam {String} username username
+     * @apiParam {String} password password
+     * @apiParam {String} email email
      *
-     * @apiSuccess {String} type Type
-     * @apiSuccess {String} token Token
+     * @apiSuccess {String} type Token type
+     * @apiSuccess {String} token JWT token
      * @apiSuccess {String} refreshToken Refresh token
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
@@ -38,15 +42,14 @@ Route.group(() => {
     Route.post('signup', 'Auth/AuthController.signup');
 
     /**
-     * @api {post} /auth/signup Signup a user
-     * @apiName Signup
+     * @api {post} /auth/signin Signin a user using basic authentication
+     * @apiName Signin
      * @apiGroup Auth
-     * @apiParam {String} username username
      * @apiParam {String} password password
      * @apiParam {String} email email
      *
-     * @apiSuccess {String} type Type
-     * @apiSuccess {String} token Token
+     * @apiSuccess {String} type Token type
+     * @apiSuccess {String} token JWT token
      * @apiSuccess {String} refreshToken Refresh token
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
@@ -67,7 +70,9 @@ Route.group(() => {
      * @apiParam {String} authCode OAuth code got from authorize url
      * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
      *
-     * @apiSuccess {String} token Token
+     * @apiSuccess {String} type Token type
+     * @apiSuccess {String} token JWT token
+     * @apiSuccess {String} refreshToken Refresh token
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
@@ -83,10 +88,10 @@ Route.group(() => {
      * @api {get} /auth/oauth/authorize_url/:service/:clientType Get authorization url for a service
      * @apiName authorize_url
      * @apiGroup Auth
-     * @apiParam {String} service service name
+     * @apiParam {String} service Service name
      * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
      *
-     * @apiSuccess {String} authorize_url
+     * @apiSuccess {String} authorize_url Url where to redirect the client
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
@@ -112,12 +117,20 @@ Route.group(() => {
 
 
 
-Route.get('/auth/social/callback/:serviceName', async ({ params, request }) => {
+Route.get('/auth/social/callback/:serviceName', async ({ params, request, response }) => {
     console.log(params.serviceName);
     console.log(request.all());
 
-    // await axios.post('http://localhost:8081/auth/oauth/signin/' + params.serviceName, {
-    //     authCode: request.all().code,
-    //     clientType: 'web'
-    // });
+    try {
+        console.log(await axios.post('http://localhost:8081/auth/oauth/signin/' + params.serviceName, {
+        authCode: request.all().code,
+        clientType: 'web'
+        }));
+    } catch (err) {
+        //console.log(err);
+        return response.status(400).json({
+            status: 'error',
+            message: '?'
+        });
+    }
 });

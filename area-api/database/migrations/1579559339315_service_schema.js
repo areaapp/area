@@ -9,9 +9,9 @@ class ServiceSchema extends Schema {
             table.increments();
             table.integer('user_id').unsigned().references('id').inTable('users');
             table.string('name', 80).notNullable();
-            table.string('email').nullable();
-            table.string('oauth_token').nullable();
-            table.string('oauth_refresh_token').nullable();
+            table.string('email', 255).nullable();
+            table.text('oauth_token').nullable();
+            table.text('oauth_refresh_token').nullable();
         })
     }
 
