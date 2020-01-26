@@ -116,6 +116,48 @@ Route.group(() => {
 }).prefix('me');
 
 
+Route.group(() => {
+
+    /**
+     * @api {get} /services Get all services models
+     * @apiName Services
+     * @apiGroup Service
+     * @apiSuccess {String} authType Type of authentication used by the service
+     * @apiSuccess {String} name Name of the service to send to the server
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} Description Description of the service
+     * @apiSuccess {String} baseUrl Url of the service
+     * @apiSuccess {String} iconName Name of the icon representing the service
+     * @apiSuccess {String} foreground Foreground color associated to the service
+     * @apiSuccess {String} background Background color associated to the service
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       [
+     *         {
+     *           "authType": "oauth",
+     *           "name": "github",
+     *           "displayName": "Github",
+     *           "description": "plus tard",
+     *           "baseUrl": "www.github.com",
+     *           "iconName": "github-circle",
+     *           "foreground": "",
+     *           "background": ""
+     *         },
+     *         {
+     *           "authType": "oauth",
+     *           "name": "office",
+     *           "displayName": "Office 365",
+     *           "baseUrl": "www.office.com",
+     *           "iconName": "office",
+     *           "foreground": "",
+     *           "background": ""
+     *         }
+     *       ]
+     *     }
+     */
+    Route.get('/', 'ServiceController.getServices');
+}).prefix('services');
 
 Route.get('/auth/social/callback/:serviceName', async ({ params, request, response }) => {
     console.log(params.serviceName);
