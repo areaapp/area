@@ -54,6 +54,7 @@ services:
     restart: always
     volumes:
       - v-releases:/opt/area/releases
+      - v-docs:/opt/area/docs
 
   # Area android build
   release_android:
@@ -61,7 +62,6 @@ services:
     build: ./area-android
     volumes:
       - v-releases:/opt/area/releases
-      - v-docs:/opt/area/docs
 
 
 volumes:
