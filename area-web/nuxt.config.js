@@ -58,9 +58,9 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: process.env.API_PROXY,
-        browserUrl: process.env.API_PROXY,
-        prefix: process.env.API_PROXY,
+        baseURL: `${process.env.BASE_URL}/api`,
+        browserUrl: `${process.env.BASE_URL}/api`,
+        prefix: `${process.env.BASE_URL}/api`,
         proxy: true
     },
 

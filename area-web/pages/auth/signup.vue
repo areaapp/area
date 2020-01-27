@@ -52,22 +52,21 @@
                     <v-layout justify-center>
                         <v-flex xs6>
                             <v-layout justify-space-around>
-                                <div v-for="service in services">
-                                    <v-tooltip top>
-                                        <template v-slot:activator="{ on }">
+                                <div v-for="service in services"><!--
+                                                                      <v-tooltip top>
+                                                                      <template v-slot:activator="{ on }"> -->
                                             <v-btn
                                                 :color="service.background"
                                                 :to="`oauth/${service.name}/redirect`"
-                                                v-on="on"
                                                 elevation="0"
                                                 fab
                                                 nuxt
                                             >
                                                 <v-icon :color="service.foreground">mdi-star</v-icon>
-                                            </v-btn>
-                                        </template>
-                                        <span>Sign up with {{ service.displayName }}</span>
-                                    </v-tooltip>
+                                            </v-btn><!--
+                                                         </template>
+                                                         <span>Sign up with {{ service.displayName }}</span>
+                                                         </v-tooltip> -->
                                 </div>
                             </v-layout>
                         </v-flex>
@@ -88,9 +87,15 @@
 <script>
  export default {
      async asyncData ({ $axios }) {
-         const services = await $axios.$get('/services');
+         const data = { services: [] };
+         const res = await $axios.$get('/services');
 
-         return { services };
+         if (res.status !== 'sucess') {
+             return data;
+         }
+
+         data.services = res.data;
+         return data;
      }
  };
 </script>
