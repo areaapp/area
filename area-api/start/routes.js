@@ -157,6 +157,8 @@ Route.group(() => {
      *     }
      */
     Route.get('/', 'ServiceController.getServices');
+
+    Route.get('/:name', 'ServiceController.getService');
 }).prefix('services');
 
 Route.get('/auth/social/callback/:serviceName', async ({ params, request, response }) => {

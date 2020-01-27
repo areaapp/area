@@ -24,6 +24,26 @@ class ServiceController {
             data: services
         });
     }
+    
+    getService({ params, response }) {
+        const serviceRequested = params.name;
+        let service = null;
+
+        for (let serviceName in Services) {
+            if (Services[serviceName].name == serviceRequested) {
+                service = Services[serviceName];
+                return response.json({
+                    status: 'success',
+                    data: service
+                });
+            }
+        }
+
+        return response.json({
+            status: 'failed',
+            data: null
+        });
+    }
 }
 
 module.exports = ServiceController
