@@ -25,7 +25,7 @@
      },
 
      async asyncData ({ $axios, query, params }) {
-         const jwt = await $axios.$post('/auth/signin', {
+         const jwt = await $axios.$post(`/auth/oauth/signin/${params.service}`, {
              authCode: query.code,
              service: params.service,
              clientType: 'web'
