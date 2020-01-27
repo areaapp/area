@@ -8,11 +8,11 @@ RUN npm install
 RUN npm i -g adonis-cli
 RUN npm i -g apidoc
 
-RUN npm run doc
-
-COPY docs /opt/area/docs/api
-
 COPY . .
+
+# Build documentation
+RUN npm run doc
+COPY doc /opt/area/docs/api
 
 EXPOSE 5002
 
