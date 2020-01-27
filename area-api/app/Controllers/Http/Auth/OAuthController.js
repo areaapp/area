@@ -27,7 +27,7 @@ class OAuthController {
 
         return response.json({
             status: 'success',
-            data: encodeURIComponent(this.getServiceAuthorizeUrl(service, params.clientType))
+            data: this.getServiceAuthorizeUrl(service, params.clientType)
         });
     }
 
@@ -147,7 +147,7 @@ class OAuthController {
     getServiceAuthorizeUrl(service, clientType) {
         const scopes = service.scopes.length > 0 ? 'scope=' + service.scopes.join(service.scopeSeparator) : '';
         const client_id = 'client_id=' + ApiInfos[clientType][service.name].client_id;
-        const redirect_uri = 'redirect_uri=' + ApiInfos[clientType][service.name].redirect_uri;
+        const redirect_uri = 'redirect_uri=' + encodeURIComponent(ApiInfos[clientType][service.name].redirect_uri);
         const response_type = 'response_type=code';
         const url = service.authorizeUrl + '?' + [scopes, client_id, redirect_uri, response_type].filter(Boolean).join('&');
         return url;
