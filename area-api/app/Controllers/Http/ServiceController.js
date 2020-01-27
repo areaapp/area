@@ -24,24 +24,32 @@ class ServiceController {
             data: services
         });
     }
-    
+
     getService({ params, response }) {
-        const serviceRequested = params.name;
+        const serviceName = params.name;
         let service = null;
 
-        for (let serviceName in Services) {
-            if (Services[serviceName].name == serviceRequested) {
-                service = Services[serviceName];
-                return response.json({
-                    status: 'success',
-                    data: service
-                });
-            }
+        if (!(serviceName in Services)) {
+            return response.status(404).json({
+                status: 'error',
+                message: 'Service not found'
+            });
         }
 
-        return response.json({
-            status: 'failed',
-            data: null
+        service = ({
+            authType: Services[serviceName].authType,
+            name: Services[serviceName].name,
+            displayName: Services[serviceName].displayName,
+            description: Services[serviceName].description,
+            baseUrl: Services[serviceName].baseUrl,
+            iconName: Services[serviceName].iconName,
+            foreground: Services[serviceName].foreground,
+            background: Services[serviceName].background, 
+        })
+
+        return response.status(400).json({
+            status: 'success',
+            data: service
         });
     }
 }
