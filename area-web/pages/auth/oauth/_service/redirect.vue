@@ -1,19 +1,13 @@
 <template>
-    <div>hello</div>
+    <div>Redirecting</div>
 </template>
 
 <script>
- import config from '../../../../oauth.config.js';
-
  export default {
-     validate ({ params, query, store }) {
-         if (!config[params.service]) {
-             return false;
-         }
-         console.log(params);
-         console.log(query);
-         console.log(config[params.service]);
-         return true;
+     async asyncData ({ params, redirect, $axios }) {
+         const redirectUri = await $axios.$get(`/auth/oauth/authorize_url/${params.service}/web`);
+
+         redirect(redirectUri);
      }
  };
 </script>

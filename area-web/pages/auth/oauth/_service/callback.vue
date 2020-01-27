@@ -1,21 +1,37 @@
 <template>
-    <div>hello</div>
+    <div>
+        <h1>{{ service }}</h1>
+        <p>Code: {{ code }}</p>
+        <p>JWT: {{ jwt }}</p>
+    </div>
 </template>
 
 <script>
- import config from '../../../../oauth.config.js';
 
  export default {
      validate ({ params, query, store }) {
-         if (!config[params.service] ||
-             !query.access_token ||
-             !this.$store.state.userAction) {
+         if (!query.code) {
              return false;
          }
-         console.log(params);
-         console.log(query);
-         console.log(config[params.service]);
+
          return true;
+     },
+
+     data () {
+         return {
+             code: this.$route.query.code,
+             service: this.$route.params.service
+         };
+     },
+
+     async asyncData ({ $axios, query, params }) {
+         const jwt = await $axios.$post('/auth/signin', {
+             authCode: query.code,
+             service: params.service,
+             clientType: 'web'
+         });
+
+         return { jwt };
      }
  };
 </script>
