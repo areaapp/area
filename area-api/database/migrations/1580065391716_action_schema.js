@@ -8,7 +8,7 @@ class ActionSchema extends Schema {
     this.create('actions', (table) => {
       table.increments();
       table.json('args');
-      table.string('buffer', 1000).notNullable();
+      table.text('buffer').notNullable();
       table.integer('service_id').unsigned().notNullable().references('id').inTable('services');
     })
   }
