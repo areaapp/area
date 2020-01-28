@@ -36,7 +36,7 @@ class ServiceController {
             });
         }
 
-        service = ({
+        service = {
             authType: Services[serviceName].authType,
             name: Services[serviceName].name,
             displayName: Services[serviceName].displayName,
@@ -45,9 +45,9 @@ class ServiceController {
             iconName: Services[serviceName].iconName,
             foreground: Services[serviceName].foreground,
             background: Services[serviceName].background, 
-        })
+        };
 
-        return response.status(400).json({
+        return response.json({
             status: 'success',
             data: service
         });

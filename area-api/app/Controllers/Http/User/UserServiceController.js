@@ -2,6 +2,7 @@
 
 const Services = use('App/Services/index');
 const Service = use('App/Models/Service');
+const User = use('App/Models/User');
 
 class UserServiceController {
 
@@ -68,6 +69,19 @@ class UserServiceController {
         } catch (err) {
             console.log(err);
         }
+    }
+
+    async getUserInfos({ auth, response }) {
+
+        let userInfos = {
+            username: auth.user.username,
+            email: auth.user.email
+        };
+
+        return response.json({
+            status: 'success',
+            data: userInfos
+        });
     }
 }
 
