@@ -53,6 +53,38 @@ class ServiceController {
             data: service
         });
     }
+
+    getServiceActions({ params, response }) {
+        const serviceName = params.name;
+
+        if (!(serviceName in Services)) {
+            return response.status(404).json({
+                status: 'error',
+                message: 'Service not found'
+            });
+        }
+
+        return response.json({
+            status: 'success',
+            data: Area[serviceName].actions
+        });
+    }
+
+    getServiceReactions({ params, response }) {
+        const serviceName = params.name;
+
+        if (!(serviceName in Services)) {
+            return response.status(404).json({
+                status: 'error',
+                message: 'Service not found'
+            });
+        }
+
+        return response.json({
+            status: 'success',
+            data: Area[serviceName].reactions
+        });
+    }
 }
 
 module.exports = ServiceController
