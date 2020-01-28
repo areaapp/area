@@ -20,7 +20,7 @@ class ServiceController {
         }
 
         return response.json({
-            status: 'sucess',
+            status: 'success',
             data: services
         });
     }
@@ -44,7 +44,7 @@ class ServiceController {
             baseUrl: Services[serviceName].baseUrl,
             iconName: Services[serviceName].iconName,
             foreground: Services[serviceName].foreground,
-            background: Services[serviceName].background, 
+            background: Services[serviceName].background,
         })
 
         return response.status(400).json({

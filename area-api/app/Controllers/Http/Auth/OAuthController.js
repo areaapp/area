@@ -27,7 +27,7 @@ class OAuthController {
 
         return response.json({
             status: 'success',
-            data: encodeURIComponent(this.getServiceAuthorizeUrl(service, params.clientType))
+            data: this.getServiceAuthorizeUrl(service, params.clientType)
         });
     }
 
@@ -65,15 +65,18 @@ class OAuthController {
         try {
             const user = await User.create(userInfos);
             await user.services().create(serviceInfos);
-            return response.json({
+            return reponse.json({
                 status: 'success',
                 data: await auth.generate(user)
             });
         } catch (err) {
-            console.log(err);
+            let message = 'Cannot create the user. Please, try again later.';
+            if (err.routine === '_bt_check_unique') {
+                message = 'This email already exists.';
+            }
             return response.status(400).json({
                 status: 'error',
-                message: 'Cannot create the user. Please, try again later.'
+                message
             });
         }
     }
@@ -133,13 +136,10 @@ class OAuthController {
             });
         }
 
-        console.log(userService);
         if (userService !== null) {
-            console.log('connect');
-            return this.connectUser(auth, userService, response);
+            return await this.connectUser(auth, userService, response);
         } else {
-            console.log('create');
-            return this.createUser(auth, params.serviceName, serviceUser, accessToken, response);
+            return await this.createUser(auth, params.serviceName, serviceUser, accessToken, response);
         }
     }
 
@@ -147,7 +147,7 @@ class OAuthController {
     getServiceAuthorizeUrl(service, clientType) {
         const scopes = service.scopes.length > 0 ? 'scope=' + service.scopes.join(service.scopeSeparator) : '';
         const client_id = 'client_id=' + ApiInfos[clientType][service.name].client_id;
-        const redirect_uri = 'redirect_uri=' + ApiInfos[clientType][service.name].redirect_uri;
+        const redirect_uri = 'redirect_uri=' + encodeURIComponent(ApiInfos[clientType][service.name].redirect_uri);
         const response_type = 'response_type=code';
         const url = service.authorizeUrl + '?' + [scopes, client_id, redirect_uri, response_type].filter(Boolean).join('&');
         return url;
