@@ -156,7 +156,39 @@ Route.group(() => {
      *       ]
      *     }
      */
+
     Route.get('/', 'ServiceController.getServices');
+
+    /**
+     * @api {get} /services/:name Get a specific service model
+     * @apiName Services/:name
+     * @apiGroup Service
+     * @apiSuccess {String} authType Type of authentication used by the service
+     * @apiSuccess {String} name Name of the service to send to the server
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} Description Description of the service
+     * @apiSuccess {String} baseUrl Url of the service
+     * @apiSuccess {String} iconName Name of the icon representing the service
+     * @apiSuccess {String} foreground Foreground color associated to the service
+     * @apiSuccess {String} background Background color associated to the service
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *        {
+     *          "authType": "oauth",
+     *          "name": "github",
+     *          "displayName": "Github",
+     *          "description": "plus tard",
+     *          "baseUrl": "www.github.com",
+     *          "iconName": "github-circle",
+     *          "foreground": "",
+     *          "background": ""
+     *        }
+     *     }
+     */
+
+    Route.get('/:name', 'ServiceController.getService');
+
 }).prefix('services');
 
 Route.get('/auth/social/callback/:serviceName', async ({ params, request, response }) => {

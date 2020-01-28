@@ -65,15 +65,18 @@ class OAuthController {
         try {
             const user = await User.create(userInfos);
             await user.services().create(serviceInfos);
-            return response.json({
+            return reponse.json({
                 status: 'success',
                 data: await auth.generate(user)
             });
         } catch (err) {
-            console.log(err);
+            let message = 'Cannot create the user. Please, try again later.';
+            if (err.routine === '_bt_check_unique') {
+                message = 'This email already exists.';
+            }
             return response.status(400).json({
                 status: 'error',
-                message: 'Cannot create the user. Please, try again later.'
+                message
             });
         }
     }
@@ -133,13 +136,10 @@ class OAuthController {
             });
         }
 
-        console.log(userService);
         if (userService !== null) {
-            console.log('connect');
-            return this.connectUser(auth, userService, response);
+            return await this.connectUser(auth, userService, response);
         } else {
-            console.log('create');
-            return this.createUser(auth, params.serviceName, serviceUser, accessToken, response);
+            return await this.createUser(auth, params.serviceName, serviceUser, accessToken, response);
         }
     }
 
