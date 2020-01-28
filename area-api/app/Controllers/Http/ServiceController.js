@@ -49,7 +49,7 @@ class ServiceController {
         service.actions = actions;
         service.reactions = reactions;
 
-        return response.status(400).json({
+        return response.json({
             status: 'success',
             data: service
         });

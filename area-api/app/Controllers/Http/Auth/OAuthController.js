@@ -81,25 +81,26 @@ class OAuthController {
         }
     }
 
-    async signin({ auth, params, request, response }) {
-        const parameters = request.only(['authCode', 'clientType']);
+    async signin({ auth, request, response }) {
+        const parameters = request.only(['authCode', 'clientType', 'service']);
 
         if (typeof parameters.authCode === 'undefined' ||
-            typeof parameters.clientType === 'undefined') {
+            typeof parameters.clientType === 'undefined' ||
+            typeof parameters.service === 'undefined') {
             return response.status(400).json({
                 status: 'error',
                 message: 'Invalid parameters'
             });
         }
 
-        if (!(params.serviceName in Services)) {
+        if (!(parameters.service in Services)) {
             return response.status(404).json({
                 status: 'error',
                 message: 'Service not found'
             });
         }
 
-        const service = Services[params.serviceName];
+        const service = Services[parameters.service];
         const accessToken = await this.getAccessToken(
             service,
             parameters.authCode,
@@ -126,7 +127,7 @@ class OAuthController {
         try {
             userService = await Service.query()
                   .where('email', serviceUser.email)
-                  .where('name', params.serviceName)
+                  .where('name', parameters.service)
                   .first();
         } catch (err) {
             console.log(err);
@@ -139,7 +140,7 @@ class OAuthController {
         if (userService !== null) {
             return await this.connectUser(auth, userService, response);
         } else {
-            return await this.createUser(auth, params.serviceName, serviceUser, accessToken, response);
+            return await this.createUser(auth, parameters.service, serviceUser, accessToken, response);
         }
     }
 
@@ -153,7 +154,7 @@ class OAuthController {
         return url;
     }
 
-    async getAccessToken(service, code, clientType) {
+    static async getAccessToken(service, code, clientType) {
         if (service.irregularAccessToken) {
             return await service.getAccessToken(code, clientType);
         }
