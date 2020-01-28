@@ -2,7 +2,6 @@
 
 const Services = use('App/Services/index');
 const User = use('App/Models/User');
-const Area = require('../../../area.config.js');
 
 class ServiceController {
 
@@ -19,12 +18,13 @@ class ServiceController {
         };
     }
 
-    getServices({ response }) {
+    getServices({ request, response }) {
         let services = [];
         for (let serviceName in Services) {
             let service = this.getServiceInfos(Services[serviceName]);
-            service.actions = Area[serviceName].actions;
-            service.reactions = Area[serviceName].reactions;
+            const { actions, reactions } = request.areaHelper.getServiceAll(serviceName);
+            service.actions = actions;
+            service.reactions = reactions;
             services.push(service);
         }
 
@@ -34,7 +34,7 @@ class ServiceController {
         });
     }
 
-    getService({ params, response }) {
+    getService({ params, request, response }) {
         const serviceName = params.name;
 
         if (!(serviceName in Services)) {
@@ -45,8 +45,9 @@ class ServiceController {
         }
 
         let service = this.getServiceInfos(Services[serviceName]);
-        service.actions = Area[serviceName].actions;
-        service.reactions = Area[serviceName].reactions;
+        const { actions, reactions } = request.areaHelper.getServiceAll(serviceName);
+        service.actions = actions;
+        service.reactions = reactions;
 
         return response.status(400).json({
             status: 'success',
@@ -54,7 +55,7 @@ class ServiceController {
         });
     }
 
-    getServiceActions({ params, response }) {
+    getServiceActions({ params, request, response }) {
         const serviceName = params.name;
 
         if (!(serviceName in Services)) {
@@ -66,11 +67,11 @@ class ServiceController {
 
         return response.json({
             status: 'success',
-            data: Area[serviceName].actions
+            data: request.areaHelper.getServiceActions(serviceName)
         });
     }
 
-    getServiceReactions({ params, response }) {
+    getServiceReactions({ params, request, response }) {
         const serviceName = params.name;
 
         if (!(serviceName in Services)) {
@@ -82,7 +83,7 @@ class ServiceController {
 
         return response.json({
             status: 'success',
-            data: Area[serviceName].reactions
+            data: request.areaHelper.getServiceReactions(serviceName)
         });
     }
 }

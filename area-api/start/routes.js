@@ -175,7 +175,7 @@ Route.group(() => {
      *     }
      */
 
-    Route.get('/', 'ServiceController.getServices');
+    Route.get('/', 'ServiceController.getServices').middleware('area');
 
     /**
      * @api {get} /services/:name Get a specific service model
@@ -220,7 +220,7 @@ Route.group(() => {
      *     }
      */
 
-    Route.get('/:name', 'ServiceController.getService');
+    Route.get('/:name', 'ServiceController.getService').middleware('area');
 
     /**
      * @api {get} /services/:name/actions Get all actions associated with a service
@@ -243,7 +243,7 @@ Route.group(() => {
      *       ]
      *     }
      */
-    Route.get('/:name/actions', 'ServiceController.getServiceActions');
+    Route.get('/:name/actions', 'ServiceController.getServiceActions').middleware('area');
 
     /**
      * @api {get} /services/:name/reactions Get all reactions associated with a service
@@ -269,9 +269,13 @@ Route.group(() => {
      *       ]
      *     }
      */
-    Route.get('/:name/reactions', 'ServiceController.getServiceReactions');
+    Route.get('/:name/reactions', 'ServiceController.getServiceReactions').middleware('area');
 
 }).prefix('services');
+
+Route.get('test', ({ request, areaHelper }) => {
+    console.log(request.areaHelper.getServiceAll('google'));
+}).middleware('area');
 
 Route.get('/auth/social/callback/:serviceName', async ({ params, request, response }) => {
     console.log(params.serviceName);
