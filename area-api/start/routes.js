@@ -279,6 +279,10 @@ Route.group(() => {
      * @api {get} /actions Get all actions by services
      * @apiName getActions
      * @apiGroup Actions
+     * @apiSuccess {String} name Name to identify the action
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the action
+     * @apiSuccess {Object} params Parameters of the action
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
@@ -301,6 +305,10 @@ Route.group(() => {
      * @api {get} /actions/:name Get action by name
      * @apiName getActionByName
      * @apiGroup Actions
+     * @apiSuccess {String} name Name to identify the action
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the action
+     * @apiSuccess {Object} params Parameters of the action
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
@@ -316,9 +324,13 @@ Route.group(() => {
 Route.group(() => {
 
     /**
-     * @api {get} /reactions Get all eractions by services
+     * @api {get} /reactions Get all reactions by services
      * @apiName getReactions
      * @apiGroup Reactions
+     * @apiSuccess {String} name Name to identify the reaction
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the reaction
+     * @apiSuccess {Object} params Parameters of the reaction
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
@@ -344,6 +356,10 @@ Route.group(() => {
      * @api {get} /reactions/:name Get reaction by name
      * @apiName getReactionByName
      * @apiGroup Reactions
+     * @apiSuccess {String} name Name to identify the reaction
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the reaction
+     * @apiSuccess {Object} params Parameters of the reaction
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
@@ -358,3 +374,21 @@ Route.group(() => {
      */
     Route.get('/:name', 'ReactionController.getReactionByName').middleware('area');
 }).prefix('reactions');
+
+Route.group(() => {
+
+    /**
+     * @api {get} /me Get connected user
+     * @apiName getUser
+     * @apiGroup User
+     * @apiSuccess {String} username Username
+     * @apiSuccess {String} email Email of the user
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "username": "jlemoine",
+     *       "email": "lemoine.jonathan.sg@gmail.com"
+     *     }
+     */
+    Route.get('/', 'User/UserController.getUser').middleware('auth');
+}).prefix('me');
