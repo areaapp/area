@@ -136,7 +136,7 @@ Route.group(() => {
 
     /**
      * @api {get} /services Get all services models
-     * @apiName Services
+     * @apiName getServices
      * @apiGroup Service
      * @apiSuccess {String} authType Type of authentication used by the service
      * @apiSuccess {String} name Name of the service to send to the server
@@ -146,6 +146,8 @@ Route.group(() => {
      * @apiSuccess {String} iconName Name of the icon representing the service
      * @apiSuccess {String} foreground Foreground color associated to the service
      * @apiSuccess {String} background Background color associated to the service
+     * @apiSuccess {Array} actions Actions associated with this service
+     * @apiSuccess {Array} reactions Reactions associated with this service
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
@@ -162,22 +164,38 @@ Route.group(() => {
      *         },
      *         {
      *           "authType": "oauth",
-     *           "name": "office",
-     *           "displayName": "Office 365",
-     *           "baseUrl": "www.office.com",
-     *           "iconName": "office",
+     *           "name": "google",
+     *           "displayName": "Google",
+     *           "description": "plus tard",
+     *           "baseUrl": "www.google.com",
+     *           "iconName": "google",
      *           "foreground": "",
-     *           "background": ""
+     *           "background": "",
+     *           "actions": [{
+     *             "name": "google_gmail_new_mail",
+     *             "displayName": "New email on Gmail",
+     *             "description": "Triggered when a email is received in gmail",
+     *             "params": {}
+     *           }],
+     *           "reactions": [{
+     *             "name": "google_gmail_send_email",
+     *             "displayName": "Send email with Gmail",
+     *             "description": "Send email with Gmail",
+     *             "params": {
+     *               "addresses": "Array",
+     *               "content": "string"
+     *             }
+     *           }]
      *         }
      *       ]
      *     }
      */
 
-    Route.get('/', 'ServiceController.getServices');
+    Route.get('/', 'ServiceController.getServices').middleware('area');
 
     /**
      * @api {get} /services/:name Get a specific service model
-     * @apiName Services/:name
+     * @apiName getService
      * @apiGroup Service
      * @apiSuccess {String} authType Type of authentication used by the service
      * @apiSuccess {String} name Name of the service to send to the server
@@ -187,40 +205,206 @@ Route.group(() => {
      * @apiSuccess {String} iconName Name of the icon representing the service
      * @apiSuccess {String} foreground Foreground color associated to the service
      * @apiSuccess {String} background Background color associated to the service
+     * @apiSuccess {Array} actions Actions associated with this service
+     * @apiSuccess {Array} reactions Reactions associated with this service
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
-     *        {
-     *          "authType": "oauth",
-     *          "name": "github",
-     *          "displayName": "Github",
-     *          "description": "plus tard",
-     *          "baseUrl": "www.github.com",
-     *          "iconName": "github-circle",
-     *          "foreground": "",
-     *          "background": ""
-     *        }
+     *       "authType": "oauth",
+     *       "name": "google",
+     *       "displayName": "Google",
+     *       "description": "plus tard",
+     *       "baseUrl": "www.google.com",
+     *       "iconName": "google",
+     *       "foreground": "",
+     *       "background": "",
+     *       "actions": [{
+     *         "name": "google_gmail_new_mail",
+     *         "displayName": "New email on Gmail",
+     *         "description": "Triggered when a email is received in gmail",
+     *         "params": {}
+     *       }],
+     *       "reactions": [{
+     *         "name": "google_gmail_send_email",
+     *         "displayName": "Send email with Gmail",
+     *         "description": "Send email with Gmail",
+     *         "params": {
+     *           "addresses": "Array",
+     *           "content": "string"
+     *         }
+     *       }]
      *     }
      */
 
-    Route.get('/:name', 'ServiceController.getService');
+    Route.get('/:name', 'ServiceController.getService').middleware('area');
+
+    /**
+     * @api {get} /services/:name/actions Get all actions associated with a service
+     * @apiName getServiceActions
+     * @apiGroup Service
+     * @apiSuccess {String} name Name to identify the action
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the action
+     * @apiSuccess {Object} params Parameters of the action
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       [
+     *         {
+     *           "name": "google_gmail_new_mail",
+     *           "displayName": "New email on Gmail",
+     *           "description": "Triggered when a email is received in gmail",
+     *           "params": {}
+     *         }
+     *       ]
+     *     }
+     */
+    Route.get('/:name/actions', 'ServiceController.getServiceActions').middleware('area');
+
+    /**
+     * @api {get} /services/:name/reactions Get all reactions associated with a service
+     * @apiName getServiceReactions
+     * @apiGroup Service
+     * @apiSuccess {String} name Name to identify the reaction
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the reaction
+     * @apiSuccess {Object} params Parameters of the reaction
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       [
+     *         {
+     *           "name": "google_gmail_send_email",
+     *           "displayName": "Send email with Gmail",
+     *           "description": "Send email with Gmail",
+     *           "params": {
+     *             "addresses": "Array",
+     *             "content": "string"
+     *           }
+     *         }
+     *       ]
+     *     }
+     */
+    Route.get('/:name/reactions', 'ServiceController.getServiceReactions').middleware('area');
 
 }).prefix('services');
 
-Route.get('/auth/social/callback/:serviceName', async ({ params, request, response }) => {
-    console.log(params.serviceName);
-    console.log(request.all());
+Route.group(() => {
 
-    try {
-        console.log(await axios.post('http://localhost:8081/auth/oauth/signin/' + params.serviceName, {
-        authCode: request.all().code,
-        clientType: 'web'
-        }));
-    } catch (err) {
-        //console.log(err);
-        return response.status(400).json({
-            status: 'error',
-            message: '?'
-        });
-    }
-});
+    /**
+     * @api {get} /actions Get all actions by services
+     * @apiName getActions
+     * @apiGroup Actions
+     * @apiSuccess {String} name Name to identify the action
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the action
+     * @apiSuccess {Object} params Parameters of the action
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "dropbox": [],
+     *       "github": [],
+     *       "google": [{
+     *         "name": "google_gmail_new_mail",
+     *         "displayName": "New email on Gmail",
+     *         "description": "Triggered when a email is received in gmail",
+     *         "params": {}
+     *       }],
+     *       "office": [],
+     *       "spotify": [],
+     *       "twitch": []
+     *     }
+     */
+    Route.get('/', 'ActionController.getActions').middleware('area');
+
+    /**
+     * @api {get} /actions/:name Get action by name
+     * @apiName getActionByName
+     * @apiGroup Actions
+     * @apiSuccess {String} name Name to identify the action
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the action
+     * @apiSuccess {Object} params Parameters of the action
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "name": "google_gmail_new_mail",
+     *       "displayName": "New email on Gmail",
+     *       "description": "Triggered when a email is received in gmail",
+     *       "params": {}
+     *     }
+     */
+    Route.get('/:name', 'ActionController.getActionByName').middleware('area');
+}).prefix('actions');
+
+Route.group(() => {
+
+    /**
+     * @api {get} /reactions Get all reactions by services
+     * @apiName getReactions
+     * @apiGroup Reactions
+     * @apiSuccess {String} name Name to identify the reaction
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the reaction
+     * @apiSuccess {Object} params Parameters of the reaction
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "dropbox": [],
+     *       "github": [],
+     *       "google": [{
+     *         "name": "google_gmail_send_email",
+     *         "displayName": "Send email with Gmail",
+     *         "description": "Send email with Gmail",
+     *         "params": {
+     *           "addresses": "Array",
+     *           "content": "string"
+     *         }
+     *       }],
+     *       "office": [],
+     *       "spotify": [],
+     *       "twitch": []
+     *     }
+     */
+    Route.get('/', 'ReactionController.getReactions').middleware('area');
+
+    /**
+     * @api {get} /reactions/:name Get reaction by name
+     * @apiName getReactionByName
+     * @apiGroup Reactions
+     * @apiSuccess {String} name Name to identify the reaction
+     * @apiSuccess {String} displayName Name to display
+     * @apiSuccess {String} description Description of the reaction
+     * @apiSuccess {Object} params Parameters of the reaction
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "name": "google_gmail_send_email",
+     *       "displayName": "Send email with Gmail",
+     *       "description": "Send email with Gmail",
+     *       "params": {
+     *         "addresses": "Array",
+     *         "content": "string"
+     *       }
+     *     }
+     */
+    Route.get('/:name', 'ReactionController.getReactionByName').middleware('area');
+}).prefix('reactions');
+
+Route.group(() => {
+
+    /**
+     * @api {get} /me Get connected user
+     * @apiName getUser
+     * @apiGroup User
+     * @apiSuccess {String} username Username
+     * @apiSuccess {String} email Email of the user
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "username": "jlemoine",
+     *       "email": "lemoine.jonathan.sg@gmail.com"
+     *     }
+     */
+    Route.get('/', 'User/UserController.getUser').middleware('auth');
+}).prefix('me');

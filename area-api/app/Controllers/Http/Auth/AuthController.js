@@ -32,7 +32,7 @@ class AuthController {
             console.log(err);
             let message = 'Error while creating user, please try later.';
             if (err.routine === '_bt_check_unique') {
-                message = 'This username already exist.';
+                message = 'This email already exist.';
             }
             return response.status(400).json({
                 status: 'error',

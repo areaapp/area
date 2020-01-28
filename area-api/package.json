@@ -8,7 +8,7 @@
     "start": "node server.js",
     "dev": "adonis serve --dev",
     "test": "node ace test",
-    "doc": "apidoc -i start -f start/routes.js -o ../volumes/docs/api"
+    "doc": "apidoc -i start -f start/routes.js -o doc"
   },
   "keywords": [
     "adonisjs",
