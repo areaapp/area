@@ -154,7 +154,7 @@ class OAuthController {
         return url;
     }
 
-    async getAccessToken(service, code, clientType) {
+    static async getAccessToken(service, code, clientType) {
         if (service.irregularAccessToken) {
             return await service.getAccessToken(code, clientType);
         }

@@ -3,6 +3,7 @@
 const Services = use('App/Services/index');
 const Service = use('App/Models/Service');
 const User = use('App/Models/User');
+const OAuthController = use('App/Controllers/Http/Auth/OAuthController');
 
 class UserServiceController {
 
@@ -28,15 +29,16 @@ class UserServiceController {
             }
 
             const service = Services[params.serviceName];
-            try {
-                accessToken = await service.getAccessToken({
-                    code: parameters.authCode,
-                    clientType: parameters.clientType
-                });
-            } catch (err) {
-                return response.status(401).json({
+            const accessToken = await OAuthController.getAccessToken(
+                service,
+                parameters.authCode,
+                parameters.clientType
+            );
+
+            if (accessToken === null) {
+                return response.status(400).json({
                     status: 'error',
-                    message: 'Cannot get access_token'
+                    message: 'Cannot retreive access_token'
                 });
             }
 

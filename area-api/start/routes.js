@@ -101,36 +101,6 @@ Route.group(() => {
     Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl');
 }).prefix('auth');
 
-Route.group(() => {
-
-    /**
-     * @api {post} /me/services/:name Create a service instance for this user
-     * @apiName Service
-     * @apiGroup User
-     * @apiHeader {String} authorization Bearer \<token\>
-     * @apiParam {String} name Name of the service
-     * @apiParam {String} authCode OAuth code got from authorize url
-     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
-     */
-    Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
-
-    /**
-     * @api {get} /me Get email and username of current user
-     * @apiName /me
-     * @apiGroup me
-     * @apiSuccess {String} username Username of the user
-     * @apiSuccess {String} email Email of the user
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/2 200 OK
-     *        {
-     *          "username": "kylianm",
-     *          "email": "kylian.maugue@epitech.eu"
-     *        }
-     */
-
-    Route.get('/', 'User/UserController.getUser').middleware('auth');
-}).prefix('me');
-
 
 Route.group(() => {
 
@@ -407,9 +377,15 @@ Route.group(() => {
      *     }
      */
     Route.get('/', 'User/UserController.getUser').middleware('auth');
-}).prefix('me');
 
-Route.get('auth/social/callback/:service', ({ params, request }) => {
-    console.log(params.service);
-    console.log(request.all());
-});
+    /**
+     * @api {post} /me/services/:name Create a service instance for this user
+     * @apiName Service
+     * @apiGroup User
+     * @apiHeader {String} authorization Bearer \<token\>
+     * @apiParam {String} name Name of the service
+     * @apiParam {String} authCode OAuth code got from authorize url
+     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
+     */
+    Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
+}).prefix('me');
