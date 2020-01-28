@@ -63,7 +63,7 @@ Route.group(() => {
 
 
     /**
-     * @api {post} /auth/oauth/signin/:service Signup/Signin a user with a oauth service
+     * @api {post} /auth/oauth/signin Signup/Signin a user with a oauth service
      * @apiName ServiceSignin
      * @apiGroup Auth
      * @apiParam {String} service Service used to authenticate
@@ -81,7 +81,7 @@ Route.group(() => {
      *       "refreshToken": null
      *     }
      */
-    Route.post('oauth/signin/:serviceName', 'Auth/OAuthController.signin');
+    Route.post('oauth/signin', 'Auth/OAuthController.signin');
 
 
     /**
@@ -113,7 +113,7 @@ Route.group(() => {
      * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
      */
     Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
-    
+
     /**
      * @api {get} /me Get email and username of current user
      * @apiName /me
@@ -408,3 +408,8 @@ Route.group(() => {
      */
     Route.get('/', 'User/UserController.getUser').middleware('auth');
 }).prefix('me');
+
+Route.get('auth/social/callback/:service', ({ params, request }) => {
+    console.log(params.service);
+    console.log(request.all());
+});

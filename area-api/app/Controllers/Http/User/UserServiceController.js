@@ -28,18 +28,17 @@ class UserServiceController {
             }
 
             const service = Services[params.serviceName];
-            let accessToken = '22b93eff1349d4f4392ccc8de3eb1c6388aa69b5';
-            // try {
-            //     accessToken = await service.getAccessToken({
-            //         code: parameters.authCode,
-            //         clientType: parameters.clientType
-            //     });
-            // } catch (err) {
-            //     return response.status(401).json({
-            //         status: 'error',
-            //         message: 'Cannot get access_token'
-            //     });
-            // }
+            try {
+                accessToken = await service.getAccessToken({
+                    code: parameters.authCode,
+                    clientType: parameters.clientType
+                });
+            } catch (err) {
+                return response.status(401).json({
+                    status: 'error',
+                    message: 'Cannot get access_token'
+                });
+            }
 
             const serviceUser = await service.getUser(accessToken);
 
@@ -69,19 +68,6 @@ class UserServiceController {
         } catch (err) {
             console.log(err);
         }
-    }
-
-    async getUserInfos({ auth, response }) {
-
-        let userInfos = {
-            username: auth.user.username,
-            email: auth.user.email
-        };
-
-        return response.json({
-            status: 'success',
-            data: userInfos
-        });
     }
 }
 
