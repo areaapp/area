@@ -70,19 +70,6 @@ class UserServiceController {
             console.log(err);
         }
     }
-
-    async getUserInfos({ auth, response }) {
-
-        let userInfos = {
-            username: auth.user.username,
-            email: auth.user.email
-        };
-
-        return response.json({
-            status: 'success',
-            data: userInfos
-        });
-    }
 }
 
 module.exports = UserServiceController

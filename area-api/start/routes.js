@@ -128,7 +128,7 @@ Route.group(() => {
      *        }
      */
 
-    Route.get('/', 'User/UserServiceController.getUserInfos').middleware('auth');
+    Route.get('/', 'User/UserController.getUser').middleware('auth');
 }).prefix('me');
 
 
