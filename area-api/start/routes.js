@@ -273,24 +273,88 @@ Route.group(() => {
 
 }).prefix('services');
 
-Route.get('test', ({ request, areaHelper }) => {
-    console.log(request.areaHelper.getServiceAll('google'));
-}).middleware('area');
+Route.group(() => {
 
-Route.get('/auth/social/callback/:serviceName', async ({ params, request, response }) => {
-    console.log(params.serviceName);
-    console.log(request.all());
+    /**
+     * @api {get} /actions Get all actions by services
+     * @apiName getActions
+     * @apiGroup Actions
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "dropbox": [],
+     *       "github": [],
+     *       "google": [{
+     *         "name": "google_gmail_new_mail",
+     *         "displayName": "New email on Gmail",
+     *         "description": "Triggered when a email is received in gmail",
+     *         "params": {}
+     *       }],
+     *       "office": [],
+     *       "spotify": [],
+     *       "twitch": []
+     *     }
+     */
+    Route.get('/', 'ActionController.getActions').middleware('area');
 
-    try {
-        console.log(await axios.post('http://localhost:8081/auth/oauth/signin/' + params.serviceName, {
-        authCode: request.all().code,
-        clientType: 'web'
-        }));
-    } catch (err) {
-        //console.log(err);
-        return response.status(400).json({
-            status: 'error',
-            message: '?'
-        });
-    }
-});
+    /**
+     * @api {get} /actions/:name Get action by name
+     * @apiName getActionByName
+     * @apiGroup Actions
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "name": "google_gmail_new_mail",
+     *       "displayName": "New email on Gmail",
+     *       "description": "Triggered when a email is received in gmail",
+     *       "params": {}
+     *     }
+     */
+    Route.get('/:name', 'ActionController.getActionByName').middleware('area');
+}).prefix('actions');
+
+Route.group(() => {
+
+    /**
+     * @api {get} /reactions Get all eractions by services
+     * @apiName getReactions
+     * @apiGroup Reactions
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "dropbox": [],
+     *       "github": [],
+     *       "google": [{
+     *         "name": "google_gmail_send_email",
+     *         "displayName": "Send email with Gmail",
+     *         "description": "Send email with Gmail",
+     *         "params": {
+     *           "addresses": "Array",
+     *           "content": "string"
+     *         }
+     *       }],
+     *       "office": [],
+     *       "spotify": [],
+     *       "twitch": []
+     *     }
+     */
+    Route.get('/', 'ReactionController.getReactions').middleware('area');
+
+    /**
+     * @api {get} /reactions/:name Get reaction by name
+     * @apiName getReactionByName
+     * @apiGroup Reactions
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "name": "google_gmail_send_email",
+     *       "displayName": "Send email with Gmail",
+     *       "description": "Send email with Gmail",
+     *       "params": {
+     *         "addresses": "Array",
+     *         "content": "string"
+     *       }
+     *     }
+     */
+    Route.get('/:name', 'ReactionController.getReactionByName').middleware('area');
+}).prefix('reactions');
