@@ -57,11 +57,10 @@
                                         <template v-slot:activator="{ on }">
                                             <v-btn
                                                 :color="service.background"
-                                                :to="`oauth/${service.name}/redirect`"
-                                                v-on="on"
                                                 elevation="0"
                                                 fab
-                                                nuxt
+                                                v-on="on"
+                                                v-on:click="redirectToOauth(service.name)"
                                             >
                                                 <v-icon :color="service.foreground">mdi-star</v-icon>
                                             </v-btn>
@@ -87,16 +86,28 @@
 
 <script>
  export default {
-     async asyncData ({ $axios }) {
-         const data = { services: [] };
-         const res = await $axios.$get('/services');
+     auth: 'guest',
 
-         if (res.status !== 'sucess') {
-             return data;
+     async asyncData ({ $axios, $auth }) {
+         const resServices = await $axios.$get('/services');
+
+         console.log('logged:', $auth.loggedIn);
+
+         if (resServices.status !== 'success') {
+             return { services: [] };
          }
 
-         data.services = res.data;
-         return data;
+         return {
+             services: resServices.data
+         };
+     },
+
+     methods: {
+         redirectToOauth (service) {
+             this.$store.commit('userAction/setAction', 'signin');
+             this.$store.commit('userAction/setUrl', this.$nuxt.$route.path);
+             this.$router.push(`oauth/${service}/redirect`);
+         }
      }
  };
 </script>
