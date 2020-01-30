@@ -63,7 +63,7 @@ Route.group(() => {
 
 
     /**
-     * @api {post} /auth/oauth/signin/:service Signup/Signin a user with a oauth service
+     * @api {post} /auth/oauth/signin Signup/Signin a user with a oauth service
      * @apiName ServiceSignin
      * @apiGroup Auth
      * @apiParam {String} service Service used to authenticate
@@ -81,7 +81,7 @@ Route.group(() => {
      *       "refreshToken": null
      *     }
      */
-    Route.post('oauth/signin/:serviceName', 'Auth/OAuthController.signin');
+    Route.post('oauth/signin', 'Auth/OAuthController.signin');
 
 
     /**
@@ -101,6 +101,7 @@ Route.group(() => {
     Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl');
 }).prefix('auth');
 
+<<<<<<< HEAD
 Route.group(() => {
 
     /**
@@ -147,6 +148,8 @@ Route.group(() => {
     Route.put('/', 'User/UserController.setUserInfos').middleware('auth');
 }).prefix('me');
 
+=======
+>>>>>>> eeca849cee38eaba26cdb16dc9a616045977eca9
 
 Route.group(() => {
 
@@ -423,4 +426,15 @@ Route.group(() => {
      *     }
      */
     Route.get('/', 'User/UserController.getUser').middleware('auth');
+
+    /**
+     * @api {post} /me/services/:name Create a service instance for this user
+     * @apiName Service
+     * @apiGroup User
+     * @apiHeader {String} authorization Bearer \<token\>
+     * @apiParam {String} name Name of the service
+     * @apiParam {String} authCode OAuth code got from authorize url
+     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
+     */
+    Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
 }).prefix('me');
