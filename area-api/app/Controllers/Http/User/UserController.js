@@ -13,15 +13,21 @@ class UserController {
 
     async setUserInfos({ auth, request, response }) {
         let user = auth.current.user;
-        const params = request.only(['username', 'email']);
+        const params = request.only(['username']);
+
+        if (params.username == undefined)
+            return response.status(422).json({
+                status: 'error',
+                message: 'Username is not provided'
+            });
 
         user.username = params.username;
-        user.email = params.email;
 
         await user.save();
 
         return response.json({
-            status: 'success'
+            status: 'success',
+            data: user.username
         });
     }
 }

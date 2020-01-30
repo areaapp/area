@@ -101,7 +101,6 @@ Route.group(() => {
     Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl');
 }).prefix('auth');
 
-<<<<<<< HEAD
 Route.group(() => {
 
     /**
@@ -140,16 +139,12 @@ Route.group(() => {
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
-     *          "username": "kylianm",
-     *          "email": "kylian.maugue@epitech.eu"
+     *          "username": "kylianm"
      *        }
      */
 
     Route.put('/', 'User/UserController.setUserInfos').middleware('auth');
 }).prefix('me');
-
-=======
->>>>>>> eeca849cee38eaba26cdb16dc9a616045977eca9
 
 Route.group(() => {
 
@@ -409,32 +404,3 @@ Route.group(() => {
      */
     Route.get('/:name', 'ReactionController.getReactionByName').middleware('area');
 }).prefix('reactions');
-
-Route.group(() => {
-
-    /**
-     * @api {get} /me Get connected user
-     * @apiName getUser
-     * @apiGroup User
-     * @apiSuccess {String} username Username
-     * @apiSuccess {String} email Email of the user
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/2 200 OK
-     *     {
-     *       "username": "jlemoine",
-     *       "email": "lemoine.jonathan.sg@gmail.com"
-     *     }
-     */
-    Route.get('/', 'User/UserController.getUser').middleware('auth');
-
-    /**
-     * @api {post} /me/services/:name Create a service instance for this user
-     * @apiName Service
-     * @apiGroup User
-     * @apiHeader {String} authorization Bearer \<token\>
-     * @apiParam {String} name Name of the service
-     * @apiParam {String} authCode OAuth code got from authorize url
-     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
-     */
-    Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
-}).prefix('me');
