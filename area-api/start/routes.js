@@ -129,6 +129,22 @@ Route.group(() => {
      */
 
     Route.get('/', 'User/UserController.getUser').middleware('auth');
+
+    /**
+     * @api {put} /me Modify infos of username
+     * @apiName /me
+     * @apiGroup me
+     * @apiSuccess {String} username Username of the user
+     * @apiSuccess {String} email Email of the user
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "username": "kylianm",
+     *          "email": "kylian.maugue@epitech.eu"
+     *        }
+     */
+
+    Route.put('/', 'User/UserController.setUserInfos').middleware('auth');
 }).prefix('me');
 
 
