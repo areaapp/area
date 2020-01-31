@@ -1,4 +1,4 @@
-package com.example.area_android.ui.dashboard
+package com.example.area_android.ui.services
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.area_android.R
 
-class DashboardFragment : Fragment() {
+class ServicesFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var servicesViewModel: ServicesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(this, Observer {
+        servicesViewModel =
+            ViewModelProviders.of(this).get(ServicesViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_services, container, false)
+        val textView: TextView = root.findViewById(R.id.text_services)
+        servicesViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root
