@@ -49,6 +49,8 @@ class UserServiceController {
                   .where('name', params.serviceName)
                   .first();
 
+            console.log(userService);
+
             if (userService !== null) {
                 return response.status(400).json({
                     status: 'error',
@@ -68,6 +70,22 @@ class UserServiceController {
                 status: 'success'
             });
         } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async getUserServices({auth, response}) {
+        try {
+            const userService = await Service.query()
+            .where('user_id', auth.current.user.id)
+            .fetch();
+
+            return response.json({
+                status: 'success',
+                data: userService
+            });
+        }
+        catch (err) {
             console.log(err);
         }
     }

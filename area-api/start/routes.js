@@ -135,7 +135,6 @@ Route.group(() => {
      * @apiName /me
      * @apiGroup me
      * @apiSuccess {String} username Username of the user
-     * @apiSuccess {String} email Email of the user
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
@@ -144,6 +143,30 @@ Route.group(() => {
      */
 
     Route.put('/', 'User/UserController.setUserInfos').middleware('auth');
+
+    /**
+     * @api {get} /me/services Get services of one user
+     * @apiName /me/services
+     * @apiGroup me
+     * @apiSuccess {Integer} id Id of the user's services
+     * @apiSuccess {Integer} user_id Id of the user
+     * @apiSuccess {String} name Name of the service
+     * @apiSuccess {String} email Email used to connect to the service
+     * @apiSuccess {String} oauth_token Oauth token used for the service
+     * @apiSuccess {String} oauth_refresh_token oauth refresh token used for the service
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "id": "1",
+     *          "user_id": "2",
+     *          "name": "google",
+     *          "email": "kylianm@tek.eu",
+     *          "oauth_token": "ya29.Il-8B3Gj-wUoGehca59RqZK2LDZ8NBFVkqEfs6w2UXnzkN_s7QBhilqtBn98ap1nOz1koGHntp_mQlobFf2c38K0KgwslHhXv03c3EmbRWtiFnItohKy0ni0pY3TKlw2TA",
+     *          "oauth_refresh_token": "null"
+     *        }
+     */
+
+    Route.get('/services', 'User/UserServiceController.getUserServices').middleware('auth');
 }).prefix('me');
 
 Route.group(() => {
@@ -404,3 +427,8 @@ Route.group(() => {
      */
     Route.get('/:name', 'ReactionController.getReactionByName').middleware('area');
 }).prefix('reactions');
+
+Route.get('auth/social/callback/:service', ({ params, request }) => {
+    console.log(params.service);
+    console.log(request.all());
+});
