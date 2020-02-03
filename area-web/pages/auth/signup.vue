@@ -8,7 +8,7 @@
             class="align-self-stretch"
         >
             <v-card class="headline">
-                <v-card-title>Sign in to Area</v-card-title>
+                <v-card-title>Sign up to Area</v-card-title>
                 <v-card-text>
                     <v-text-field
                         label="Username"
