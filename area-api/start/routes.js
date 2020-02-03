@@ -134,6 +134,7 @@ Route.group(() => {
      * @api {put} /me Modify infos of username
      * @apiName /me
      * @apiGroup me
+     * @apiParam {String} email New email of the account
      * @apiSuccess {String} username Username of the user
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
@@ -167,6 +168,8 @@ Route.group(() => {
      */
 
     Route.get('/services', 'User/UserServiceController.getUserServices').middleware('auth');
+
+    Route.delete('/services/:name', 'User/UserServiceController.deleteService').middleware('auth');
 }).prefix('me');
 
 Route.group(() => {

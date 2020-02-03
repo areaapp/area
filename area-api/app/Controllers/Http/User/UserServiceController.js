@@ -49,8 +49,6 @@ class UserServiceController {
                   .where('name', params.serviceName)
                   .first();
 
-            console.log(userService);
-
             if (userService !== null) {
                 return response.status(400).json({
                     status: 'error',
@@ -88,6 +86,29 @@ class UserServiceController {
         catch (err) {
             console.log(err);
         }
+    }
+
+    async deleteService({auth, params, response}) {
+        const userService = await Service.query()
+        .where('user_id', auth.current.user.id)
+        .where('name', params.name)
+        .fetch();
+
+        if (userService.rows.length == 0)
+            return response.status(404).json({
+                status: 'error',
+                message: 'The service doesn\'t exist for this user'
+            });
+
+        await Service.query()
+        .where('user_id', auth.current.user.id)
+        .where('name', params.name)
+        .delete();
+
+        return response.json({
+            status: 'success',
+            message: 'The service ' + params.name + ' is suppressed'
+        });
     }
 }
 
