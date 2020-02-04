@@ -1,12 +1,22 @@
 <template>
-    <v-app dark>
+    <v-app
+        :style="{ background: $vuetify.theme.themes[theme].background }"
+    >
         <v-navigation-drawer
             v-model="drawer"
-            :mini-variant="miniVariant"
-            :clipped="clipped"
             fixed
             app
+            class="secondary elevation-0 accent--text"
+            dark
         >
+            <v-flex class="py-4">
+                <v-row class="justify-center">
+                    <AreaLogo />
+                    <p class="text-center subtitle-2 font-weight-regular">
+                        An automation tool to connect your applications
+                    </p>
+                </v-row>
+            </v-flex>
             <v-list>
                 <v-list-item
                     v-for="(item, i) in items"
@@ -16,7 +26,9 @@
                     exact
                 >
                     <v-list-item-action>
-                        <v-icon>{{ item.icon }}</v-icon>
+                        <v-icon class="primary--text">
+                            {{ item.icon }}
+                        </v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title v-text="item.title" />
@@ -27,101 +39,86 @@
                 v-if="$auth.loggedIn"
                 v-slot:append
             >
-                <div>
-                    <v-btn
-                        v-on:click="signout"
-                        block
-                    >
-                        <v-icon>mdi-exit-run</v-icon>
-                        Sign out
-                    </v-btn>
+                <div class="px-6">
+                    <v-divider></v-divider>
                 </div>
+                <v-flex class="pa-3">
+                    <v-col class="justify-space-around">
+                        <v-switch
+                            v-model="darkTheme"
+                            hide-details
+                            inset
+                            label="Toggle dark theme"
+                        >
+                        </v-switch>
+                        <v-btn
+                            v-on:click="signout"
+                            block
+                            class="error"
+                        >
+                            <v-icon>mdi-exit-run</v-icon>
+                            Sign out
+                        </v-btn>
+                    </v-col>
+                </v-flex>
             </template>
         </v-navigation-drawer>
         <v-app-bar
-            :clipped-left="clipped"
+            class="secondary"
             fixed
             app
+            flat
+            dark
         >
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-            <v-btn
-                @click.stop="miniVariant = !miniVariant"
-                icon
-            >
-                <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-            </v-btn>
-            <v-btn
-                @click.stop="clipped = !clipped"
-                icon
-            >
-                <v-icon>mdi-application</v-icon>
-            </v-btn>
-            <v-btn
-                @click.stop="fixed = !fixed"
-                icon
-            >
-                <v-icon>mdi-minus</v-icon>
-            </v-btn>
-            <v-toolbar-title v-text="title" />
-            <v-spacer />
-            <v-btn
-                @click.stop="rightDrawer = !rightDrawer"
-                icon
-            >
-                <v-icon>mdi-menu</v-icon>
-            </v-btn>
+            <v-app-bar-nav-icon class="accent--text" @click.stop="drawer = !drawer" />
+            <v-spacer></v-spacer>
+            <v-toolbar-title>{{ title }}</v-toolbar-title>
+            <v-spacer></v-spacer>
         </v-app-bar>
         <v-content>
             <v-container>
                 <nuxt />
             </v-container>
         </v-content>
-        <v-navigation-drawer
-            v-model="rightDrawer"
-            :right="right"
-            temporary
-            fixed
-        >
-            <v-list>
-                <v-list-item @click.native="right = !right">
-                    <v-list-item-action>
-                        <v-icon light>
-                            mdi-repeat
-                        </v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
-        <v-footer
-            :fixed="fixed"
-            app
-        >
-            <span>&copy; 2019</span>
-        </v-footer>
     </v-app>
 </template>
 
 <script>
+ import AreaLogo from '../components/AreaLogo.vue';
+
  export default {
+     components: {
+         AreaLogo
+     },
+
      data () {
          return {
-             clipped: false,
-             drawer: false,
-             fixed: false,
-             miniVariant: false,
-             right: true,
-             rightDrawer: false,
-             title: 'Vuetify.js'
+             drawer: true
          };
      },
 
      computed: {
-         items () {
-             let items = [];
+         darkTheme: {
+             get () {
+                 return this.$store.state.darkTheme;
+             },
 
+             set (value) {
+                 this.$store.dispatch('setDarkTheme', value);
+             }
+         },
+
+         title () {
+             return this.$store.state.pageTitle;
+         },
+
+         theme () {
+             return this.$vuetify.theme.dark ? 'dark' : 'light';
+         },
+
+         items () {
              if (!this.$auth.loggedIn) {
-                 items = items.concat([
+                 return [
                      {
                          icon: 'mdi-login-variant',
                          title: 'Sign in',
@@ -132,19 +129,36 @@
                          title: 'Sign up',
                          to: '/auth/signup'
                      }
-                 ]);
-             } else {
-                 items = items.concat([
-                     {
-                         icon: 'mdi-apps',
-                         title: 'Home',
-                         to: '/'
-                     }
-                 ]);
+                 ];
              }
-
-             return items;
+             return [
+                 {
+                     icon: 'mdi-apps',
+                     title: 'Home',
+                     to: '/'
+                 },
+                 {
+                     icon: 'mdi-puzzle',
+                     title: 'Services',
+                     to: '/services'
+                 },
+                 {
+                     icon: 'mdi-settings',
+                     title: 'Settings',
+                     to: '/settings'
+                 }
+             ]
          }
+     },
+
+     watch: {
+         darkTheme (val) {
+             this.$vuetify.theme.isDark = val;
+         }
+     },
+
+     mounted () {
+         this.$vuetify.theme.isDark = this.darkTheme;
      },
 
      methods: {

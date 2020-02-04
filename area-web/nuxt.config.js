@@ -89,17 +89,28 @@ export default {
     vuetify: {
         customVariables: ['~/assets/variables.scss'],
         theme: {
-            dark: true,
             themes: {
                 dark: {
-                    primary: colors.blue.darken2,
-                    accent: colors.grey.darken3,
-                    secondary: colors.amber.darken3,
+                    primary: colors.lightBlue.darken1,
+                    accent: '#ffffff',
+                    background: '#3c4154',
+                    secondary: '#151b2b',
+                    info: colors.teal.lighten1,
+                    warning: colors.amber.base,
+                    error: colors.deepOrange.accent4,
+                    success: colors.green.accent3
+                },
+                light: {
+                    primary: colors.lightBlue.darken1,
+                    accent: '#ffffff',
+                    background: '#ffffff',
+                    secondary: '#151b2b',
                     info: colors.teal.lighten1,
                     warning: colors.amber.base,
                     error: colors.deepOrange.accent4,
                     success: colors.green.accent3
                 }
+
             }
         }
     },
@@ -125,7 +136,7 @@ export default {
                     login: {
                         url: '/auth/signin',
                         method: 'post',
-                        propertyName: 'token'
+                        propertyName: 'data.token'
                     },
                     user: {
                         url: '/me',
