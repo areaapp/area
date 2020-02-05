@@ -169,7 +169,35 @@ Route.group(() => {
 
     Route.get('/services', 'User/UserServiceController.getUserServices').middleware('auth');
 
+    /**
+     * @api {delete} /me/services/:name Delete a service for a user
+     * @apiName /me/services/:name
+     * @apiGroup me
+     * @apiParam {String} name Name of the service to delete
+     * @apiSuccess {String} message Message which indicate the name of the service suppressed
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "message": "The service google is suppressed"
+     *        }
+     */
+
     Route.delete('/services/:name', 'User/UserServiceController.deleteService').middleware('auth');
+
+    /**
+     * @api {post} /me/area Create an AREA
+     * @apiName Area
+     * @apiGroup Area
+     * @apiParam {String} name Name of the AREA
+     * @apiParam {String} action_name Name of the action
+     * @apiParam {String} reaction_name Name of the reaction
+     * @apiParam {String} reaction_args Arguments of the reaction
+     * @apiParam {String} action_args Arguments of the action
+     */
+
+    Route.post('/area', 'AreaController.addArea').middleware('auth').middleware('area');
+
+    Route.get('/area', 'AreaController.getAreas').middleware('auth');
 }).prefix('me');
 
 Route.group(() => {
