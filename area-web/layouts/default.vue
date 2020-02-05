@@ -42,25 +42,54 @@
                 <div class="px-6">
                     <v-divider></v-divider>
                 </div>
-                <v-flex class="pa-3">
-                    <v-col class="justify-space-around">
-                        <v-switch
-                            v-model="darkTheme"
-                            hide-details
-                            inset
-                            label="Toggle dark theme"
-                        >
-                        </v-switch>
-                        <v-btn
-                            v-on:click="signout"
-                            block
-                            class="error"
-                        >
-                            <v-icon>mdi-exit-run</v-icon>
-                            Sign out
-                        </v-btn>
-                    </v-col>
-                </v-flex>
+                <v-col>
+                    <v-flex class="pa-3">
+                        <v-row class="px-4" align="center">
+                            <v-avatar color="primary" class="mr-3">
+                                <!-- <img :src="avatar" :alt="user.username" /> -->
+                                <span class="accent--text healine font-weight-bold text-capitalize">
+                                    {{ user.username[0] }}
+                                </span>
+                            </v-avatar>
+                            <v-col>
+                                <v-row>
+                                    <span class="caption font-weight-bold">{{ user.username }}</span>
+                                </v-row>
+                                <v-row>
+                                    <span class="caption mr-2">
+                                        3
+                                        <v-icon x-small>mdi-puzzle</v-icon>
+                                    </span>
+                                    <span class="caption">
+                                        13
+                                        <v-icon x-small>mdi-vector-square</v-icon>
+                                    </span>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                        <v-row class="py-4 justify-center">
+                            <v-switch
+                                v-model="darkTheme"
+                                hide-details
+                                inset
+                                label="Toggle dark theme"
+                                color="primary"
+                                class="accent--text"
+                            >
+                            </v-switch>
+                        </v-row>
+                        <v-row class="py-4">
+                            <v-btn
+                                v-on:click="signout"
+                                block
+                                class="error"
+                            >
+                                <v-icon>mdi-exit-run</v-icon>
+                                Sign out
+                            </v-btn>
+                        </v-row>
+                    </v-flex>
+                </v-col>
             </template>
         </v-navigation-drawer>
         <v-app-bar
@@ -104,6 +133,7 @@
              },
 
              set (value) {
+                 this.$vuetify.theme.isDark = value;
                  this.$store.dispatch('setDarkTheme', value);
              }
          },
@@ -114,6 +144,13 @@
 
          theme () {
              return this.$vuetify.theme.dark ? 'dark' : 'light';
+         },
+
+         user () {
+             if (this.$auth.loggedIn) {
+                 return this.$auth.user;
+             }
+             return null;
          },
 
          items () {
@@ -148,12 +185,6 @@
                      to: '/settings'
                  }
              ]
-         }
-     },
-
-     watch: {
-         darkTheme (val) {
-             this.$vuetify.theme.isDark = val;
          }
      },
 

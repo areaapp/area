@@ -90,27 +90,28 @@ export default {
         customVariables: ['~/assets/variables.scss'],
         theme: {
             themes: {
-                dark: {
-                    primary: colors.lightBlue.darken1,
-                    accent: '#ffffff',
-                    background: '#3c4154',
-                    secondary: '#151b2b',
-                    info: colors.teal.lighten1,
-                    warning: colors.amber.base,
-                    error: colors.deepOrange.accent4,
-                    success: colors.green.accent3
-                },
                 light: {
                     primary: colors.lightBlue.darken1,
                     accent: '#ffffff',
                     background: '#ffffff',
                     secondary: '#151b2b',
+                    tertiary: '#ffffff',
+                    info: colors.teal.lighten1,
+                    warning: colors.amber.base,
+                    error: colors.deepOrange.accent4,
+                    success: colors.green.accent3
+                },
+                dark: {
+                    primary: colors.lightBlue.darken1,
+                    accent: '#ffffff',
+                    background: '#3c4154',
+                    secondary: '#151b2b',
+                    tertiary: '#3c4154',
                     info: colors.teal.lighten1,
                     warning: colors.amber.base,
                     error: colors.deepOrange.accent4,
                     success: colors.green.accent3
                 }
-
             }
         }
     },
