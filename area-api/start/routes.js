@@ -197,7 +197,78 @@ Route.group(() => {
 
     Route.post('/area', 'AreaController.addArea').middleware('auth').middleware('area');
 
+    /**
+     * @api {get} /me/area Get all the areas of the current user
+     * @apiName /me/area
+     * @apiGroup me
+     * @apiSuccess {Integer} id Id of the area
+     * @apiSuccess {String} name Name of the area
+     * @apiSuccess {Date} last_execution Date of the last area execution
+     * @apiSuccess {Integer} user_id Id of the user 
+     * @apiSuccess {Integer} action_id Id of the action use for the current AREA
+     * @apiSuccess {Integer} reaction_id Id of the reaction use for the current AREA
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *      {
+     *        {
+     *          "id": "3",
+     *          "name": "Area1",
+     *          "last_execution": "null",
+     *          "user_id": "1",
+     *          "action_id": "4",
+     *          "reaction_id": "3"
+     *        },
+     *        {
+     *          "id": "4",
+     *          "name": "Area4",
+     *          "last_execution": "null",
+     *          "user_id": "1",
+     *          "action_id": "5",
+     *          "reaction_id": "5"
+     *        }
+     *      }
+     */
+
     Route.get('/area', 'AreaController.getAreas').middleware('auth');
+
+    /**
+     * @api {get} /me/area Get a specific AREA of the current user
+     * @apiName /me/area
+     * @apiGroup me
+     * @apiSuccess {Integer} id Id of the area
+     * @apiSuccess {String} name Name of the area
+     * @apiSuccess {Date} last_execution Date of the last area execution
+     * @apiSuccess {Integer} user_id Id of the user 
+     * @apiSuccess {Integer} action_id Id of the action use for the current AREA
+     * @apiSuccess {Integer} reaction_id Id of the reaction use for the current AREA
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "id": "3",
+     *          "name": "Area1",
+     *          "last_execution": "null",
+     *          "user_id": "1",
+     *          "action_id": "4",
+     *          "reaction_id": "3"
+     *        }
+     */
+
+    Route.get('/area/:id', 'AreaController.getArea').middleware('auth');
+
+    /**
+     * @api {delete} /me/area/:id Delete an AREA for a user
+     * @apiName /me/area/:id
+     * @apiGroup me
+     * @apiParam {Integer} id Id ofthe AREA to suppress
+     * @apiSuccess {String} message Message which indicate that the AREA is suppressed
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "message": "The AREA is suppressed"
+     *        }
+     */
+
+    Route.delete('/area/:id', 'AreaController.deleteArea').middleware('auth');
 }).prefix('me');
 
 Route.group(() => {

@@ -90,6 +90,48 @@ class AreaController {
             data: userAreas
         });
     }
+
+    async getArea({auth, params, response}) {
+        const userArea = await Area.query()
+        .where('user_id', auth.current.user.id)
+        .where('id', params.id)
+        .fetch();
+
+        if (userArea.rows.length == 0)
+            return response.status(404).json({
+                status: 'error',
+                message: 'Area id doesn\'t exist'
+            });
+        
+        return response.json({
+            status: 'success',
+            data: userArea
+        });
+    }
+
+    async deleteArea({auth, params, response}) {
+        const userArea = await Area.query()
+        .where('user_id', auth.current.user.id)
+        .where('id', params.id)
+        .fetch();
+
+        if (userArea.rows.length == 0) {
+            return response.status(404).json({
+                status: 'error',
+                message: 'The area doesn\'t exist'
+            });
+        }
+
+        await Area.query()
+        .where('user_id', auth.current.user.id)
+        .where('id', params.id)
+        .delete();
+
+        return response.json({
+            status: 'success',
+            message: 'AREA is suppressed'
+        });
+    }
 }
 
 module.exports = AreaController
