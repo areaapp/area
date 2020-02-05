@@ -1,13 +1,18 @@
 export const state = () => ({
-    userAction: null
+    action: '',
+    url: ''
 });
 
 export const mutations = {
-    set (state, value) {
-        state.userAction = value;
+    setAction (state, value) {
+        state.action = value;
+    },
+
+    setUrl (state, value) {
+        state.url = value;
     },
 
     clear (state) {
-        state.userAction = null;
+        state.action = null;
     }
 };

@@ -54,7 +54,7 @@ module.exports = {
             return {
                 username: response.data.login,
                 email: response.data.email,
-            }
+            };
         } catch (err) {
             console.log(err);
             return null;

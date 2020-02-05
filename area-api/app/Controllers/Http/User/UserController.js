@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 class UserController {
     getUser({ auth, response }) {
@@ -12,4 +12,4 @@ class UserController {
     }
 }
 
-module.exports = UserController
+module.exports = UserController;

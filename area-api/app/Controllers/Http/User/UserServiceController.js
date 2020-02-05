@@ -2,6 +2,8 @@
 
 const Services = use('App/Services/index');
 const Service = use('App/Models/Service');
+const User = use('App/Models/User');
+const OAuthController = use('App/Controllers/Http/Auth/OAuthController');
 
 class UserServiceController {
 
@@ -27,18 +29,18 @@ class UserServiceController {
             }
 
             const service = Services[params.serviceName];
-            let accessToken = '22b93eff1349d4f4392ccc8de3eb1c6388aa69b5';
-            // try {
-            //     accessToken = await service.getAccessToken({
-            //         code: parameters.authCode,
-            //         clientType: parameters.clientType
-            //     });
-            // } catch (err) {
-            //     return response.status(401).json({
-            //         status: 'error',
-            //         message: 'Cannot get access_token'
-            //     });
-            // }
+            const accessToken = await OAuthController.getAccessToken(
+                service,
+                parameters.authCode,
+                parameters.clientType
+            );
+
+            if (accessToken === null) {
+                return response.status(400).json({
+                    status: 'error',
+                    message: 'Cannot retreive access_token'
+                });
+            }
 
             const serviceUser = await service.getUser(accessToken);
 

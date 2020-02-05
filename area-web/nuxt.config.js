@@ -50,8 +50,14 @@ export default {
         '@nuxtjs/pwa',
         // Doc: https://github.com/nuxt-community/dotenv-module
         '@nuxtjs/dotenv',
-        '@nuxtjs/auth'
+        '@nuxtjs/auth',
+        'cookie-universal-nuxt'
     ],
+
+
+    router: {
+        middleware: ['auth']
+    },
 
     /*
     ** Axios module configuration
@@ -113,5 +119,51 @@ export default {
     ** Auth configuration
     */
     auth: {
+        strategies: {
+            local: {
+                endpoints: {
+                    login: {
+                        url: '/auth/signin',
+                        method: 'post',
+                        propertyName: 'token'
+                    },
+                    user: {
+                        url: '/me',
+                        methode: 'get',
+                        propertyName: 'data'
+                    },
+                    logout: false
+                },
+                tokenRequired: true,
+                tokenName: 'Authorization',
+                tokenType: 'Bearer'
+            },
+
+            oauth: {
+                _scheme: 'local',
+                endpoints: {
+                    login: {
+                        url: '/auth/oauth/signin',
+                        method: 'post',
+                        propertyName: 'data.token'
+                    },
+                    user: {
+                        url: '/me',
+                        methode: 'get',
+                        propertyName: 'data'
+                    },
+                    logout: false
+                },
+                tokenRequired: true,
+                tokenName: 'Authorization',
+                tokenType: 'Bearer'
+            }
+        },
+        redirect: {
+            login: '/auth/signin',
+            logout: '/auth/signin',
+            home: '/',
+            user: '/me'
+        }
     }
 };

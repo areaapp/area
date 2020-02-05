@@ -23,6 +23,20 @@
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
+            <template
+                v-if="$auth.loggedIn"
+                v-slot:append
+            >
+                <div>
+                    <v-btn
+                        v-on:click="signout"
+                        block
+                    >
+                        <v-icon>mdi-exit-run</v-icon>
+                        Sign out
+                    </v-btn>
+                </div>
+            </template>
         </v-navigation-drawer>
         <v-app-bar
             :clipped-left="clipped"
@@ -95,23 +109,48 @@
              clipped: false,
              drawer: false,
              fixed: false,
-             items: [
-                 {
-                     icon: 'mdi-apps',
-                     title: 'Welcome',
-                     to: '/'
-                 },
-                 {
-                     icon: 'mdi-chart-bubble',
-                     title: 'Inspire',
-                     to: '/inspire'
-                 }
-             ],
              miniVariant: false,
              right: true,
              rightDrawer: false,
              title: 'Vuetify.js'
          };
+     },
+
+     computed: {
+         items () {
+             let items = [];
+
+             if (!this.$auth.loggedIn) {
+                 items = items.concat([
+                     {
+                         icon: 'mdi-login-variant',
+                         title: 'Sign in',
+                         to: '/auth/signin'
+                     },
+                     {
+                         icon: 'mdi-login-variant',
+                         title: 'Sign up',
+                         to: '/auth/signup'
+                     }
+                 ]);
+             } else {
+                 items = items.concat([
+                     {
+                         icon: 'mdi-apps',
+                         title: 'Home',
+                         to: '/'
+                     }
+                 ]);
+             }
+
+             return items;
+         }
+     },
+
+     methods: {
+         async signout () {
+             await this.$auth.logout();
+         }
      }
  };
 </script>
