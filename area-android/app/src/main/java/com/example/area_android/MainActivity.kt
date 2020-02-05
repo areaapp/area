@@ -1,12 +1,18 @@
 package com.example.area_android
 
 import android.os.Bundle
+import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.authentication
+import com.github.kittinunf.fuel.json.responseJson
+import com.github.kittinunf.result.Result
 
 class MainActivity : AppCompatActivity() {
 
