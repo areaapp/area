@@ -269,6 +269,24 @@ Route.group(() => {
      */
 
     Route.delete('/area/:id(\\d+)', 'AreaController.deleteArea').middleware('auth');
+
+    /**
+     * @api {put} /me/area/:id Modify an AREA for a user
+     * @apiName /me/area/:id
+     * @apiGroup me
+     * @apiParam {String} name New name of the area
+     * @apiParam {Date} last_execution Date of the last execution
+     * @apiParam {Json} action_args Arguments of the action link to the area
+     * @apiParam {String} reaction_args Arguments of the reaction link to the area
+     * @apiSuccess {String} status success
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "status": "success"
+     *        }
+     */
+
+    Route.put('/area/:id(\\d+)', 'AreaController.modifyArea').middleware('auth');
 }).prefix('me');
 
 Route.group(() => {

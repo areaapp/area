@@ -132,6 +132,45 @@ class AreaController {
             message: 'AREA is suppressed'
         });
     }
+
+    async modifyArea({auth, params, request, response}) {
+        const parametersArea = request.only(['last_execution', 'name']);
+        const parametersArgs = request.only(['action_args', 'reaction_args']);
+        const area = await Area.find(params.id);
+
+        if (!area || area.user_id != auth.current.user.id)
+            return response.status(404).json({
+                status: 'error',
+                message: 'Area doesn\'t exist'
+            });
+        
+        
+        area.merge(parametersArea);
+        await area.save();
+
+        const action = await Action.find(area.action_id);
+        const reaction = await Reaction.find(area.reaction_id);
+
+        if (!action || !reaction)
+            return response.status(404).json({
+                status: 'error',
+                message: 'Action or reaction of the area is invalid'
+            });
+        
+        if (parametersArgs.action_args !== undefined) {
+            action.args = parametersArgs.action_args;
+            await action.save();
+        }
+
+        if (parametersArgs.reaction_args !== undefined) {
+            reaction.args = parametersArgs.reaction_args;
+            await reaction.save();
+        }
+
+        return response.json({
+            status: 'success'
+        });
+    }
 }
 
 module.exports = AreaController
