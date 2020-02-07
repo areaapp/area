@@ -10,7 +10,7 @@ class ActionSchema extends Schema {
       table.text('name').notNullable();
       table.json('args');
       table.text('buffer').nullable();
-      table.integer('service_id').unsigned().notNullable().references('id').inTable('services');
+      table.integer('service_id').unsigned().notNullable().references('id').inTable('services').onDelete('CASCADE');
     })
   }
 

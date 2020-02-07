@@ -9,7 +9,7 @@ class ReactionSchema extends Schema {
       table.increments();
       table.text('name').notNullable();
       table.json('args');
-      table.integer('service_id').unsigned().notNullable().references('id').inTable('services');
+      table.integer('service_id').unsigned().notNullable().references('id').inTable('services').onDelete("cascade");
     })
   }
 

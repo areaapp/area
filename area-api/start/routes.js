@@ -112,7 +112,7 @@ Route.group(() => {
      * @apiParam {String} authCode OAuth code got from authorize url
      * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
      */
-    Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
+    Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware('auth');
     
     /**
      * @api {get} /me Get email and username of current user
@@ -182,7 +182,7 @@ Route.group(() => {
      *        }
      */
 
-    Route.delete('/services/:name', 'User/UserServiceController.deleteService').middleware('auth');
+    Route.delete('/services/:name([a-zA-Z]+)', 'User/UserServiceController.deleteService').middleware('auth');
 
     /**
      * @api {post} /me/area Create an AREA
@@ -253,7 +253,7 @@ Route.group(() => {
      *        }
      */
 
-    Route.get('/area/:id', 'AreaController.getArea').middleware('auth');
+    Route.get('/area/:id(\\d+)', 'AreaController.getArea').middleware('auth');
 
     /**
      * @api {delete} /me/area/:id Delete an AREA for a user
@@ -268,7 +268,7 @@ Route.group(() => {
      *        }
      */
 
-    Route.delete('/area/:id', 'AreaController.deleteArea').middleware('auth');
+    Route.delete('/area/:id(\\d+)', 'AreaController.deleteArea').middleware('auth');
 }).prefix('me');
 
 Route.group(() => {
