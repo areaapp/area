@@ -27,7 +27,7 @@ export const actions = {
     },
 
     async getAreas ({ commit }) {
-        const resAreas = await this.$axios.$get('/me/area');
+        const resAreas = await this.$axios.$get('/me/areas');
 
         if (resAreas.status === 'success') {
             commit('setAreas', resAreas.data);
