@@ -10,8 +10,8 @@ module.exports = {
     description: 'plus tard',
     baseUrl: 'www.github.com',
     iconName: 'github-circle',
-    foreground: '',
-    background: '',
+    foreground: '#ffffff',
+    background: '#211f1f',
     irregularAccessToken: true,
     authorizeUrl: "https://github.com/login/oauth/authorize",
     accessTokenUrl: 'https://github.com/login/oauth/access_token',
@@ -54,7 +54,7 @@ module.exports = {
             return {
                 username: response.data.login,
                 email: response.data.email,
-            }
+            };
         } catch (err) {
             console.log(err);
             return null;

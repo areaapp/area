@@ -72,40 +72,53 @@ class AreaController {
             reaction_id: newReaction.id
         };
 
-        await Area.create(newAreaInfos);
+        const area = await Area.create(newAreaInfos);
+        const data = request.areaHelper.areaSerialize(area, newAction, newReaction);
 
         return response.json({
             status: 'success',
-            message: 'Area added'
+            data: data
         });
     }
 
-    async getAreas({auth, response}) {
+    async getAreas({auth, request, response}) {
         const userAreas = await Area.query()
         .where('user_id', auth.current.user.id)
         .fetch();
 
+        const areasInfos = userAreas.toJSON();
+        let data = [];
+        let action;
+        let reaction;
+
+        for (var i = 0; i < areasInfos.length; i++) {
+            action = await Action.find(areasInfos[i].action_id);
+            reaction = await Reaction.find(areasInfos[i].reaction_id);
+            data.push(request.areaHelper.areaSerialize(areasInfos[i], action, reaction));
+        }
+
         return response.json({
             status: 'success',
-            data: userAreas
+            data: data
         });
     }
 
-    async getArea({auth, params, response}) {
-        const userArea = await Area.query()
-        .where('user_id', auth.current.user.id)
-        .where('id', params.id)
-        .fetch();
+    async getArea({auth, params, request, response}) {
+        const area = await Area.find(params.id);
 
-        if (userArea.rows.length == 0)
+        if (!area || area.user_id != auth.current.user.id)
             return response.status(404).json({
                 status: 'error',
-                message: 'Area id doesn\'t exist'
+                message: 'Area doesn\'t exist'
             });
-        
+
+        const action = await Action.find(area.action_id);
+        const reaction = await Reaction.find(area.reaction_id);
+        const data = request.areaHelper.areaSerialize(area, action, reaction);
+            
         return response.json({
             status: 'success',
-            data: userArea
+            data: data
         });
     }
 
@@ -167,8 +180,11 @@ class AreaController {
             await reaction.save();
         }
 
+        const data = request.areaHelper.areaSerialize(area, action, reaction);
+
         return response.json({
-            status: 'success'
+            status: 'success',
+            data: data
         });
     }
 }

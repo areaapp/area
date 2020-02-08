@@ -110,6 +110,20 @@ class AreaHelper {
                     }
                 }
                 return null;
+            },
+
+            areaSerialize(area, action, reaction) {
+                const data = {
+                    id: area.id,
+                    name: area.name,
+                    user_id: area.user_id,
+                    action_id: area.action_id,
+                    reaction_id: area.reaction_id,
+                    action_args: action.args,
+                    reaction_args: reaction.args
+                };
+
+                return data;
             }
         };
 

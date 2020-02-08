@@ -34,9 +34,11 @@ class OAuthController {
     async connectUser(auth, userService, response) {
         try {
             const user = await userService.user().fetch();
+            const userAuth = await auth.generate(user);
+
             return response.json({
                 status: 'success',
-                data: await auth.generate(user)
+                data: userAuth
             });
         } catch (err) {
             console.log(err);
@@ -65,7 +67,7 @@ class OAuthController {
         try {
             const user = await User.create(userInfos);
             await user.services().create(serviceInfos);
-            return reponse.json({
+            return response.json({
                 status: 'success',
                 data: await auth.generate(user)
             });
@@ -101,13 +103,14 @@ class OAuthController {
         }
 
         const service = Services[parameters.service];
-        const accessToken = await this.getAccessToken(
+        const accessToken = await this.constructor.getAccessToken(
             service,
             parameters.authCode,
             parameters.clientType
         );
 
         if (accessToken === null) {
+            console.log('ERROR');
             return response.status(400).json({
                 status: 'error',
                 message: 'Cannot retreive access_token'
@@ -117,6 +120,7 @@ class OAuthController {
         const serviceUser = await service.getUser(accessToken);
 
         if (serviceUser === null) {
+            console.log('ERROR');
             return response.status(400).json({
                 status: 'error',
                 message: 'An error as occured. Please, try again later'
@@ -158,6 +162,7 @@ class OAuthController {
         if (service.irregularAccessToken) {
             return await service.getAccessToken(code, clientType);
         }
+
         const data = querystring.stringify({
             client_id: ApiInfos[clientType][service.name].client_id,
             client_secret: ApiInfos[clientType][service.name].client_secret,

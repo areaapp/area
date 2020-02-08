@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
     web: {
@@ -36,5 +36,5 @@ module.exports = {
 
     android: {
 
-    },
-}
+    }
+};

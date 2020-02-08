@@ -111,13 +111,21 @@ Route.group(() => {
      * @apiParam {String} name Name of the service
      * @apiParam {String} authCode OAuth code got from authorize url
      * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "id": "2",
+     *          "user_id": "1",
+     *          "name": "google",
+     *          "email": "kylian.maugue@epitech.eu"
+     *        }
      */
     Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware('auth');
     
     /**
      * @api {get} /me Get email and username of current user
      * @apiName /me
-     * @apiGroup me
+     * @apiGroup User
      * @apiSuccess {String} username Username of the user
      * @apiSuccess {String} email Email of the user
      * @apiSuccessExample {json} Success-Response:
@@ -133,13 +141,16 @@ Route.group(() => {
     /**
      * @api {put} /me Modify infos of username
      * @apiName /me
-     * @apiGroup me
+     * @apiGroup User
      * @apiParam {String} email New email of the account
      * @apiSuccess {String} username Username of the user
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
-     *          "username": "kylianm"
+     *          "id": "1",
+     *          "username": "kylianm",
+     *          "email" : "kylian.maugue@epitech.eu",
+     *          "login_source": "area"
      *        }
      */
 
@@ -148,7 +159,7 @@ Route.group(() => {
     /**
      * @api {get} /me/services Get services of one user
      * @apiName /me/services
-     * @apiGroup me
+     * @apiGroup User
      * @apiSuccess {Integer} id Id of the user's services
      * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {String} name Name of the service
@@ -162,8 +173,6 @@ Route.group(() => {
      *          "user_id": "2",
      *          "name": "google",
      *          "email": "kylianm@tek.eu",
-     *          "oauth_token": "ya29.Il-8B3Gj-wUoGehca59RqZK2LDZ8NBFVkqEfs6w2UXnzkN_s7QBhilqtBn98ap1nOz1koGHntp_mQlobFf2c38K0KgwslHhXv03c3EmbRWtiFnItohKy0ni0pY3TKlw2TA",
-     *          "oauth_refresh_token": "null"
      *        }
      */
 
@@ -172,7 +181,7 @@ Route.group(() => {
     /**
      * @api {delete} /me/services/:name Delete a service for a user
      * @apiName /me/services/:name
-     * @apiGroup me
+     * @apiGroup User
      * @apiParam {String} name Name of the service to delete
      * @apiSuccess {String} message Message which indicate the name of the service suppressed
      * @apiSuccessExample {json} Success-Response:
@@ -187,12 +196,23 @@ Route.group(() => {
     /**
      * @api {post} /me/area Create an AREA
      * @apiName Area
-     * @apiGroup Area
+     * @apiGroup User
      * @apiParam {String} name Name of the AREA
      * @apiParam {String} action_name Name of the action
      * @apiParam {String} reaction_name Name of the reaction
      * @apiParam {String} reaction_args Arguments of the reaction
      * @apiParam {String} action_args Arguments of the action
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "id": "3"
+     *          "name": "area",
+     *          "user_id": "2",
+     *          "action_id": "1",
+     *          "reaction_id": "1",
+     *          "action_args": ["params1", "params2"],
+     *          "reaction_args": ["params1", "params2"]
+     *        }
      */
 
     Route.post('/area', 'AreaController.addArea').middleware('auth').middleware('area');
@@ -200,7 +220,7 @@ Route.group(() => {
     /**
      * @api {get} /me/area Get all the areas of the current user
      * @apiName /me/area
-     * @apiGroup me
+     * @apiGroup User
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Date} last_execution Date of the last area execution
@@ -229,12 +249,12 @@ Route.group(() => {
      *      }
      */
 
-    Route.get('/area', 'AreaController.getAreas').middleware('auth');
+    Route.get('/area', 'AreaController.getAreas').middleware('auth').middleware('area');
 
     /**
      * @api {get} /me/area Get a specific AREA of the current user
      * @apiName /me/area
-     * @apiGroup me
+     * @apiGroup User
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Date} last_execution Date of the last area execution
@@ -243,22 +263,37 @@ Route.group(() => {
      * @apiSuccess {Integer} reaction_id Id of the reaction use for the current AREA
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
+     * {
      *        {
      *          "id": "3",
      *          "name": "Area1",
      *          "last_execution": "null",
      *          "user_id": "1",
      *          "action_id": "4",
-     *          "reaction_id": "3"
+     *          "reaction_id": "3",
+     *          "action_args": "[action_args1, action_args2]";
+     *          "reaction_args": "[reaction_args1, reaction_args2]"
+     *        },
+     *        {
+     *          "id": "4",
+     *          "name": "Area2",
+     *          "last_execution": "null",
+     *          "user_id": "1",
+     *          "action_id": "4",
+     *          "reaction_id": "3",
+     *          "action_args": "[action_args1, action_args2]";
+     *          "reaction_args": "[reaction_args1, reaction_args2]"
      *        }
+     *      
+     * }
      */
 
-    Route.get('/area/:id(\\d+)', 'AreaController.getArea').middleware('auth');
+    Route.get('/area/:id(\\d+)', 'AreaController.getArea').middleware('auth').middleware('area');
 
     /**
      * @api {delete} /me/area/:id Delete an AREA for a user
      * @apiName /me/area/:id
-     * @apiGroup me
+     * @apiGroup User
      * @apiParam {Integer} id Id ofthe AREA to suppress
      * @apiSuccess {String} message Message which indicate that the AREA is suppressed
      * @apiSuccessExample {json} Success-Response:
@@ -273,7 +308,7 @@ Route.group(() => {
     /**
      * @api {put} /me/area/:id Modify an AREA for a user
      * @apiName /me/area/:id
-     * @apiGroup me
+     * @apiGroup User
      * @apiParam {String} name New name of the area
      * @apiParam {Date} last_execution Date of the last execution
      * @apiParam {Json} action_args Arguments of the action link to the area
@@ -282,11 +317,16 @@ Route.group(() => {
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
-     *          "status": "success"
+     *          "id": "3",
+     *          "name": "Area1",
+     *          "last_execution": "null",
+     *          "user_id": "1",
+     *          "action_id": "4",
+     *          "reaction_id": "3"
      *        }
      */
 
-    Route.put('/area/:id(\\d+)', 'AreaController.modifyArea').middleware('auth');
+    Route.put('/area/:id(\\d+)', 'AreaController.modifyArea').middleware('auth').middleware('area');
 }).prefix('me');
 
 Route.group(() => {

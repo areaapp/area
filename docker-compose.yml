@@ -1,0 +1,96 @@
+version: "3.4"
+
+services:
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:latest
+    container_name: "area_proxy"
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - v-nginx:/etc/nginx/conf.d
+    restart: always
+    networks:
+      - net-web
+      - net-api
+
+  # Area database (postgresql)
+  db:
+    image: "postgres"
+    container_name: "area_db"
+    environment:
+      - POSTGRES_USER=${DBUSERNAME}
+      - POSTGRES_PASSWORD=${DBPASSWORD}
+      - POSTGRES_DB=${DBNAME}
+    volumes:
+      - v-db:/var/lib/postgresql/data
+    networks:
+      - net-db
+
+  # Area api (adonis)
+  server:
+    networks:
+      - net-api
+      - net-db
+    build: ./area-api
+    container_name: "area_api"
+    environment:
+      - DB_USER=${DBUSERNAME}
+      - DB_PASSWORD=${DBPASSWORD}
+      - DB_DATABASE=${DBNAME}
+      - NODE_ENV=production
+    restart: always
+    volumes:
+      - v-docs:/opt/area/docs
+
+  # Area web client (nuxt)
+  client_web:
+    networks:
+      - net-web
+      - net-api
+    build: ./area-web
+    container_name: "area_web"
+    restart: always
+    volumes:
+      - v-releases:/opt/area/releases
+      - v-docs:/opt/area/docs
+
+  # Area android build
+  release_android:
+    container_name: "area_android"
+    build: ./area-android
+    volumes:
+      - v-releases:/opt/area/releases
+
+
+volumes:
+  v-releases:
+    driver_opts:
+      device: "${PWD}/volumes/releases"
+      type: none
+      o: bind
+  v-db:
+    driver_opts:
+      device: "${PWD}/volumes/db"
+      type: none
+      o: bind
+  v-nginx:
+    driver_opts:
+      device: "${PWD}/volumes/nginx"
+      type: none
+      o: bind
+  v-docs:
+    driver_opts:
+      device: "${PWD}/volumes/docs"
+      type: none
+      o: bind
+
+networks:
+  net-web:
+    driver: bridge
+  net-api:
+    driver: bridge
+  net-db:
+    driver: bridge
+

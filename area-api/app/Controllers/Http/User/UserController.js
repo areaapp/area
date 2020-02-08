@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 class UserController {
     getUser({ auth, response }) {
@@ -27,9 +27,9 @@ class UserController {
 
         return response.json({
             status: 'success',
-            data: user.username
+            data: user
         });
     }
 }
 
-module.exports = UserController
+module.exports = UserController;
