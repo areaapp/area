@@ -40,7 +40,12 @@
                 v-slot:append
             >
                 <v-row class="justify-center my-5">
-                    <v-btn class="primary--text" color="normal" light>
+                    <v-btn
+                        nuxt
+                        to="/new"
+                        class="primary--text"
+                        color="normal"
+                        light>
                         Create a new area <v-icon right>mdi-plus-circle</v-icon>
                     </v-btn>
                 </v-row>
