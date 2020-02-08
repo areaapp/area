@@ -114,6 +114,13 @@ class AreaController {
 
         const action = await Action.find(area.action_id);
         const reaction = await Reaction.find(area.reaction_id);
+
+        if (!action || !reaction)
+            return response.status(404).json({
+                status: 'error',
+                message: 'Action or reaction of the area is invalid'
+            });
+
         const data = request.areaHelper.areaSerialize(area, action, reaction);
             
         return response.json({

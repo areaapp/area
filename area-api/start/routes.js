@@ -121,7 +121,7 @@ Route.group(() => {
      *        }
      */
     Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware('auth');
-    
+
     /**
      * @api {get} /me Get email and username of current user
      * @apiName /me
@@ -160,19 +160,15 @@ Route.group(() => {
      * @api {get} /me/services Get services of one user
      * @apiName /me/services
      * @apiGroup User
-     * @apiSuccess {Integer} id Id of the user's services
-     * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {String} name Name of the service
      * @apiSuccess {String} email Email used to connect to the service
-     * @apiSuccess {String} oauth_token Oauth token used for the service
-     * @apiSuccess {String} oauth_refresh_token oauth refresh token used for the service
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
-     *          "id": "1",
-     *          "user_id": "2",
-     *          "name": "google",
-     *          "email": "kylianm@tek.eu",
+     *          "google": {
+     *            "name": "google",
+     *            "email": "kylianm@tek.eu"
+     *          }
      *        }
      */
 
@@ -218,38 +214,56 @@ Route.group(() => {
     Route.post('/area', 'AreaController.addArea').middleware('auth').middleware('area');
 
     /**
-     * @api {get} /me/area Get all the areas of the current user
-     * @apiName /me/area
+     * @api {get} /me/areas Get all the areas of the current user
+     * @apiName /me/areas
      * @apiGroup User
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Date} last_execution Date of the last area execution
-     * @apiSuccess {Integer} user_id Id of the user 
+     * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {Integer} action_id Id of the action use for the current AREA
      * @apiSuccess {Integer} reaction_id Id of the reaction use for the current AREA
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
-     *      {
-     *        {
-     *          "id": "3",
-     *          "name": "Area1",
-     *          "last_execution": "null",
-     *          "user_id": "1",
-     *          "action_id": "4",
-     *          "reaction_id": "3"
-     *        },
-     *        {
-     *          "id": "4",
-     *          "name": "Area4",
-     *          "last_execution": "null",
-     *          "user_id": "1",
-     *          "action_id": "5",
-     *          "reaction_id": "5"
-     *        }
-     *      }
+     *     {
+     *      "id": 3,
+     *       "name": "area45",
+     *     "user_id": 1,
+     *       "action": {
+     *           "name": "google_gmail_new_mail",
+     *           "args": [
+     *               "action_params1",
+     *               "action_params0"
+     *           ]
+     *       },
+     *       "reaction": {
+     *           "name": "google_gmail_send_email",
+     *           "args": [
+     *               "reaction_params1",
+     *               "reaction_params0"
+     *           ]
+     *       }
+     *   },
+     *   {
+     *       "id": 4,
+     *       "name": "area45",
+     *       "user_id": 1,
+     *       "action": {
+     *           "name": "google_gmail_new_mail",
+     *           "args": [
+     *               "[\"action_params1\",  \"action_params0\"]"
+     *           ]
+     *       },
+     *       "reaction": {
+     *           "name": "google_gmail_send_email",
+     *           "args": [
+     *               "[\"reaction_params1\",  \"reaction_params0\"]"
+     *           ]
+     *       }
+     *   }
      */
 
-    Route.get('/area', 'AreaController.getAreas').middleware('auth').middleware('area');
+    Route.get('/areas', 'AreaController.getAreas').middleware('auth').middleware('area');
 
     /**
      * @api {get} /me/area Get a specific AREA of the current user
@@ -258,34 +272,29 @@ Route.group(() => {
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Date} last_execution Date of the last area execution
-     * @apiSuccess {Integer} user_id Id of the user 
+     * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {Integer} action_id Id of the action use for the current AREA
      * @apiSuccess {Integer} reaction_id Id of the reaction use for the current AREA
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
-     * {
-     *        {
-     *          "id": "3",
-     *          "name": "Area1",
-     *          "last_execution": "null",
-     *          "user_id": "1",
-     *          "action_id": "4",
-     *          "reaction_id": "3",
-     *          "action_args": "[action_args1, action_args2]";
-     *          "reaction_args": "[reaction_args1, reaction_args2]"
-     *        },
-     *        {
-     *          "id": "4",
-     *          "name": "Area2",
-     *          "last_execution": "null",
-     *          "user_id": "1",
-     *          "action_id": "4",
-     *          "reaction_id": "3",
-     *          "action_args": "[action_args1, action_args2]";
-     *          "reaction_args": "[reaction_args1, reaction_args2]"
-     *        }
-     *      
-     * }
+     *   {
+     *       "id": 3,
+     *       "name": "area45",
+     *       "user_id": 1,
+     *       "action": {
+     *           "name": "google_gmail_new_mail",
+     *           "args": [
+     *               "action_params1",
+     *               "action_params0"
+     *           ]
+     *       },
+     *       "reaction": {
+     *           "name": "google_gmail_send_email",
+     *           "args": [
+     *               "reaction_params1",
+     *               "reaction_params0"
+     *           ]
+     *   }
      */
 
     Route.get('/area/:id(\\d+)', 'AreaController.getArea').middleware('auth').middleware('area');

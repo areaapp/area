@@ -79,9 +79,21 @@ class UserServiceController {
             .where('user_id', auth.current.user.id)
             .fetch();
 
+            const userServicesInfos = userService.toJSON();
+            let services = {};
+
+            for (var i = 0; i < userServicesInfos.length; i++) {
+                let service = {
+                    name: userServicesInfos[i].name,
+                    email: userServicesInfos[i].email
+                };
+
+                services[service.name] = service;
+            }
+
             return response.json({
                 status: 'success',
-                data: userService
+                data: services
             });
         }
         catch (err) {
