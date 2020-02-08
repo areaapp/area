@@ -98,10 +98,21 @@
          SocialAuth
      },
 
+     asyncData ({ query }) {
+         const errors = [];
+
+         if (query.error) {
+             errors.push({
+                 message: query.error
+             });
+         }
+
+         return { errors };
+     },
+
      data () {
          return {
              title: 'Sign up',
-             errors: [],
              username: '',
              email: '',
              password: '',
