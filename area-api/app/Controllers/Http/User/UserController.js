@@ -27,7 +27,7 @@ class UserController {
 
         return response.json({
             status: 'success',
-            data: user.username
+            data: user
         });
     }
 }

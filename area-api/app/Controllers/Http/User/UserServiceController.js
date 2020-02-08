@@ -62,10 +62,11 @@ class UserServiceController {
                 email: serviceUser.email,
             };
 
-            await auth.current.user.services().create(serviceInfos);
+            const newService = await auth.current.user.services().create(serviceInfos);
 
             return response.json({
-                status: 'success'
+                status: 'success',
+                data: newService
             });
         } catch (err) {
             console.log(err);

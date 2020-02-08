@@ -10,8 +10,8 @@ class AreaSchema extends Schema {
       table.string('name', 255).notNullable();
       table.date('last_execution').nullable();
       table.integer('user_id').unsigned().notNullable().references('id').inTable('users').onDelete("cascade");
-      table.integer('action_id').unsigned().notNullable().references('id').inTable('actions');
-      table.integer('reaction_id').unsigned().notNullable().references('id').inTable('reactions');
+      table.integer('action_id').unsigned().notNullable().references('id').inTable('actions').onDelete("cascade");
+      table.integer('reaction_id').unsigned().notNullable().references('id').inTable('reactions').onDelete("cascade");
     })
   }
 
