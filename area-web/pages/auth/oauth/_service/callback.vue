@@ -8,5 +8,5 @@
  export default {
      auth: 'guest',
      middleware: 'oauth'
- }
+ };
 </script>

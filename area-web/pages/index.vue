@@ -8,8 +8,7 @@
             xs12
             sm8
             md6
-        >
-        </v-flex>
+        />
     </v-layout>
 </template>
 
@@ -18,11 +17,11 @@
      data () {
          return {
              title: 'My Areas'
-         }
+         };
      },
 
      mounted () {
          this.$store.commit('setTitle', this.title);
      }
- }
+ };
 </script>

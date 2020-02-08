@@ -1,7 +1,5 @@
 <template>
-    <v-layout column>
-
-    </v-layout>
+    <v-layout column />
 </template>
 
 <script>
@@ -15,5 +13,5 @@
      mounted () {
          this.$store.commit('setTitle', this.title);
      }
- }
+ };
 </script>

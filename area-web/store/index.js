@@ -19,7 +19,8 @@ export const mutations = {
 };
 
 export const actions = {
-    async nuxtServerInit ({ commit }, { $axios, app }) {
+
+    async nuxtServerInit ({ commit, dispatch }, { $axios, $auth, app }) {
         // Get services
         const resServices = await $axios.$get('/services');
 
@@ -30,6 +31,11 @@ export const actions = {
         // Get dark theme mode
         const dark = app.$cookies.get('darkTheme') || false;
         commit('setDarkTheme', dark);
+
+        if ($auth.loggedIn) {
+            await dispatch('user/getServices');
+            await dispatch('user/getAreas');
+        }
     },
 
     setDarkTheme ({ commit }, value) {

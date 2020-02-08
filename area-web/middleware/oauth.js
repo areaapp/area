@@ -20,7 +20,7 @@ export default async function ({ $auth, app, store, query, params, redirect }) {
             });
             redirect(url, { success: 'connected' });
         } catch (e) {
-            redirect(url, { error: `Sign in with ${params.service} failed. Try again later.` });
+            redirect(url, { error: e.response.data.message });
         }
         break;
     }
