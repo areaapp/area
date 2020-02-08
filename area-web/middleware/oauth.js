@@ -20,6 +20,7 @@ export default async function ({ $auth, app, store, query, params, redirect }) {
             });
             redirect(url, { success: 'connected' });
         } catch (e) {
+            console.log(e);
             redirect(url, { error: e.message });
         }
         break;
