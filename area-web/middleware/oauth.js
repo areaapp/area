@@ -1,4 +1,4 @@
-export default async function ({ $auth, app, store, query, params, redirect }) {
+export default async function ({ $auth, store, app, query, params, redirect }) {
     const userAction = app.$cookies.get('userAction');
     const url = app.$cookies.get('userActionUrl');
 
@@ -7,7 +7,15 @@ export default async function ({ $auth, app, store, query, params, redirect }) {
 
     switch (userAction) {
     case 'addService':
-        // add service and redirect
+        try {
+            await store.dispatch('user/addService', {
+                name: params.service,
+                authCode: query.code
+            });
+            redirect(url, { success: `Service ${params.service} successfully added.` });
+        } catch (e) {
+            redirect(url, { error: e.response.data.message });
+        }
         break;
     default:
         try {

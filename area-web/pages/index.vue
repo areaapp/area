@@ -1,15 +1,5 @@
 <template>
-    <v-layout
-        column
-        justify-center
-        align-center
-    >
-        <v-flex
-            xs12
-            sm8
-            md6
-        />
-    </v-layout>
+    <v-layout></v-layout>
 </template>
 
 <script>
@@ -20,7 +10,14 @@
          };
      },
 
+     computed: {
+         userAreas () {
+             return this.$store.state.user.areas;
+         }
+     },
+
      mounted () {
+         this.title = `My areas (${this.userAreas.length})`
          this.$store.commit('setTitle', this.title);
      }
  };

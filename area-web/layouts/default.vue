@@ -67,11 +67,11 @@
                                 </v-row>
                                 <v-row>
                                     <span class="caption mr-2">
-                                        3
+                                        {{ Object.keys(userServices).length }}
                                         <v-icon x-small>mdi-puzzle</v-icon>
                                     </span>
                                     <span class="caption">
-                                        13
+                                        {{ userAreas.length }}
                                         <v-icon x-small>mdi-vector-square</v-icon>
                                     </span>
                                 </v-row>
@@ -130,6 +130,12 @@
          AreaLogo
      },
 
+     head () {
+         return {
+             titleTemplate: `%s - ${this.title}`
+         };
+     },
+
      data () {
          return {
              drawer: true
@@ -161,6 +167,14 @@
                  return this.$auth.user;
              }
              return null;
+         },
+
+         userServices () {
+             return this.$store.state.user.services;
+         },
+
+         userAreas () {
+             return this.$store.state.user.areas;
          },
 
          items () {

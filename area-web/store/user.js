@@ -9,7 +9,14 @@ export const mutations = {
     },
 
     addService (state, service) {
-        state.services.push(service);
+        state.services[service.name] = service;
+    },
+
+    deleteService (state, serviceName) {
+        const services = state.services;
+
+        delete services[serviceName];
+        state.services = services;
     },
 
     setAreas (state, value) {
@@ -31,6 +38,26 @@ export const actions = {
 
         if (resAreas.status === 'success') {
             commit('setAreas', resAreas.data);
+        }
+    },
+
+    async addService ({ commit }, { name, authCode }) {
+        const resService = await this.$axios.$post(`/me/services/${name}`, {
+            name,
+            authCode,
+            clientType: 'web'
+        });
+
+        if (resService.status === 'success') {
+            commit('addService', resService.data);
+        }
+    },
+
+    async deleteService ({ commit }, name) {
+        const resService = await this.$axios.$delete(`/me/services/${name}`);
+
+        if (resService.status === 'success') {
+            commit('deleteService', name);
         }
     }
 };

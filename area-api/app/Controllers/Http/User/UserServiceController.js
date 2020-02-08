@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Services = use('App/Services/index');
 const Service = use('App/Models/Service');
@@ -8,7 +8,7 @@ const OAuthController = use('App/Controllers/Http/Auth/OAuthController');
 class UserServiceController {
 
     async addService({ auth, params, request, response }) {
-        try {
+         try {
             const paramNames = ['authCode', 'clientType'];
             const parameters = request.only(paramNames);
 
@@ -64,6 +64,7 @@ class UserServiceController {
 
             const newService = await auth.current.user.services().create(serviceInfos);
 
+            console.log(newService);
             return response.json({
                 status: 'success',
                 data: newService
@@ -120,9 +121,9 @@ class UserServiceController {
 
         return response.json({
             status: 'success',
-            message: 'The service ' + params.name + ' is suppressed'
+            data: 'The service ' + params.name + ' is suppressed'
         });
     }
 }
 
-module.exports = UserServiceController
+module.exports = UserServiceController;
