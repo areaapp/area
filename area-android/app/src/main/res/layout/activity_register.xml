@@ -120,23 +120,6 @@
             android:text="@android:string/ok" />
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/register_serviceButtons"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="316dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="-19dp">
-
-        <LinearLayout
-            android:id="@+id/register_serviceButtonsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        </LinearLayout>
-    </ScrollView>
-
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
@@ -145,8 +128,6 @@
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:weightSum="1"
-        app:layout_constraintEnd_toStartOf="@+id/register_serviceButtons"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -170,5 +151,14 @@
             android:layout_height="wrap_content"
             android:text="Login" />
     </LinearLayout>
+
+    <fragment
+        android:id="@+id/register_services"
+        android:name="com.example.area_android.LogWithServicesFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="324dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

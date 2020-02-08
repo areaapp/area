@@ -3,7 +3,6 @@ package com.example.area_android
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.github.kittinunf.fuel.Fuel
@@ -35,7 +34,6 @@ class SendAuthCodeActivity : Activity() {
             "clientType" to "android"
         )
 
-        println(code)
         Fuel.post(url)
             .jsonBody(JSONObject(requestData).toString())
             .responseJson { request, response, result ->
@@ -52,7 +50,8 @@ class SendAuthCodeActivity : Activity() {
                         app.token = responseData.getString("token")
                         val intent = Intent(this, MainActivity::class.java)
 
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     }

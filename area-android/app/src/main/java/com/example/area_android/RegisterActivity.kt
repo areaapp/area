@@ -21,7 +21,7 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder
 import org.json.JSONArray
 import org.json.JSONObject
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity(), LogWithServicesFragment.OnServiceLoginListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,31 +44,15 @@ class RegisterActivity : AppCompatActivity() {
         val ip = findViewById<EditText>(R.id.register_ip)
         val port = findViewById<EditText>(R.id.register_port)
         val connectButton = findViewById<Button>(R.id.register_connectButton)
+        val registerServices = supportFragmentManager.findFragmentById(R.id.register_services)
+                as LogWithServicesFragment
 
         connectButton.setOnClickListener {
             app.serverIp = ip.text.toString()
             app.serverPort = port.text.toString()
             app.generateServerUrl()
 
-            val url: String = app.serverUrl!! + "/services"
-            Fuel.get(url)
-                .responseJson { request, response, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            Toast.makeText(
-                                this,
-                                "Connection to the server failed",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                        is Result.Success -> {
-                            Toast.makeText(this, "Connected to the server", Toast.LENGTH_SHORT)
-                                .show()
-                            this.addServices(result.get().obj())
-                            this.enableAll()
-                        }
-                    }
-                }
+            registerServices.getServices()
         }
 
         val registerButton = findViewById<MaterialButton>(R.id.register_registerButton)
@@ -123,61 +107,20 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun addServices(obj: JSONObject) {
-        val serviceButtonsLayout = findViewById<LinearLayout>(R.id.register_serviceButtonsLayout)
-
-        val data: JSONArray = obj.getJSONArray("data")
-        for (i in 0 until data.length()) {
-            val service: JSONObject = data.getJSONObject(i)
-            val icon = service.getString("iconName").replace('-', '_').toUpperCase()
-
-            val d: Drawable =
-                MaterialDrawableBuilder.with(this) // provide a context
-                    .setIcon(MaterialDrawableBuilder.IconValue.valueOf(icon)) // provide an icon
-                    .setColor(Color.WHITE) // set the icon color
-                    .setToActionbarSize() // set the icon size
-                    .build() // Finally call build
-
-            val button = MaterialButton(this)
-            button.text = service.getString("displayName")
-            button.icon = d
-            button.setOnClickListener {
-                this.redirectToService(service.getString("name"))
-            }
-
-            serviceButtonsLayout.addView(button)
-        }
-    }
-
-    private fun redirectToService(serviceName: String) {
-        val app = this.application as AreaApplication
-
-        if (serviceName == "dropbox") {
-            val intent = Intent(this, DropboxAuthActivity::class.java)
-
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
-            finish()
-            return
-        }
-
-        val url = app.serverUrl + "/auth/oauth/authorize_url/$serviceName/android"
-        Fuel.get(url)
-            .responseJson() { request, response, result ->
-                val data = result.get().obj().getString("data")
-
-                app.redirectAction = AreaApplication.ActionType.Signin
-                val webpage: Uri = Uri.parse(data)
-                val intent = Intent(Intent.ACTION_VIEW, webpage)
-                startActivity(intent)
-            }
-    }
-
     private fun enableAll() {
         findViewById<EditText>(R.id.register_username).isEnabled = true
         findViewById<EditText>(R.id.register_email).isEnabled = true
         findViewById<EditText>(R.id.register_password).isEnabled = true
         findViewById<EditText>(R.id.register_passwordRepeat).isEnabled = true
         findViewById<MaterialButton>(R.id.register_registerButton).isEnabled = true
+    }
+
+    override fun onConnectionSuccess() {
+        Toast.makeText(this, "Connected to the server", Toast.LENGTH_SHORT).show()
+        this.enableAll()
+    }
+
+    override fun onConnectionFailed() {
+        Toast.makeText(this, "Connection to the server failed", Toast.LENGTH_LONG).show()
     }
 }
