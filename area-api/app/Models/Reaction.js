@@ -16,6 +16,5 @@ class Reaction extends Model {
         return this.belongsTo('App/Models/Service');
     }
 }
-}
 
 module.exports = Reaction
