@@ -92,10 +92,10 @@ export default {
             themes: {
                 light: {
                     primary: colors.lightBlue.darken1,
-                    accent: '#ffffff',
-                    background: '#ffffff',
+                    accent: '#eeeeee',
+                    background: '#eeeeee',
                     secondary: '#151b2b',
-                    tertiary: '#ffffff',
+                    tertiary: '#eeeeee',
                     info: colors.teal.lighten1,
                     warning: colors.amber.base,
                     error: colors.deepOrange.accent4,
@@ -103,7 +103,7 @@ export default {
                 },
                 dark: {
                     primary: colors.lightBlue.darken1,
-                    accent: '#ffffff',
+                    accent: '#eeeeee',
                     background: '#3c4154',
                     secondary: '#151b2b',
                     tertiary: '#3c4154',
