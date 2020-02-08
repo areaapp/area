@@ -7,7 +7,7 @@ class ServiceSchema extends Schema {
     up () {
         this.create('services', (table) => {
             table.increments();
-            table.integer('user_id').unsigned().references('id').inTable('users');
+            table.integer('user_id').unsigned().references('id').inTable('users').onDelete("cascade");
             table.string('name', 80).notNullable();
             table.string('email', 255).nullable();
             table.text('oauth_token').nullable();
