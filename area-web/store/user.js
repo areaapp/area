@@ -8,6 +8,10 @@ export const mutations = {
         state.services = value;
     },
 
+    addService (state, service) {
+        state.services.push(service);
+    },
+
     setAreas (state, value) {
         state.areas = value;
     }
@@ -15,7 +19,6 @@ export const mutations = {
 
 export const actions = {
     async nuxtServerInit ({ commit }, { $axios, $auth, app }) {
-        console.log('Logged in:', $auth.loggedIn);
         if ($auth.loggedIn) {
             const resServices = await $axios.$get('/me/services');
 

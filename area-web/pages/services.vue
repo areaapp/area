@@ -50,6 +50,9 @@
          };
      },
 
+     method: {
+     },
+
      computed: {
          services () {
              return this.$store.state.services;

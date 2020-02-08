@@ -39,6 +39,11 @@
                 v-if="$auth.loggedIn"
                 v-slot:append
             >
+                <v-row class="justify-center my-5">
+                    <v-btn class="primary--text" color="normal" light>
+                        Create a new area <v-icon right>mdi-plus-circle</v-icon>
+                    </v-btn>
+                </v-row>
                 <div class="px-6">
                     <v-divider></v-divider>
                 </div>
@@ -78,13 +83,14 @@
                             >
                             </v-switch>
                         </v-row>
-                        <v-row class="py-4">
+                        <v-row class="ma-4">
                             <v-btn
                                 v-on:click="signout"
                                 block
+                                small
                                 class="error"
                             >
-                                <v-icon>mdi-exit-run</v-icon>
+                                <v-icon small>mdi-exit-run</v-icon>
                                 Sign out
                             </v-btn>
                         </v-row>

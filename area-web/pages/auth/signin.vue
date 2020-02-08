@@ -81,10 +81,22 @@
      components: {
          SocialAuth
      },
+
+     asyncData ({ query }) {
+         const errors = [];
+
+         if (query.error) {
+             errors.push({
+                 message: query.error
+             });
+         }
+
+         return { errors };
+     },
+
      data () {
          return {
              title: 'Sign in',
-             errors: [],
              email: '',
              password: '',
              showPass: false,
@@ -116,7 +128,7 @@
                  await this.$auth.loginWith('local', { data });
              } catch (e) {
                  this.errors.push({
-                     message: e.response.data.message
+                     message: e.message
                  });
              }
          }
