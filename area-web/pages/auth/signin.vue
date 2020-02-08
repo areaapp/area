@@ -113,7 +113,6 @@
                  password: this.password
              };
              try {
-                 await this.$axios.$post('auth/signin', data);
                  await this.$auth.loginWith('local', { data });
              } catch (e) {
                  this.errors.push({
