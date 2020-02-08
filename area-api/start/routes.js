@@ -121,7 +121,7 @@ Route.group(() => {
      *        }
      */
     Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware('auth');
-    
+
     /**
      * @api {get} /me Get email and username of current user
      * @apiName /me
@@ -160,17 +160,15 @@ Route.group(() => {
      * @api {get} /me/services Get services of one user
      * @apiName /me/services
      * @apiGroup User
-     * @apiSuccess {Integer} id Id of the user's services
-     * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {String} name Name of the service
      * @apiSuccess {String} email Email used to connect to the service
-     * @apiSuccess {String} oauth_token Oauth token used for the service
-     * @apiSuccess {String} oauth_refresh_token oauth refresh token used for the service
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
-     *          "name": "google",
-     *          "email": "kylianm@tek.eu"
+     *          "google": {
+     *            "name": "google",
+     *            "email": "kylianm@tek.eu"
+     *          }
      *        }
      */
 
@@ -222,7 +220,7 @@ Route.group(() => {
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Date} last_execution Date of the last area execution
-     * @apiSuccess {Integer} user_id Id of the user 
+     * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {Integer} action_id Id of the action use for the current AREA
      * @apiSuccess {Integer} reaction_id Id of the reaction use for the current AREA
      * @apiSuccessExample {json} Success-Response:
@@ -274,7 +272,7 @@ Route.group(() => {
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Date} last_execution Date of the last area execution
-     * @apiSuccess {Integer} user_id Id of the user 
+     * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {Integer} action_id Id of the action use for the current AREA
      * @apiSuccess {Integer} reaction_id Id of the reaction use for the current AREA
      * @apiSuccessExample {json} Success-Response:

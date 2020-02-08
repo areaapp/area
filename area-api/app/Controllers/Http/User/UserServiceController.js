@@ -80,7 +80,7 @@ class UserServiceController {
             .fetch();
 
             const userServicesInfos = userService.toJSON();
-            let services = [];
+            let services = {};
 
             for (var i = 0; i < userServicesInfos.length; i++) {
                 let service = {
@@ -88,7 +88,7 @@ class UserServiceController {
                     email: userServicesInfos[i].email
                 };
 
-                services.push(service);
+                services[service.name] = service;
             }
 
             return response.json({
