@@ -14,6 +14,7 @@ module.exports = {
     foreground: '#dc3e15',
     background: '#ffffff',
     irregularAccessToken: false,
+    codeFlow: true,
     authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
     accessTokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
     scopeSeparator: '%20',
