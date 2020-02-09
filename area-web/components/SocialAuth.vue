@@ -57,8 +57,9 @@
 
      methods: {
          redirectToOauth (service) {
-             this.$store.commit('userAction/setAction', 'signin');
-             this.$store.commit('userAction/setUrl', this.$nuxt.$route.path);
+             this.$store.dispatch('userAction/setAction', 'signin');
+             this.$store.dispatch('userAction/setFailureUrl', this.$nuxt.$route.path);
+             this.$store.dispatch('userAction/setSuccessUrl', '/');
              this.$router.push(`oauth/${service}/redirect`);
          }
      }

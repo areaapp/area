@@ -1,9 +1,9 @@
 export default async function ({ $auth, store, app, query, params, redirect }) {
     const userAction = app.$cookies.get('userAction');
-    const url = app.$cookies.get('userActionUrl');
+    const fUrl = app.$cookies.get('userActionFUrl');
+    const sUrl = app.$cookies.get('userActionSUrl');
 
-    app.$cookies.remove('userAction');
-    app.$cookies.remove('userActionUrl');
+    store.dispatch('userAction/clear');
 
     switch (userAction) {
     case 'addService':
@@ -15,10 +15,10 @@ export default async function ({ $auth, store, app, query, params, redirect }) {
             const displayName = store.state.services[params.service].displayName;
 
             store.dispatch('messages/setSuccess', `${displayName} successfully added !`);
-            redirect(url);
+            redirect(sUrl);
         } catch (e) {
             store.dispatch('messages/setError', e.response.data.message);
-            redirect(url);
+            redirect(fUrl);
         }
         break;
     default:
@@ -31,10 +31,10 @@ export default async function ({ $auth, store, app, query, params, redirect }) {
                 }
             });
             store.dispatch('messages/setSuccess', `Hi ${$auth.user.username} !`);
-            redirect(url);
+            redirect(sUrl);
         } catch (e) {
             store.dispatch('messages/setError', e.response.data.message);
-            redirect(url);
+            redirect(fUrl);
         }
         break;
     }

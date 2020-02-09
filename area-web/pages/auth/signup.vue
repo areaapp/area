@@ -152,6 +152,7 @@
              try {
                  await this.$axios.$post('auth/signup', data);
                  await this.$auth.loginWith('local', { data });
+                 this.$router.push('/');
              } catch (e) {
                  this.errors.push({
                      message: e.response.data.message

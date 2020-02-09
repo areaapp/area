@@ -113,8 +113,8 @@
          },
 
          addService (serviceName) {
-             this.$store.commit('userAction/setAction', 'addService');
-             this.$store.commit('userAction/setUrl', this.$nuxt.$route.path);
+             this.$store.dispatch('userAction/setAction', 'addService');
+             this.$store.dispatch('userAction/setUrl', this.$nuxt.$route.path);
              this.$router.push(`/auth/oauth/${serviceName}/redirect`);
          },
 

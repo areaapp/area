@@ -121,9 +121,10 @@
              };
              try {
                  await this.$auth.loginWith('local', { data });
+                 this.$router.push('/');
              } catch (e) {
                  this.errors.push({
-                     message: e.message
+                     message: e.response.data.message
                  });
              }
          }
