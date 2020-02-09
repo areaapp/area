@@ -1,5 +1,6 @@
 export const state = () => ({
     services: [],
+    servicesNb: 0,
     pageTitle: '',
     darkTheme: false
 });
@@ -7,6 +8,7 @@ export const state = () => ({
 export const mutations = {
     setServices (state, value) {
         state.services = value;
+        state.servicesNb = Object.keys(value).length;
     },
 
     setTitle (state, value) {

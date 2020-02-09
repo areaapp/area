@@ -124,6 +124,10 @@
      },
 
      computed: {
+         servicesNb () {
+             return this.$store.state.servicesNb;
+         },
+
          services () {
              return this.$store.state.services;
          },
@@ -142,7 +146,7 @@
      },
 
      mounted () {
-         this.title = `Services (${Object.keys(this.services).length})`;
+         this.title = `Services (${this.servicesNb})`;
          this.$store.commit('setTitle', this.title);
      }
  };

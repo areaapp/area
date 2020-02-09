@@ -67,7 +67,7 @@
                                 </v-row>
                                 <v-row>
                                     <span class="caption mr-2">
-                                        {{ Object.keys(userServices).length }}
+                                        {{ userServicesNb }}
                                         <v-icon x-small>mdi-puzzle</v-icon>
                                     </span>
                                     <span class="caption">
@@ -169,8 +169,8 @@
              return null;
          },
 
-         userServices () {
-             return this.$store.state.user.services;
+         userServicesNb () {
+             return this.$store.state.user.servicesNb;
          },
 
          userAreas () {
