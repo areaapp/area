@@ -8,7 +8,7 @@ export default {
     */
     head: {
         titleTemplate: '%s - ' + process.env.npm_package_name,
-        title: process.env.npm_package_name || '',
+        title: 'Area',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -55,7 +55,7 @@ export default {
     ],
 
     router: {
-        middleware: ['auth']
+        middleware: ['auth', 'messages']
     },
 
     /*
@@ -94,7 +94,7 @@ export default {
                     accent: '#eeeeee',
                     background: '#eeeeee',
                     secondary: '#151b2b',
-                    tertiary: '#eeeeee',
+                    tertiary: '#3c4154',
                     info: colors.teal.lighten1,
                     warning: colors.amber.base,
                     error: colors.deepOrange.accent4,

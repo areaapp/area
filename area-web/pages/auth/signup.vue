@@ -10,9 +10,7 @@
             <v-card class="signup secondary" dark>
                 <v-card-title>Sign up to Area</v-card-title>
                 <v-card-text>
-                    <v-alert v-for="error in errors" type="error" dismissible>
-                        {{ error.message }}
-                    </v-alert>
+                    <Errors :errors="errors" />
                     <v-form
                         ref="signForm"
                         v-model="validForm"
@@ -90,12 +88,14 @@
 
 <script>
  import SocialAuth from '../../components/SocialAuth.vue';
+ import Errors from '../../components/Errors.vue';
 
  export default {
      auth: 'guest',
 
      components: {
-         SocialAuth
+         SocialAuth,
+         Errors
      },
 
      data () {
@@ -123,16 +123,10 @@
          }
      },
 
-     asyncData ({ query }) {
-         const errors = [];
-
-         if (query.error) {
-             errors.push({
-                 message: query.error
-             });
-         }
-
-         return { errors };
+     asyncData ({ areaErrors }) {
+         return {
+             errors: areaErrors || []
+         };
      },
 
      mounted () {
@@ -158,6 +152,7 @@
              try {
                  await this.$axios.$post('auth/signup', data);
                  await this.$auth.loginWith('local', { data });
+                 this.$router.push('/');
              } catch (e) {
                  this.errors.push({
                      message: e.response.data.message

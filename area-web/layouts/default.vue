@@ -45,7 +45,8 @@
                         to="/new"
                         class="primary--text"
                         color="normal"
-                        light>
+                        light
+                    >
                         Create a new area <v-icon right>mdi-plus-circle</v-icon>
                     </v-btn>
                 </v-row>
@@ -67,11 +68,11 @@
                                 </v-row>
                                 <v-row>
                                     <span class="caption mr-2">
-                                        3
+                                        {{ userServicesNb }}
                                         <v-icon x-small>mdi-puzzle</v-icon>
                                     </span>
                                     <span class="caption">
-                                        13
+                                        {{ userAreas.length }}
                                         <v-icon x-small>mdi-vector-square</v-icon>
                                     </span>
                                 </v-row>
@@ -130,6 +131,12 @@
          AreaLogo
      },
 
+     head () {
+         return {
+             titleTemplate: `%s - ${this.title}`
+         };
+     },
+
      data () {
          return {
              drawer: true
@@ -161,6 +168,14 @@
                  return this.$auth.user;
              }
              return null;
+         },
+
+         userServicesNb () {
+             return this.$store.state.user.servicesNb;
+         },
+
+         userAreas () {
+             return this.$store.state.user.areas;
          },
 
          items () {

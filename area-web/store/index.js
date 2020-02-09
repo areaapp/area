@@ -1,12 +1,15 @@
 export const state = () => ({
     services: [],
+    servicesNb: 0,
     pageTitle: '',
-    darkTheme: false
+    darkTheme: false,
+    error: null
 });
 
 export const mutations = {
     setServices (state, value) {
         state.services = value;
+        state.servicesNb = Object.keys(value).length;
     },
 
     setTitle (state, value) {
@@ -15,6 +18,14 @@ export const mutations = {
 
     setDarkTheme (state, value) {
         state.darkTheme = value;
+    },
+
+    setError (state, message) {
+        state.error = { message };
+    },
+
+    clearError (state) {
+        state.error = null;
     }
 };
 
@@ -31,6 +42,18 @@ export const actions = {
         // Get dark theme mode
         const dark = app.$cookies.get('darkTheme') || false;
         commit('setDarkTheme', dark);
+
+        // Get error
+        const errorMsg = app.$cookies.get('areaError');
+        if (errorMsg) {
+            commit('messages/setError', errorMsg);
+        }
+
+        // Get success
+        const successMsg = app.$cookies.get('areaSuccess');
+        if (successMsg) {
+            commit('messages/setSuccess', successMsg);
+        }
 
         if ($auth.loggedIn) {
             await dispatch('user/getServices');

@@ -1,13 +1,25 @@
-export default async function ({ $auth, app, store, query, params, redirect }) {
+export default async function ({ $auth, store, app, query, params, redirect }) {
     const userAction = app.$cookies.get('userAction');
-    const url = app.$cookies.get('userActionUrl');
+    const fUrl = app.$cookies.get('userActionFUrl');
+    const sUrl = app.$cookies.get('userActionSUrl');
 
-    app.$cookies.remove('userAction');
-    app.$cookies.remove('userActionUrl');
+    store.dispatch('userAction/clear');
 
     switch (userAction) {
     case 'addService':
-        // add service and redirect
+        try {
+            await store.dispatch('user/addService', {
+                name: params.service,
+                authCode: query.code
+            });
+            const displayName = store.state.services[params.service].displayName;
+
+            store.dispatch('messages/setSuccess', `${displayName} successfully added !`);
+            redirect(sUrl);
+        } catch (e) {
+            store.dispatch('messages/setError', e.response.data.message);
+            redirect(fUrl);
+        }
         break;
     default:
         try {
@@ -18,9 +30,11 @@ export default async function ({ $auth, app, store, query, params, redirect }) {
                     clientType: 'web'
                 }
             });
-            redirect(url, { success: 'connected' });
+            store.dispatch('messages/setSuccess', `Hi ${$auth.user.username} !`);
+            redirect(sUrl);
         } catch (e) {
-            redirect(url, { error: e.response.data.message });
+            store.dispatch('messages/setError', e.response.data.message);
+            redirect(fUrl);
         }
         break;
     }

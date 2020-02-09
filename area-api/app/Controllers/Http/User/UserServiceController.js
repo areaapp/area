@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Services = use('App/Services/index');
 const Service = use('App/Models/Service');
@@ -127,4 +127,4 @@ class UserServiceController {
     }
 }
 
-module.exports = UserServiceController
+module.exports = UserServiceController;
