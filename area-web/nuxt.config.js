@@ -54,7 +54,6 @@ export default {
         'cookie-universal-nuxt'
     ],
 
-
     router: {
         middleware: ['auth']
     },

@@ -40,12 +40,17 @@
                 v-slot:append
             >
                 <v-row class="justify-center my-5">
-                    <v-btn class="primary--text" color="normal" light>
+                    <v-btn
+                        nuxt
+                        to="/new"
+                        class="primary--text"
+                        color="normal"
+                        light>
                         Create a new area <v-icon right>mdi-plus-circle</v-icon>
                     </v-btn>
                 </v-row>
                 <div class="px-6">
-                    <v-divider></v-divider>
+                    <v-divider />
                 </div>
                 <v-col>
                     <v-flex class="pa-3">
@@ -80,8 +85,7 @@
                                 label="Toggle dark theme"
                                 color="primary"
                                 class="accent--text"
-                            >
-                            </v-switch>
+                            />
                         </v-row>
                         <v-row class="ma-4">
                             <v-btn
@@ -105,10 +109,10 @@
             flat
             dark
         >
-            <v-app-bar-nav-icon class="accent--text" @click.stop="drawer = !drawer" />
-            <v-spacer></v-spacer>
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="accent--text" />
+            <v-spacer />
             <v-toolbar-title>{{ title }}</v-toolbar-title>
-            <v-spacer></v-spacer>
+            <v-spacer />
         </v-app-bar>
         <v-content>
             <v-container>
@@ -190,7 +194,7 @@
                      title: 'Settings',
                      to: '/settings'
                  }
-             ]
+             ];
          }
      },
 

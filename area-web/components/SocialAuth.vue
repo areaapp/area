@@ -4,24 +4,25 @@
             <v-layout justify-space-around flex-wrap>
                 <v-skeleton-loader
                     ref="skeleton"
-                    type="avatar"
-                    class="mx-auto"
                     v-if="!loaded"
                     v-for="i in 5"
                     :key="i"
-                ></v-skeleton-loader>
+                    type="avatar"
+                    class="mx-auto"
+                />
                 <div
                     v-if="loaded"
-                    v-for="service in services">
+                    v-for="service in services"
+                >
                     <v-tooltip top>
                         <template v-slot:activator="{ on }">
                             <v-btn
                                 :color="service.background"
-                                elevation="0"
-                                fab
                                 v-on="on"
                                 v-on:click="redirectToOauth(service.name)"
-                                >
+                                elevation="0"
+                                fab
+                            >
                                 <v-icon :color="service.foreground">{{ `mdi-${service.iconName}` }}</v-icon>
                             </v-btn>
                         </template>
@@ -45,13 +46,13 @@
 
      mounted () {
          this.$nextTick(() => {
-             this.$nuxt.$loading.start()
+             this.$nuxt.$loading.start();
 
              setTimeout(() => {
                  this.loaded = true;
-                 this.$nuxt.$loading.finish()
-             }, 500)
-         })
+                 this.$nuxt.$loading.finish();
+             }, 500);
+         });
      },
 
      methods: {
@@ -61,5 +62,5 @@
              this.$router.push(`oauth/${service}/redirect`);
          }
      }
- }
+ };
 </script>

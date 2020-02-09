@@ -18,13 +18,19 @@ export const mutations = {
 };
 
 export const actions = {
-    async nuxtServerInit ({ commit }, { $axios, $auth, app }) {
-        if ($auth.loggedIn) {
-            const resServices = await $axios.$get('/me/services');
+    async getServices ({ commit }) {
+        const resServices = await this.$axios.$get('/me/services');
 
-            if (resServices.status === 'success') {
-                commit('setServices', resServices.data);
-            }
+        if (resServices.status === 'success') {
+            commit('setServices', resServices.data);
+        }
+    },
+
+    async getAreas ({ commit }) {
+        const resAreas = await this.$axios.$get('/me/areas');
+
+        if (resAreas.status === 'success') {
+            commit('setAreas', resAreas.data);
         }
     }
 };

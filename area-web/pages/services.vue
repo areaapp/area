@@ -4,7 +4,7 @@
         <v-card v-for="service in services" class="secondary pa-4 my-2">
             <v-card-title>
                 <span class="accent--text">{{ service.displayName }}</span>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn color="primary">
                     Add <v-icon right>mdi-plus-circle</v-icon>
                 </v-btn>
@@ -14,9 +14,9 @@
                 <v-expansion-panel :style="{ background: $vuetify.theme.themes[theme].background }">
                     <v-expansion-panel-header>Actions ({{ service.actions.length }})</v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <v-card v-for="action in service.actions" class="my-2" :color="service.background">
+                        <v-card v-for="action in service.actions" :color="service.background" class="my-2">
                             <v-card-title :style="`color: ${service.foreground}`">
-                                <v-icon class="mr-2" :color="service.foreground">mdi-{{ service.iconName }}</v-icon>
+                                <v-icon :color="service.foreground" class="mr-2">mdi-{{ service.iconName }}</v-icon>
                                 {{ action.displayName }}
                             </v-card-title>
                             <v-card-subtitle :style="`color: ${service.foreground}`">
@@ -25,12 +25,12 @@
                         </v-card>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
-                <v-expansion-panel  :style="{ background: $vuetify.theme.themes[theme].background }">
+                <v-expansion-panel :style="{ background: $vuetify.theme.themes[theme].background }">
                     <v-expansion-panel-header>REactions ({{ service.reactions.length }})</v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <v-card v-for="action in service.reactions" class="my-2" :color="service.background" :style="`color: ${service.foreground}`">
+                        <v-card v-for="action in service.reactions" :color="service.background" :style="`color: ${service.foreground}`" class="my-2">
                             <v-card-title>
-                                <v-icon class="mr-2" :color="service.foreground">mdi-{{ service.iconName }}</v-icon>
+                                <v-icon :color="service.foreground" class="mr-2">mdi-{{ service.iconName }}</v-icon>
                                 {{ action.displayName }}
                             </v-card-title>
                             <v-card-subtitle>{{ action.description }}</v-card-subtitle>
@@ -75,5 +75,5 @@
          this.title = `Services (${this.services.length})`;
          this.$store.commit('setTitle', this.title);
      }
- }
+ };
 </script>

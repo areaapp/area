@@ -1,14 +1,5 @@
 <template>
-    <v-layout
-        column
-        justify-center
-        align-center
-    >
-        <v-flex
-            xs12
-            sm8
-            md6
-        />
+    <v-layout column>
     </v-layout>
 </template>
 
@@ -16,7 +7,7 @@
  export default {
      data () {
          return {
-             title: 'My Areas'
+             title: 'Create a new area'
          };
      },
 

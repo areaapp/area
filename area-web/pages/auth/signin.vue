@@ -18,30 +18,30 @@
                         v-model="validForm"
                     >
                         <v-text-field
+                            :rules="[rules.required, rules.validEmail]"
+                            v-model="email"
                             label="E-mail"
                             outlined
                             type="email"
-                            :rules="[rules.required, rules.validEmail]"
-                            v-model="email"
                         />
                         <v-text-field
-                            label="Password"
-                            outlined
                             :rules="[rules.required]"
                             :type="showPass ? 'text' : 'password'"
                             :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
                             v-model="password"
                             @click:append="showPass = !showPass"
+                            label="Password"
+                            outlined
                         />
                         <v-layout justify-center align-center>
                             <v-flex xs10 md3 row>
                                 <v-btn
+                                    :disabled="!validForm"
+                                    v-on:click="signin"
                                     elevation="0"
                                     color="primary"
                                     rounded
                                     block
-                                    :disabled="!validForm"
-                                    v-on:click="signin"
                                 >
                                     Sign in
                                 </v-btn>
@@ -59,7 +59,7 @@
                 </v-card-text>
                 <v-card-title>Sign in with:</v-card-title>
                 <v-card-text>
-                    <SocialAuth :services="services"/>
+                    <SocialAuth :services="services" />
                 </v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
@@ -82,6 +82,26 @@
          SocialAuth
      },
 
+     data () {
+         return {
+             title: 'Sign in',
+             email: '',
+             password: '',
+             showPass: false,
+             showPass2: false,
+             validForm: false,
+             rules: {
+                 required: val => !!val || 'This field is required.'
+             }
+         };
+     },
+
+     computed: {
+         services () {
+             return this.$store.state.services;
+         }
+     },
+
      asyncData ({ query }) {
          const errors = [];
 
@@ -94,28 +114,8 @@
          return { errors };
      },
 
-     data () {
-         return {
-             title: 'Sign in',
-             email: '',
-             password: '',
-             showPass: false,
-             showPass2: false,
-             validForm: false,
-             rules: {
-                 required: val => !!val || 'This field is required.'
-             }
-         }
-     },
-
      mounted () {
          this.$store.commit('setTitle', this.title);
-     },
-
-     computed: {
-         services () {
-             return this.$store.state.services;
-         }
      },
 
      methods: {
