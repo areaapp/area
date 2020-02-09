@@ -45,7 +45,8 @@
                         to="/new"
                         class="primary--text"
                         color="normal"
-                        light>
+                        light
+                    >
                         Create a new area <v-icon right>mdi-plus-circle</v-icon>
                     </v-btn>
                 </v-row>

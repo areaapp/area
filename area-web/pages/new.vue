@@ -1,6 +1,5 @@
 <template>
-    <v-layout column>
-    </v-layout>
+    <v-layout column />
 </template>
 
 <script>

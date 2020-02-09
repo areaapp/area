@@ -1,5 +1,5 @@
 <template>
-    <v-layout></v-layout>
+    <v-layout />
 </template>
 
 <script>
@@ -17,7 +17,7 @@
      },
 
      mounted () {
-         this.title = `My areas (${this.userAreas.length})`
+         this.title = `My areas (${this.userAreas.length})`;
          this.$store.commit('setTitle', this.title);
      }
  };

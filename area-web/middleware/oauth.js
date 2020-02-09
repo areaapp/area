@@ -12,9 +12,13 @@ export default async function ({ $auth, store, app, query, params, redirect }) {
                 name: params.service,
                 authCode: query.code
             });
-            redirect(url, { success: `Service ${params.service} successfully added.` });
+            const displayName = store.state.services[params.service].displayName;
+
+            store.dispatch('messages/setSuccess', `${displayName} successfully added !`);
+            redirect(url);
         } catch (e) {
-            redirect(url, { error: e.response.data.message });
+            store.dispatch('messages/setError', e.response.data.message);
+            redirect(url);
         }
         break;
     default:
@@ -26,9 +30,11 @@ export default async function ({ $auth, store, app, query, params, redirect }) {
                     clientType: 'web'
                 }
             });
-            redirect(url, { success: 'connected' });
+            store.dispatch('messages/setSuccess', `Hi ${$auth.user.username} !`);
+            redirect(url);
         } catch (e) {
-            redirect(url, { error: e.response.data.message });
+            store.dispatch('messages/setError', e.response.data.message);
+            redirect(url);
         }
         break;
     }

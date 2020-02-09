@@ -55,7 +55,7 @@ export default {
     ],
 
     router: {
-        middleware: ['auth']
+        middleware: ['auth', 'messages']
     },
 
     /*

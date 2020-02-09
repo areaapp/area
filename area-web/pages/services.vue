@@ -1,14 +1,15 @@
 <template>
     <v-layout column>
-        <v-card v-for="service in services" class="secondary pa-4 my-2">
+        <Errors :errors="errors" />
+        <v-card v-for="service in services" :key="service" class="secondary pa-4 my-2">
             <v-card-title>
                 <span class="accent--text">{{ service.displayName }}</span>
                 <v-spacer />
                 <div v-if="userServices[service.name]">
                     <v-chip
-                        class="ma-2"
                         :color="service.background"
                         :text-color="service.foreground"
+                        class="ma-2"
                         small
                     >
                         <v-avatar left>
@@ -19,10 +20,10 @@
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-btn
-                                icon
-                                color="accent"
                                 v-on="on"
                                 v-on:click="editMode(service.name)"
+                                icon
+                                color="accent"
                             >
                                 <v-icon>mdi-settings</v-icon>
                             </v-btn>
@@ -32,8 +33,8 @@
                 </div>
                 <v-btn
                     v-else
-                    color="primary"
                     v-on:click="addService(service.name)"
+                    color="primary"
                 >
                     Add <v-icon right>mdi-plus-circle</v-icon>
                 </v-btn>
@@ -43,7 +44,7 @@
                 <v-expansion-panel :style="{ background: $vuetify.theme.themes[theme].background }">
                     <v-expansion-panel-header>Actions ({{ service.actions.length }})</v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <v-card v-for="action in service.actions" :color="service.background" class="my-2">
+                        <v-card v-for="action in service.actions" :key="action" :color="service.background" class="my-2">
                             <v-card-title :style="`color: ${service.foreground}`">
                                 <v-icon :color="service.foreground" class="mr-2">mdi-{{ service.iconName }}</v-icon>
                                 {{ action.displayName }}
@@ -57,12 +58,12 @@
                 <v-expansion-panel :style="{ background: $vuetify.theme.themes[theme].background }">
                     <v-expansion-panel-header>REactions ({{ service.reactions.length }})</v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <v-card v-for="action in service.reactions" :color="service.background" :style="`color: ${service.foreground}`" class="my-2">
+                        <v-card v-for="reaction in service.reactions" :key="reaction" :color="service.background" :style="`color: ${service.foreground}`" class="my-2">
                             <v-card-title>
                                 <v-icon :color="service.foreground" class="mr-2">mdi-{{ service.iconName }}</v-icon>
-                                {{ action.displayName }}
+                                {{ reaction.displayName }}
                             </v-card-title>
-                            <v-card-subtitle>{{ action.description }}</v-card-subtitle>
+                            <v-card-subtitle>{{ reaction.description }}</v-card-subtitle>
                         </v-card>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -82,9 +83,9 @@
                             Switch account<v-icon right>mdi-account-circle</v-icon>
                         </v-btn>
                         <v-btn
+                            v-on:click="deleteService(editService)"
                             color="error"
                             class="ma-4"
-                            v-on:click="deleteService(editService)"
                         >
                             Delete {{ editService }} service<v-icon right>mdi-delete</v-icon>
                         </v-btn>
@@ -92,35 +93,28 @@
                 </v-container>
             </v-sheet>
         </v-bottom-sheet>
+        <v-snackbar v-model="snackInfo" v-if="success" color="secondary">
+            {{ success.message }}
+            <v-icon color="primary" right>mdi-check-decagram</v-icon>
+        </v-snackbar>
     </v-layout>
 </template>
 
 <script>
+ import Errors from '../components/Errors.vue';
+
  export default {
+     components: {
+         Errors
+     },
+
      data () {
          return {
              title: 'Services',
              edit: false,
-             editService: null
+             editService: null,
+             snackInfo: false
          };
-     },
-
-     methods: {
-         editMode (serviceName) {
-             this.edit = true;
-             this.editService = serviceName;
-         },
-
-         addService (serviceName) {
-             this.$store.commit('userAction/setAction', 'addService');
-             this.$store.commit('userAction/setUrl', this.$nuxt.$route.path);
-             this.$router.push(`/auth/oauth/${serviceName}/redirect`);
-         },
-
-         async deleteService (serviceName) {
-             await this.$store.dispatch('user/deleteService', serviceName);
-             this.edit = false;
-         }
      },
 
      computed: {
@@ -145,9 +139,38 @@
          }
      },
 
+     asyncData ({ areaErrors, areaSuccess }) {
+         return {
+             errors: areaErrors || [],
+             success: areaSuccess || null
+         };
+     },
+
      mounted () {
          this.title = `Services (${this.servicesNb})`;
          this.$store.commit('setTitle', this.title);
+
+         if (this.success) {
+             this.snackInfo = true;
+         }
+     },
+
+     methods: {
+         editMode (serviceName) {
+             this.edit = true;
+             this.editService = serviceName;
+         },
+
+         addService (serviceName) {
+             this.$store.commit('userAction/setAction', 'addService');
+             this.$store.commit('userAction/setUrl', this.$nuxt.$route.path);
+             this.$router.push(`/auth/oauth/${serviceName}/redirect`);
+         },
+
+         async deleteService (serviceName) {
+             await this.$store.dispatch('user/deleteService', serviceName);
+             this.edit = false;
+         }
      }
  };
 </script>

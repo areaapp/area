@@ -1,12 +1,15 @@
 <template>
-    <v-app dark>
+    <v-app
+        :style="{ background: $vuetify.theme.themes[theme].background }"
+        class="text-center"
+    >
         <h1 v-if="error.statusCode === 404">
             {{ pageNotFound }}
         </h1>
         <h1 v-else>
             {{ otherError }}
         </h1>
-        <NuxtLink to="/">
+        <NuxtLink to="/" class="link-light">
             Home page
         </NuxtLink>
     </v-app>
@@ -21,6 +24,7 @@
              default: null
          }
      },
+
      head () {
          const title =
              this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
@@ -28,11 +32,18 @@
              title
          };
      },
+
      data () {
          return {
              pageNotFound: '404 Not Found',
              otherError: 'An error occurred'
          };
+     },
+
+     computed: {
+         theme () {
+             return this.$vuetify.theme.dark ? 'dark' : 'light';
+         }
      }
  };
 </script>
