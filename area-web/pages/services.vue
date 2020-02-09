@@ -1,74 +1,23 @@
 <template>
     <v-layout column>
         <Errors :errors="errors" />
-        <v-card v-for="service in services" :key="service" class="secondary pa-4 my-2">
-            <v-card-title>
-                <span class="accent--text">{{ service.displayName }}</span>
-                <v-spacer />
-                <div v-if="userServices[service.name]">
-                    <v-chip
-                        :color="service.background"
-                        :text-color="service.foreground"
-                        class="ma-2"
-                        small
-                    >
-                        <v-avatar left>
-                            <v-icon small>mdi-{{ service.iconName }}</v-icon>
-                        </v-avatar>
-                        {{ userServices[service.name].email }}
-                    </v-chip>
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <v-btn
-                                v-on="on"
-                                v-on:click="editMode(service.name)"
-                                icon
-                                color="accent"
-                            >
-                                <v-icon>mdi-settings</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Settings</span>
-                    </v-tooltip>
-                </div>
-                <v-btn
-                    v-else
-                    v-on:click="addService(service.name)"
-                    color="primary"
-                >
-                    Add <v-icon right>mdi-plus-circle</v-icon>
-                </v-btn>
-            </v-card-title>
-            <v-card-subtitle class="accent--text">{{ service.description }}</v-card-subtitle>
-            <v-expansion-panels>
-                <v-expansion-panel :style="{ background: $vuetify.theme.themes[theme].background }">
-                    <v-expansion-panel-header>Actions ({{ service.actions.length }})</v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <v-card v-for="action in service.actions" :key="action" :color="service.background" class="my-2">
-                            <v-card-title :style="`color: ${service.foreground}`">
-                                <v-icon :color="service.foreground" class="mr-2">mdi-{{ service.iconName }}</v-icon>
-                                {{ action.displayName }}
-                            </v-card-title>
-                            <v-card-subtitle :style="`color: ${service.foreground}`">
-                                {{ action.description }}
-                            </v-card-subtitle>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel :style="{ background: $vuetify.theme.themes[theme].background }">
-                    <v-expansion-panel-header>REactions ({{ service.reactions.length }})</v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <v-card v-for="reaction in service.reactions" :key="reaction" :color="service.background" :style="`color: ${service.foreground}`" class="my-2">
-                            <v-card-title>
-                                <v-icon :color="service.foreground" class="mr-2">mdi-{{ service.iconName }}</v-icon>
-                                {{ reaction.displayName }}
-                            </v-card-title>
-                            <v-card-subtitle>{{ reaction.description }}</v-card-subtitle>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-            </v-expansion-panels>
-        </v-card>
+        <Service
+            v-for="(service, i) in services"
+            :key="i"
+            :name="service.name"
+            :title="service.displayName"
+            :icon="service.iconName"
+            :description="service.description"
+            :email="userServices[service.name] ? userServices[service.name].email : null"
+            :configured="userServices[service.name]"
+            :actions="service.actions"
+            :reactions="service.reactions"
+            :background="service.background"
+            :foreground="service.foreground"
+            :themeBg="$vuetify.theme.themes[theme].background"
+            v-on:editMode="editMode"
+            v-on:addService="addService"
+        />
         <v-bottom-sheet v-model="edit">
             <v-sheet
                 v-if="editService"
@@ -102,10 +51,12 @@
 
 <script>
  import Errors from '../components/Errors.vue';
+ import Service from '../components/Service.vue';
 
  export default {
      components: {
-         Errors
+         Errors,
+         Service
      },
 
      data () {

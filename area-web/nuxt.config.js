@@ -94,7 +94,7 @@ export default {
                     accent: '#eeeeee',
                     background: '#eeeeee',
                     secondary: '#151b2b',
-                    tertiary: '#eeeeee',
+                    tertiary: '#3c4154',
                     info: colors.teal.lighten1,
                     warning: colors.amber.base,
                     error: colors.deepOrange.accent4,
