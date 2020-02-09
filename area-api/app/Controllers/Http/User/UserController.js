@@ -7,6 +7,7 @@ class UserController {
             data: {
                 username: auth.current.user.username,
                 email: auth.current.user.email,
+                register_source: auth.current.user.register_source
             }
         });
     }

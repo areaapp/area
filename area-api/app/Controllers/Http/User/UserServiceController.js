@@ -93,6 +93,14 @@ class UserServiceController {
     }
 
     async deleteService({auth, params, response}) {
+
+        if (auth.current.user.register_source === params.name) {
+            return response.status(400).json({
+                status: 'error',
+                message: 'This service is used to authenticate the user, it cannot be deleted'
+            });
+        }
+
         const userService = await Service.query()
         .where('user_id', auth.current.user.id)
         .where('name', params.name)

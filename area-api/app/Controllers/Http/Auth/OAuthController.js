@@ -31,9 +31,8 @@ class OAuthController {
         });
     }
 
-    async connectUser(auth, userService, response) {
+    async connectUser(auth, user, response) {
         try {
-            const user = await userService.user().fetch();
             const userAuth = await auth.generate(user);
 
             return response.json({
@@ -54,7 +53,7 @@ class OAuthController {
             username: serviceUser.username,
             email: serviceUser.email,
             password: null,
-            login_source: serviceName
+            register_source: serviceName
         };
 
         const serviceInfos = {
@@ -110,7 +109,6 @@ class OAuthController {
         );
 
         if (accessToken === null) {
-            console.log('ERROR');
             return response.status(400).json({
                 status: 'error',
                 message: 'Cannot retreive access_token'
@@ -120,19 +118,23 @@ class OAuthController {
         const serviceUser = await service.getUser(accessToken);
 
         if (serviceUser === null) {
-            console.log('ERROR');
             return response.status(400).json({
                 status: 'error',
                 message: 'An error as occured. Please, try again later'
             });
         }
 
-        let userService = null;
+        let user = null;
         try {
-            userService = await Service.query()
-                  .where('email', serviceUser.email)
-                  .where('name', parameters.service)
-                  .first();
+            user = await User.findBy('email', serviceUser.email);
+
+            if (user !== null && user.register_source !== parameters.service) {
+                return response.status(400).json({
+                    status: 'error',
+                    message: 'This user registered through ' + user.register_source + '.'
+                });
+            }
+
         } catch (err) {
             console.log(err);
             return response.status(400).json({
@@ -141,8 +143,8 @@ class OAuthController {
             });
         }
 
-        if (userService !== null) {
-            return await this.connectUser(auth, userService, response);
+        if (user !== null) {
+            return await this.connectUser(auth, user, response);
         } else {
             return await this.createUser(auth, parameters.service, serviceUser, accessToken, response);
         }
