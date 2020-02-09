@@ -14,6 +14,7 @@ module.exports = {
     foreground: '#ffffff',
     background: '#3484f0',
     irregularAccessToken: false,
+    codeFlow: true,
     authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
     accessTokenUrl: 'https://oauth2.googleapis.com/token',
     scopeSeparator: '%20',

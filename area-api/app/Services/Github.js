@@ -13,6 +13,7 @@ module.exports = {
     foreground: '#ffffff',
     background: '#211f1f',
     irregularAccessToken: true,
+    codeFlow: true,
     authorizeUrl: "https://github.com/login/oauth/authorize",
     accessTokenUrl: 'https://github.com/login/oauth/access_token',
     scopeSeparator: '%20',

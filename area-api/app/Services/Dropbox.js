@@ -14,6 +14,7 @@ module.exports = {
     foreground: '#ffffff',
     background: '#3d9ae8',
     irregularAccessToken: false,
+    codeFlow: true,
     authorizeUrl: "https://www.dropbox.com/oauth2/authorize",
     accessTokenUrl: 'https://api.dropboxapi.com/oauth2/token',
     scopeSeparator: '%20',
