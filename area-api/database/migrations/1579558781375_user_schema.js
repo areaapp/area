@@ -11,6 +11,7 @@ class UserSchema extends Schema {
             table.string('email', 254).notNullable().unique();
             table.string('password', 60);
             table.string('register_source', 80).notNullable();
+            table.string('email_md5', 32).notNullable();
         })
     }
 

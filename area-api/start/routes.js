@@ -128,11 +128,15 @@ Route.group(() => {
      * @apiGroup User
      * @apiSuccess {String} username Username of the user
      * @apiSuccess {String} email Email of the user
+     * @apiSuccess {String} register_source Source of the register
+     * @apiSuccess {String} email_md5 Md5 hash of the user's email (used for the avatar)
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
      *          "username": "kylianm",
      *          "email": "kylian.maugue@epitech.eu"
+     *          "register_source": "area"
+     *          "email_md5": "9cb9af3a4d2894dd0b75a2d56bb5f70a"
      *        }
      */
 
