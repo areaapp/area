@@ -47,6 +47,7 @@ class SendAuthCodeActivity : Activity() {
                         val obj = result.get().obj()
                         val responseData: JSONObject = obj.getJSONObject("data")
 
+                        app.services?.add(service)
                         app.token = responseData.getString("token")
                         val intent = Intent(this, MainActivity::class.java)
 
