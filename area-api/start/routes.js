@@ -205,6 +205,7 @@ Route.group(() => {
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
      * @apiSuccess {Object} action Object action link to the area
      * @apiSuccess {Object} reaction Object reaction link to the area
      * @apiSuccessExample {json} Success-Response:
@@ -238,6 +239,7 @@ Route.group(() => {
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
      * @apiSuccess {Object} action Object action link to the area
      * @apiSuccess {Object} reaction Object reaction link to the area
      * @apiSuccessExample {json} Success-Response:
@@ -289,6 +291,7 @@ Route.group(() => {
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
      * @apiSuccess {Object} action Object action link to the area
      * @apiSuccess {Object} reaction Object reaction link to the area
      * @apiSuccessExample {json} Success-Response:
@@ -323,6 +326,7 @@ Route.group(() => {
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
      * @apiSuccess {Object} action Object action link to the area
      * @apiSuccess {Object} reaction Object reaction link to the area
      * @apiSuccessExample {json} Success-Response:
@@ -360,6 +364,7 @@ Route.group(() => {
      * @apiSuccess {Integer} id Id of the area
      * @apiSuccess {String} name Name of the area
      * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
      * @apiSuccess {Object} action Object action link to the area
      * @apiSuccess {Object} reaction Object reaction link to the area
      * @apiSuccessExample {json} Success-Response:
@@ -368,6 +373,7 @@ Route.group(() => {
      *       "id": 3,
      *       "name": "area45",
      *       "user_id": 1,
+     *       "last_execution": "04-03-2020"
      *       "action": {
      *           "name": "google_gmail_new_mail",
      *           "args": [
@@ -410,6 +416,7 @@ Route.group(() => {
      * @api {put} /me/notification/:id Modify readed property of a notification
      * @apiName put /me/notification/:id
      * @apiGroup User
+     * @apiParams {Boolean} readed Status of the notification (readed or not)
      * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {String} message Message of the notification
      * @apiSuccess {Boolean} readed Status of the notification (readed or not)
