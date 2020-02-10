@@ -8,16 +8,21 @@ const OAuthController = use('App/Controllers/Http/Auth/OAuthController');
 class UserServiceController {
 
     async addService({ auth, params, request, response }) {
-        const paramNames = ['authCode', 'clientType'];
+        const paramNames = ['authCode', 'accessToken', 'clientType'];
         const parameters = request.only(paramNames);
 
-        for (let paramName of paramNames) {
-            if (typeof parameters[paramName] === 'undefined') {
-                return response.status(400).json({
-                    status: 'error',
-                    message: paramName + ' invalid'
-                });
-            }
+        if (typeof parameters.clientType === 'undefined') {
+            return response.status(400).json({
+                status: 'error',
+                message: 'clientType invalid'
+            });
+        }
+
+        if (typeof parameters.authCode === typeof parameters.accessToken) {
+            return response.status(400).json({
+                status: 'error',
+                message: 'authCode or accessToken invalid'
+            });
         }
 
         if (!(params.serviceName in Services)) {
@@ -28,11 +33,17 @@ class UserServiceController {
         }
 
         const service = Services[params.serviceName];
-        const accessToken = await OAuthController.getAccessToken(
-            service,
-            parameters.authCode,
-            parameters.clientType
-        );
+
+        let accessToken = null;
+        if (typeof parameters.accessToken !== 'undefined') {
+            accessToken = parameters.accessToken;
+        } else {
+            accessToken = await OAuthController.getAccessToken(
+                service,
+                parameters.authCode,
+                parameters.clientType
+            );
+        }
 
         if (accessToken === null) {
             return response.status(400).json({

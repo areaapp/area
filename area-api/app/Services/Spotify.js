@@ -14,6 +14,7 @@ module.exports = {
     foreground: '#ffffff',
     background: '#1ed761',
     irregularAccessToken: false,
+    codeFlow: true,
     authorizeUrl: "https://accounts.spotify.com/authorize",
     accessTokenUrl: 'https://accounts.spotify.com/api/token',
     scopeSeparator: '%20',
