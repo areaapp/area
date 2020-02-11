@@ -10,14 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
 import com.google.android.material.button.MaterialButton
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder
-import org.json.JSONArray
 import org.json.JSONObject
-import androidx.fragment.app.Fragment
+
 
 /**
  * A simple [Fragment] subclass.
@@ -100,9 +100,11 @@ class LogWithServicesFragment : Fragment() {
     private fun addServices(obj: JSONObject) {
         val serviceButtonsLayout = view!!.findViewById<LinearLayout>(R.id.serviceButtonsLayout)
 
-        val data: JSONArray = obj.getJSONArray("data")
-        for (i in 0 until data.length()) {
-            val service: JSONObject = data.getJSONObject(i)
+        val data: JSONObject = obj.getJSONObject("data")
+        var iter: MutableIterator<String> = data.keys()
+        while (iter.hasNext()) {
+            val serviceName = iter.next()
+            val service: JSONObject = data.getJSONObject(serviceName)
             val icon = service.getString("iconName").replace('-', '_').toUpperCase()
 
             val d: Drawable =
@@ -141,6 +143,7 @@ class LogWithServicesFragment : Fragment() {
             .responseJson { request, response, result ->
                 val data = result.get().obj().getString("data")
 
+                println(data)
                 app.redirectAction = AreaApplication.ActionType.Signin
                 val webpage: Uri = Uri.parse(data)
                 val intent = Intent(Intent.ACTION_VIEW, webpage)

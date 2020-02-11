@@ -3,10 +3,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
-class Service extends Model {
-    static get createdAtColumn () {
-        return null;
-    }
+class Notification extends Model {
 
     static get updatedAtColumn () {
         return null;
@@ -15,10 +12,6 @@ class Service extends Model {
     user() {
         return this.belongsTo('App/Models/User');
     }
-
-    static get hidden() {
-        return ['oauth_token', 'oauth_refresh_token'];
-    }
 }
 
-module.exports = Service
+module.exports = Notification

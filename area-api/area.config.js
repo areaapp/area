@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
     dropbox: {
@@ -47,7 +47,7 @@ module.exports = {
             }
         ]
     },
-    office: {
+    spotify: {
         actions: [
             {
                 name: 'spotify_new_artist_song',
@@ -68,7 +68,7 @@ module.exports = {
         ],
         reactions: []
     },
-    spotify: {
+    office: {
         actions: [],
         reactions: []
     },

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
     web: {
@@ -65,5 +65,5 @@ module.exports = {
             client_secret: '',
             redirect_uri: 'area-android://auth/office'
         }
-    },
-}
+    }
+};

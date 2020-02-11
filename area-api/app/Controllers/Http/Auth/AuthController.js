@@ -17,7 +17,7 @@ class AuthController {
     async signup({ auth, request, response}) {
         const userInfos = {
             ...request.only(['username', 'email', 'password']),
-            'login_source': 'area'
+            'register_source': 'area'
         };
 
         try {
@@ -56,6 +56,20 @@ class AuthController {
             'email',
             'password',
         ]);
+
+        const user = await User.findBy('email', email);
+
+        if (user === null) {
+            return response.status(400).json({
+                status: 'error',
+                message: 'Email not found'
+            });
+        } else if (user.register_source !== 'area') {
+            return response.status(400).json({
+                status: 'error',
+                message: 'This user registered through ' + user.register_source + '. Please, use this service to signin.'
+            });
+        }
 
         try {
             const token = await auth.attempt(email, password);
