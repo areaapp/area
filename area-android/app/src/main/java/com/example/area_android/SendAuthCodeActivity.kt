@@ -20,7 +20,12 @@ class SendAuthCodeActivity : Activity() {
         val data: Uri? = intent?.data
 
         val service = data!!.path!!.substring(1)
-        val code = data!!.getQueryParameter("code")
+        val code = data.getQueryParameter("code")
+        var accessToken: String? = null//Regex("(access_token=)(\\w+)").find(data?.fragment?).groups[2]!!.value
+
+        if (data.fragment !== null) {
+            accessToken = Regex("(access_token=)(\\w+)").find(data.fragment!!)!!.groups[2]!!.value
+        }
 
         val url = when (app.redirectAction) {
             AreaApplication.ActionType.Signin -> app.serverUrl + "/auth/oauth/signin"
@@ -30,9 +35,13 @@ class SendAuthCodeActivity : Activity() {
 
         val requestData = hashMapOf<String, Any?>(
             "service" to service,
-            "authCode" to code,
             "clientType" to "android"
         )
+        if (accessToken == null) {
+            requestData["authCode"] = code
+        } else {
+            requestData["accessToken"] = accessToken
+        }
 
         Fuel.post(url)
             .jsonBody(JSONObject(requestData).toString())
