@@ -16,9 +16,7 @@ import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.area_android.AreaApplication
-import com.example.area_android.DropboxAuthActivity
-import com.example.area_android.R
+import com.example.area_android.*
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.json.responseJson
@@ -44,35 +42,18 @@ class ServicesFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_services, container, false)
 
         val app = this.activity!!.application as AreaApplication
-        val url = app.serverUrl + "/me"
+
+        val url : String = app.serverUrl + "/services"
         Fuel.get(url)
-            .authentication()
-            .bearer(app.token!!)
             .responseJson { request, response, result ->
                 when (result) {
                     is Result.Failure -> {
-                        Toast.makeText(this.activity, "Connection to the server failed", Toast.LENGTH_LONG).show()
                     }
                     is Result.Success -> {
-                        val obj = result.get().obj()
-                        val data = obj.getJSONObject("data")
+                        this.addServices(result.get().obj())
                     }
                 }
             }
-
-        root.findViewById<Button>(R.id.services_button)?.setOnClickListener {
-            val url2 : String = app.serverUrl + "/services"
-            Fuel.get(url2)
-                .responseJson { request, response, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                        }
-                        is Result.Success -> {
-                            this.addServices(result.get().obj())
-                        }
-                    }
-                }
-        }
 
         return root
     }
@@ -81,10 +62,11 @@ class ServicesFragment : Fragment() {
         val serviceButtonsLayout = view!!.findViewById<LinearLayout>(R.id.serviceButtonsLayout)
         serviceButtonsLayout.removeViewsInLayout(0, serviceButtonsLayout.size)
 
-        val data: JSONArray = obj.getJSONArray("data")
-
-        for (i in 0 until data.length()) {
-            val service: JSONObject = data.getJSONObject(i)
+        val data: JSONObject = obj.getJSONObject("data")
+        var iter: MutableIterator<String> = data.keys()
+        while (iter.hasNext()) {
+            val serviceName = iter.next()
+            val service: JSONObject = data.getJSONObject(serviceName)
             val icon = service.getString("iconName").replace('-', '_').toUpperCase()
 
             val d: Drawable =
@@ -98,35 +80,14 @@ class ServicesFragment : Fragment() {
             button.text = service.getString("displayName")
             button.icon = d
             button.setOnClickListener {
-                this.redirectToService(service.getString("name"))
+                val intent = Intent(this.activity, ServiceActivity::class.java)
+
+                intent.putExtra("service", service.getString("name"))
+                startActivity(intent)
             }
 
             serviceButtonsLayout.addView(button)
         }
     }
 
-    private fun redirectToService(serviceName: String) {
-        val app = this.activity!!.application as AreaApplication
-
-        if (serviceName == "dropbox") {
-            val intent = Intent(this.activity, DropboxAuthActivity::class.java)
-
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
-            this.activity!!.finish()
-            return
-        }
-
-
-        val url = app.serverUrl + "/auth/oauth/authorize_url/$serviceName/android"
-        Fuel.get(url)
-            .responseJson { request, response, result ->
-                val data = result.get().obj().getString("data")
-
-                app.redirectAction = AreaApplication.ActionType.Signin
-                val webpage: Uri = Uri.parse(data)
-                val intent = Intent(Intent.ACTION_VIEW, webpage)
-                startActivity(intent)
-            }
-    }
 }

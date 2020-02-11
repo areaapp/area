@@ -9,7 +9,6 @@ class AreaApplication : Application() {
     var serverUrl: String? = null
     var token: String? = null
     var redirectAction: ActionType? = null
-    var services: MutableList<String>? = mutableListOf("test")
 
     enum class ActionType {
         Signin,

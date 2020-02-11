@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light">
+        <activity android:name=".ServiceActivity"></activity>
         <activity android:name=".DropboxAuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -41,8 +42,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                android:host="auth"
-                android:scheme="area-android" />
+                    android:host="auth"
+                    android:scheme="area-android" />
             </intent-filter>
         </activity>
         <activity

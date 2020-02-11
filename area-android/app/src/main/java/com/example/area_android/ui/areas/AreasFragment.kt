@@ -40,56 +40,6 @@ class AreasFragment : Fragment() {
 
         val app = this.activity!!.application as AreaApplication
 
-        root.findViewById<Button>(R.id.action_button).setOnClickListener {
-            val url : String = app.serverUrl + "/actions"
-            Fuel.get(url)
-                .responseJson { request, response, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            print("Failed to get actions fragment area print \n")
-                        }
-                        is Result.Success -> {
-                            //Pas oublier de mettre tout ça dans une fun
-                            val obj : JSONObject = result.get().obj()
-                            val data : JSONObject = obj.getJSONObject("data")
-
-                            actionButtonsLayout.removeViewsInLayout(0, actionButtonsLayout.size)
-                            for (i : Int in 1 until (app.services?.size ?: 10)) {
-                                val namz : String = app.services?.get(i) !!
-                                val actionsArray : JSONArray = data.getJSONArray(namz)
-                                for (j : Int in 0 until actionsArray.length()) {
-                                    val actions : JSONObject = actionsArray.getJSONObject(j)
-
-//                                    val d: Drawable =
-//                                        MaterialDrawableBuilder.with(this.activity)
-//                                            .setIcon(MaterialDrawableBuilder.IconValue.valueOf("list"))
-//                                            .setColor(Color.WHITE)
-//                                            .setToActionbarSize()
-//                                            .build()
-
-                                    val button = MaterialButton(this.activity!!)
-                                    button.text = actions.getString("displayName")
-//                                    button.icon = d
-                                    button.setOnClickListener {
-                                        Toast.makeText(context, actions.getString("description"), Toast.LENGTH_LONG).show()
-                                    }
-                                        actionButtonsLayout.addView(button)
-                                    print("Voici les actions n° " + j + ": " + actions + "   mrc \n")
-                                }
-                            }
-
-                        }
-                    }
-                }
-        }
-        //juste pour test à retirer
-        root.findViewById<Button>(R.id.test_button_google).setOnClickListener {
-            if (app.services?.contains("google")!!) {
-            }
-            else {
-                app.services?.add("google")
-            }
-        }
 
         return root
     }

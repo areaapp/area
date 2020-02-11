@@ -143,7 +143,6 @@ class LogWithServicesFragment : Fragment() {
             .responseJson { request, response, result ->
                 val data = result.get().obj().getString("data")
 
-                println(data)
                 app.redirectAction = AreaApplication.ActionType.Signin
                 val webpage: Uri = Uri.parse(data)
                 val intent = Intent(Intent.ACTION_VIEW, webpage)

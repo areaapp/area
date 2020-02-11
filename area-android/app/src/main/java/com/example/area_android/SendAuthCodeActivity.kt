@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
@@ -37,17 +38,29 @@ class SendAuthCodeActivity : Activity() {
             "service" to service,
             "clientType" to "android"
         )
+
         if (accessToken == null) {
             requestData["authCode"] = code
         } else {
             requestData["accessToken"] = accessToken
         }
 
+        if (app.redirectAction === AreaApplication.ActionType.Signin) {
+            this.login(url, requestData)
+        } else {
+            this.addService(url, requestData, service)
+        }
+        finish()
+    }
+
+    private fun login(url: String, requestData: HashMap<String, Any?>) {
+        val app = this.application as AreaApplication
         Fuel.post(url)
             .jsonBody(JSONObject(requestData).toString())
-            .responseJson { request, response, result ->
+            .responseJson { _, _, result ->
                 when (result) {
                     is Result.Failure -> {
+                        println(result.error)
                         Toast.makeText(this, "Invalid credentials", Toast.LENGTH_LONG).show()
                         finish()
                     }
@@ -56,7 +69,6 @@ class SendAuthCodeActivity : Activity() {
                         val obj = result.get().obj()
                         val responseData: JSONObject = obj.getJSONObject("data")
 
-                        app.services?.add(service)
                         app.token = responseData.getString("token")
                         val intent = Intent(this, MainActivity::class.java)
 
@@ -67,6 +79,30 @@ class SendAuthCodeActivity : Activity() {
                     }
                 }
             }
-        finish()
+    }
+
+    private fun addService(url: String, requestData: HashMap<String, Any?>, service: String) {
+        val app = this.application as AreaApplication
+        Fuel.post(url)
+            .authentication()
+            .bearer(app.token!!)
+            .jsonBody(JSONObject(requestData).toString())
+            .responseJson { _, _, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        println(result.error)
+                        Toast.makeText(this, "Invalid credentials", Toast.LENGTH_LONG).show()
+                        finish()
+                    }
+                    is Result.Success -> {
+                        Toast.makeText(this, "Service added", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, ServiceActivity::class.java)
+
+                        intent.putExtra("service", service)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            }
     }
 }
