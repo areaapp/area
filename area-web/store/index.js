@@ -58,6 +58,8 @@ export const actions = {
         if ($auth.loggedIn) {
             await dispatch('user/getServices');
             await dispatch('user/getAreas');
+
+            dispatch('user/setAvatar', $auth.user.email_md5);
         }
     },
 
