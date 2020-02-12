@@ -1,6 +1,6 @@
 <template>
     <div class="text-center">
-        <h2>Connection to {{ service.displayName }} in progress...</h2>
+        <h2>Waiting for {{ service.displayName }}...</h2>
         <v-progress-circular
             :size="70"
             :width="7"
