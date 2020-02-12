@@ -50,16 +50,16 @@ class SettingsFragment : Fragment() {
             .responseJson { request, response, result ->
                 when (result) {
                     is Result.Failure -> {
-                        print("FAILURE SETTINGS FRAGMENT : " + result.toString() + "\n")
-
                     }
                     is Result.Success -> {
                         val obj : JSONObject = result.get().obj()
                         val data : JSONObject = obj.getJSONObject("data")
 
+                        println(data)
+
                         email.text = "Email : " + data.getString("email")
                         username.text = data.getString("username")
-                        avatar.hash = data.getString("email_md5").hashCode()
+                        avatar.hash = data.getString("avatar").hashCode()
 
                         if (data.getString("register_source") !== "area") {
                             changePassword.isEnabled = false
