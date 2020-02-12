@@ -124,7 +124,6 @@ class AreaHelper {
                 const data = {
                     id: area.id,
                     name: area.name,
-                    user_id: area.user_id,
                     last_execution: area.last_execution,
                     action: actionInfos,
                     reaction: reactionInfos

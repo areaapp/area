@@ -19,7 +19,7 @@ class User extends Model {
             if (userInstance.dirty.password) {
                 userInstance.password = await Hash.make(userInstance.password);
             }
-            userInstance.email_md5 = md5(userInstance.email);
+            userInstance.avatar = md5(userInstance.email);
         });
     }
 
@@ -39,6 +39,10 @@ class User extends Model {
 
     services() {
         return this.hasMany('App/Models/Service');
+    }
+
+    areas() {
+        return this.hasMany('App/Models/Area');
     }
 
     static get createdAtColumn () {

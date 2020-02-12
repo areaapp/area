@@ -19,7 +19,7 @@ class AreaController {
     }
 
     async addArea({auth, request, response}) {
-        const paramsNames = ['action_name', 'reaction_name', 'name', 'action_args', 'reaction_args'];
+        const paramsNames = ['name', 'action', 'reaction'];
         const parameters = request.only(paramsNames);
 
         for (let paramName of paramsNames) {
@@ -31,39 +31,42 @@ class AreaController {
             }
         }
 
-       const actionServiceName = request.areaHelper.getServiceNameByAction(parameters.action_name);
-       const reactionServiceName = request.areaHelper.getServiceNameByReaction(parameters.reaction_name);
+        const action = JSON.parse(parameters.action);
+        const reaction = JSON.parse(parameters.reaction);
 
-       if (!actionServiceName || !reactionServiceName) {
-           return response.status(404).json({
-               status: 'error',
-               message: 'Action or reaction doesn\'t exist'
-           });
-       }
+        const actionServiceName = request.areaHelper.getServiceNameByAction(action.name);
+        const reactionServiceName = request.areaHelper.getServiceNameByReaction(reaction.name);
 
-       const actionServiceId = await this.getServiceIdFromName(auth, actionServiceName);
-       const reactionServiceId = await this.getServiceIdFromName(auth, reactionServiceName);
+        if (!actionServiceName || !reactionServiceName) {
+            return response.status(404).json({
+                status: 'error',
+                message: 'Action or reaction doesn\'t exist'
+            });
+        }
 
-       if (!actionServiceId || !reactionServiceId)
+        const actionServiceId = await this.getServiceIdFromName(auth, actionServiceName);
+        const reactionServiceId = await this.getServiceIdFromName(auth, reactionServiceName);
+
+        if (!actionServiceId || !reactionServiceId)
             return response.status(404).json({
                 status: 'error',
                 message: 'Invalid service'
             });
 
-       const newActionInfos = {
-             name: parameters.action_name,
-             args: JSON.stringify([parameters.action_args]),
-             service_id: actionServiceId
-       };
+        const newActionInfos = {
+            name: action.name,
+            args: action.params,
+            service_id: actionServiceId
+        };
 
-       const newReactionInfos = {
-           name: parameters.reaction_name,
-           args: JSON.stringify([parameters.reaction_args]),
-           service_id: reactionServiceId
-       };
+        const newReactionInfos = {
+            name: reaction.name,
+            args: reaction.params,
+            service_id: reactionServiceId
+        };
 
-       const newAction = await Action.create(newActionInfos);
-       const newReaction = await Reaction.create(newReactionInfos);
+        const newAction = await Action.create(newActionInfos);
+        const newReaction = await Reaction.create(newReactionInfos);
 
         const newAreaInfos = {
             name: parameters.name,
@@ -122,18 +125,15 @@ class AreaController {
             });
 
         const data = request.areaHelper.areaSerialize(area, action, reaction);
-            
+
         return response.json({
             status: 'success',
             data: data
         });
     }
 
-    async deleteArea({auth, params, response}) {
-        const userArea = await Area.query()
-        .where('user_id', auth.current.user.id)
-        .where('id', params.id)
-        .fetch();
+    async deleteArea({auth, request, params, response}) {
+        const userArea = await auth.current.user.areas().where('id', params.id).fetch();
 
         if (userArea.rows.length == 0) {
             return response.status(404).json({
@@ -142,7 +142,7 @@ class AreaController {
             });
         }
 
-        const area = userArea.toJSON();
+        const area = userArea.toJSON()[0];
         const action = await Action.find(area.action_id);
         const reaction = await Reaction.find(area.reaction_id);
 
@@ -175,8 +175,8 @@ class AreaController {
                 status: 'error',
                 message: 'Area doesn\'t exist'
             });
-        
-        
+
+
         area.merge(parametersArea);
         await area.save();
 
@@ -188,7 +188,7 @@ class AreaController {
                 status: 'error',
                 message: 'Action or reaction of the area is invalid'
             });
-        
+
         if (parametersArgs.action_args !== undefined) {
             action.args = parametersArgs.action_args;
             await action.save();
