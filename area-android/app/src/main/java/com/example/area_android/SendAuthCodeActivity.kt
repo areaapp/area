@@ -24,10 +24,6 @@ class SendAuthCodeActivity : Activity() {
         val code = data!!.getQueryParameter("code")
         var accessToken: String? = null
 
-        println(service)
-        println(code)
-        println(accessToken)
-
         if (data.fragment !== null) {
             accessToken = Regex("(access_token=)(\\w+)").find(data.fragment!!)!!.groups[2]!!.value
         }

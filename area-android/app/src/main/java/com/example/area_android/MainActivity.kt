@@ -14,6 +14,8 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_service.*
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        var serverUrl: String = "0"
         val app = this.application as AreaApplication
 
         val navController = findNavController(R.id.nav_host_fragment)
@@ -36,20 +37,5 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-
-        val url: String = app.serverUrl + "/services"
-        Fuel.get(url)
-            .responseJson { request, response, result ->
-                when (result) {
-                    is Result.Failure -> {
-                        Toast.makeText(this, "Connection to the server failed", Toast.LENGTH_LONG).show()
-                    }
-                    is Result.Success -> {
-                        Toast.makeText(this, "Connected to the server", Toast.LENGTH_SHORT).show()
-//                        this.addServices(result.get().obj())
-                    }
-                }
-            }
     }
 }
