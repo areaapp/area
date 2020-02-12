@@ -11,7 +11,7 @@ class UserServiceController {
         const paramNames = ['authCode', 'accessToken', 'clientType'];
         const parameters = request.only(paramNames);
 
-        if (typeof parameters.clientType === 'undefined') {
+        if (!parameters.clientType) {
             return response.status(400).json({
                 status: 'error',
                 message: 'clientType invalid'

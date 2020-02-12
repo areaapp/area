@@ -45,6 +45,7 @@ Route.group(() => {
      * @api {post} /auth/signin Signin a user using basic authentication
      * @apiName Signin
      * @apiGroup Auth
+     * @apiGroup Auth
      * @apiParam {String} password password
      * @apiParam {String} email email
      *
@@ -129,14 +130,14 @@ Route.group(() => {
      * @apiSuccess {String} username Username of the user
      * @apiSuccess {String} email Email of the user
      * @apiSuccess {String} register_source Source of the register
-     * @apiSuccess {String} email_md5 Md5 hash of the user's email (used for the avatar)
+     * @apiSuccess {String} avatar Md5 hash of the user's email (used for the avatar)
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
      *          "username": "kylianm",
      *          "email": "kylian.maugue@epitech.eu"
      *          "register_source": "area"
-     *          "email_md5": "9cb9af3a4d2894dd0b75a2d56bb5f70a"
+     *          "avatar": "9cb9af3a4d2894dd0b75a2d56bb5f70a"
      *        }
      */
 
@@ -219,18 +220,16 @@ Route.group(() => {
      *       "name": "area45",
      *       "user_id": 1,
      *       "action": {
-     *           "name": "google_gmail_new_mail",
-     *           "args": [
-     *               "action_params1",
-     *               "action_params0"
-     *           ]
+     *           "name": "twitch_streamer_connected",
+     *           "args": {
+     *               "streamer": "mistermv"
+     *           }
      *       },
      *       "reaction": {
-     *           "name": "google_gmail_send_email",
-     *           "args": [
-     *               "reaction_params1",
-     *               "reaction_params0"
-     *           ]
+     *           "name": "google_youtube_add_to_watch_later",
+     *           "args": {
+     *             "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
+     *           }
      *   }
      */
 
@@ -395,7 +394,7 @@ Route.group(() => {
      */
 
     Route.put('/area/:id(\\d+)', 'AreaController.modifyArea').middleware('auth').middleware('area');
-    
+
     /**
      * @api {get} /me/notifications Get notifications for a user
      * @apiName /me/notifications

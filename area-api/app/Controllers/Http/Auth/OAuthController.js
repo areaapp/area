@@ -85,8 +85,7 @@ class OAuthController {
     async signin({ auth, request, response }) {
         const parameters = request.only(['authCode', 'accessToken', 'clientType', 'service']);
 
-        if (typeof parameters.clientType === 'undefined' ||
-            typeof parameters.service === 'undefined') {
+        if (!parameters.clientType || !parameters.service) {
             return response.status(400).json({
                 status: 'error',
                 message: 'Invalid parameters'
