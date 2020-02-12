@@ -58,7 +58,7 @@ export const actions = {
             await dispatch('user/getServices');
             await dispatch('user/getAreas');
 
-            dispatch('user/setAvatar', $auth.user.email_md5);
+            dispatch('user/setAvatar', $auth.user.avatar);
         }
     },
 
