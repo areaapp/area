@@ -30,8 +30,7 @@ export const mutations = {
 };
 
 export const actions = {
-
-    async nuxtServerInit ({ commit, dispatch }, { $axios, $auth, app }) {
+    async nuxtServerInit ({ commit, dispatch }, { $axios, $auth, app, route }) {
         // Get services
         const resServices = await $axios.$get('/services');
 

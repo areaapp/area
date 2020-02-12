@@ -1,7 +1,9 @@
-export default async function ({ $auth, store, app, query, params, redirect }) {
+async function oauthConnect ({ $auth, store, app, query, params, redirect, route }) {
     const userAction = app.$cookies.get('userAction');
     const fUrl = app.$cookies.get('userActionFUrl');
     const sUrl = app.$cookies.get('userActionSUrl');
+    const match = route.hash.match(/(access_token=)(\w+)/);
+    const accessToken = match ? match[2] : undefined;
 
     store.dispatch('userAction/clear');
 
@@ -9,8 +11,9 @@ export default async function ({ $auth, store, app, query, params, redirect }) {
     case 'addService':
         try {
             await store.dispatch('user/addService', {
-                name: params.service,
-                authCode: query.code
+                service: params.service,
+                authCode: query.code,
+                accessToken
             });
             const displayName = store.state.services[params.service].displayName;
 
@@ -25,8 +28,9 @@ export default async function ({ $auth, store, app, query, params, redirect }) {
         try {
             await $auth.loginWith('oauth', {
                 data: {
-                    authCode: query.code,
                     service: params.service,
+                    authCode: query.code,
+                    accessToken,
                     clientType: 'web'
                 }
             });
@@ -38,4 +42,8 @@ export default async function ({ $auth, store, app, query, params, redirect }) {
         }
         break;
     }
+}
+
+export default function (ctx, inject) {
+    inject('oauthConnect', () => oauthConnect(ctx));
 }

@@ -51,10 +51,10 @@ export const actions = {
         }
     },
 
-    async addService ({ commit }, { name, authCode }) {
+    async addService ({ commit }, { name, authCode, accessToken }) {
         const resService = await this.$axios.$post(`/me/services/${name}`, {
-            name,
             authCode,
+            accessToken,
             clientType: 'web'
         });
 

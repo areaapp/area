@@ -169,7 +169,10 @@ class OAuthController {
     getServiceAuthorizeUrl(service, clientType) {
         const scopes = service.scopes.length > 0 ? 'scope=' + service.scopes.join(service.scopeSeparator) : '';
         const client_id = 'client_id=' + ApiInfos[clientType][service.name].client_id;
-        const redirect_uri = 'redirect_uri=' + encodeURIComponent(ApiInfos[clientType][service.name].redirect_uri);
+        let redirect_uri = ''
+        if (ApiInfos[clientType][service.name].redirect_uri) {
+            redirect_uri = 'redirect_uri=' + encodeURIComponent(ApiInfos[clientType][service.name].redirect_uri);
+        }
         const response_type = 'response_type=' + (service.codeFlow ? 'code' : 'token');
         const url = service.authorizeUrl + '?' + [scopes, client_id, redirect_uri, response_type].filter(Boolean).join('&');
         return url;
@@ -180,13 +183,17 @@ class OAuthController {
             return await service.getAccessToken(code, clientType);
         }
 
-        const data = querystring.stringify({
+        let dataObj = {
             client_id: ApiInfos[clientType][service.name].client_id,
             client_secret: ApiInfos[clientType][service.name].client_secret,
             code,
             grant_type: 'authorization_code',
-            redirect_uri: ApiInfos[clientType][service.name].redirect_uri
-        });
+        }
+
+        if (ApiInfos[clientType][service.name].redirect_uri) {
+            dataObj.redirect_uri = ApiInfos[clientType][service.name].redirect_uri
+        }
+        const data = querystring.stringify(dataObj);
 
         try {
             const response = await axios.post(service.accessTokenUrl, data);
