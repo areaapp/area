@@ -141,6 +141,7 @@ class ServiceActivity : AppCompatActivity() {
                 val data = result.get().obj().getString("data")
 
                 app.redirectAction = AreaApplication.ActionType.AddService
+                app.authService = serviceName
                 val webpage: Uri = Uri.parse(data)
                 val intent = Intent(Intent.ACTION_VIEW, webpage)
                 startActivity(intent)

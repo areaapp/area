@@ -144,6 +144,7 @@ class LogWithServicesFragment : Fragment() {
                 val data = result.get().obj().getString("data")
 
                 app.redirectAction = AreaApplication.ActionType.Signin
+                app.authService = serviceName
                 val webpage: Uri = Uri.parse(data)
                 val intent = Intent(Intent.ACTION_VIEW, webpage)
                 startActivity(intent)

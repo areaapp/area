@@ -20,9 +20,13 @@ class SendAuthCodeActivity : Activity() {
         val app = this.application as AreaApplication
         val data: Uri? = intent?.data
 
-        val service = data!!.path!!.substring(1)
-        val code = data.getQueryParameter("code")
-        var accessToken: String? = null//Regex("(access_token=)(\\w+)").find(data?.fragment?).groups[2]!!.value
+        val service = app.authService!!
+        val code = data!!.getQueryParameter("code")
+        var accessToken: String? = null
+
+        println(service)
+        println(code)
+        println(accessToken)
 
         if (data.fragment !== null) {
             accessToken = Regex("(access_token=)(\\w+)").find(data.fragment!!)!!.groups[2]!!.value
