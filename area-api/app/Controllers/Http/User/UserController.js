@@ -15,15 +15,15 @@ class UserController {
 
     async setUserInfos({ auth, request, response }) {
         let user = auth.current.user;
-        const params = request.only(['username']);
+        const params = request.only(['username', 'password']);
 
-        if (params.username == undefined)
+        if (params.username == undefined && params.password == undefined)
             return response.status(422).json({
                 status: 'error',
-                message: 'Username is not provided'
+                message: 'Invalid params'
             });
 
-        user.username = params.username;
+        user.merge(params);
 
         await user.save();
 
