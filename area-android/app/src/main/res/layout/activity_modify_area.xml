@@ -7,46 +7,53 @@
     android:orientation="vertical"
     tools:context=".ModifyAreaActivity">
 
-    <TextView
-        android:id="@+id/areaName"
+    <EditText
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
 
     <TextView
-        android:id="@+id/actionName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:text="Action"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-    <ListView
-        android:id="@+id/actionArgsList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </ListView>
-
-    <TextView
-        android:id="@+id/reactionName"
+        android:id="@+id/action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:text="Reation"
+        android:layout_marginBottom="10dp"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-    <ListView
-        android:id="@+id/reactionArgsList"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </ListView>
+        <LinearLayout
+            android:id="@+id/actionArgsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/reaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/reactionArgsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,13 +65,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Modify" />
+            android:text="@android:string/ok" />
 
         <Button
-            android:id="@+id/deleteButton"
+            android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Delete" />
+            android:text="@android:string/cancel" />
     </LinearLayout>
+
 </LinearLayout>

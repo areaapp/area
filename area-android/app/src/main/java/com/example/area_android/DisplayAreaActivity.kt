@@ -2,6 +2,7 @@ package com.example.area_android
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
@@ -58,8 +59,9 @@ class DisplayAreaActivity : AppCompatActivity() {
 
         val modifyButton = findViewById<Button>(R.id.modifyButton)
         modifyButton.setOnClickListener {
-            setResult(Activity.RESULT_OK)
-            finish()
+            val intent = Intent(this, ModifyAreaActivity::class.java)
+            intent.putExtra("area", area.toString())
+            startActivityForResult(intent, 0)
         }
 
         val deleteButton = findViewById<Button>(R.id.deleteButton)
@@ -79,6 +81,15 @@ class DisplayAreaActivity : AppCompatActivity() {
                         }
                     }
                 }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            setResult(Activity.RESULT_OK)
+            finish()
         }
     }
 }
