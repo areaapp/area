@@ -36,8 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SendAuthCodeActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:name=".SendAuthCodeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
