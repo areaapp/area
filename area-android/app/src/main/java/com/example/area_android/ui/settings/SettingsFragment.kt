@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +64,7 @@ class SettingsFragment : Fragment() {
                         username.text = data.getString("username")
                         avatar.hash = data.getString("avatar").hashCode()
 
-                        if (data.getString("register_source") !== "area") {
+                        if (data.getString("register_source") != "area") {
                             changePassword.isEnabled = false
                         }
                     }
@@ -111,6 +112,7 @@ class SettingsFragment : Fragment() {
         changePassword.setOnClickListener {
             val passwordEdit = EditText(this.activity)
             passwordEdit.hint = "New username"
+            passwordEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             AlertDialog.Builder(this.activity!!)
                 .setTitle("Change password")
                 .setMessage("Enter the new password")

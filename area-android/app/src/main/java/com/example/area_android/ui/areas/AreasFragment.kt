@@ -6,16 +6,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.view.ViewGroup.MarginLayoutParams
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ListView
+import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.example.area_android.*
+import com.example.area_android.AreaApplication
+import com.example.area_android.DisplayAreaActivity
+import com.example.area_android.NewAreaActivity
+import com.example.area_android.R
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONObject
+
 
 class AreasFragment : Fragment() {
 
@@ -31,7 +40,7 @@ class AreasFragment : Fragment() {
             ViewModelProviders.of(this).get(AreasViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_areas, container, false)
 
-        val addServiceButton = root.findViewById<FloatingActionButton>(R.id.addServiceButton)
+        val addServiceButton = root.findViewById<Button>(R.id.addServiceButton)
 
         addServiceButton.setOnClickListener {
             val intent = Intent(this.activity, NewAreaActivity::class.java);
