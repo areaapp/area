@@ -31,8 +31,8 @@ class AreaController {
             }
         }
 
-        const action = JSON.parse(parameters.action);
-        const reaction = JSON.parse(parameters.reaction);
+        const action = parameters.action;
+        const reaction = parameters.reaction;
 
         const actionServiceName = request.areaHelper.getServiceNameByAction(action.name);
         const reactionServiceName = request.areaHelper.getServiceNameByReaction(reaction.name);
