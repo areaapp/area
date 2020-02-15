@@ -10,7 +10,7 @@ class NotificationSchema extends Schema {
       table.integer('user_id').unsigned().references('id').inTable("users").onDelete('cascade');
       table.text('message');
       table.boolean('readed').notNullable();
-      table.date("created_at").notNullable();
+      table.datetime("created_at").notNullable();
     })
   }
 
