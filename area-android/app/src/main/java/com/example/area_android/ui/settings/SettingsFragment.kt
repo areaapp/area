@@ -2,6 +2,7 @@ package com.example.area_android.ui.settings
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.area_android.AreaApplication
+import com.example.area_android.LoginActivity
 import com.example.area_android.R
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
@@ -137,6 +139,15 @@ class SettingsFragment : Fragment() {
                 .setNegativeButton("Cancel", null)
                 .show()
 
+        }
+
+        val logoutButton = root.findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            app.token = ""
+            val intent = Intent(this.activity, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
+            this.activity!!.finish()
         }
 
         return root
