@@ -1,6 +1,7 @@
 package com.example.area_android
 
 import android.content.Intent
+import android.content.RestrictionEntry
 import android.net.Uri
 import android.os.Bundle
 import android.widget.*
@@ -23,7 +24,6 @@ class ServiceActivity : AppCompatActivity() {
         val desc = findViewById<TextView>(R.id.serviceDescription)
 
         val add = findViewById<Button>(R.id.add)
-        val modify = findViewById<Button>(R.id.modify)
         val delete = findViewById<Button>(R.id.delete)
 
         val actionList = findViewById<ListView>(R.id.actions)
@@ -34,6 +34,7 @@ class ServiceActivity : AppCompatActivity() {
             .responseJson { request, response, result ->
                 when (result) {
                     is Result.Failure -> {
+                        Toast.makeText(this, "Request failed", Toast.LENGTH_SHORT).show()
                     }
                     is Result.Success -> {
                         val data = result.get().obj().getJSONObject("data")
@@ -83,23 +84,25 @@ class ServiceActivity : AppCompatActivity() {
             .authentication()
             .bearer(app.token!!)
             .responseJson { request, response, result ->
-                val data = result.get().obj().getJSONObject("data")
-                println("me services")
-                println(data)
-                if (data.has(serviceName)) {
-                    add.isEnabled = false
-                } else {
-                    modify.isEnabled = false
-                    delete.isEnabled = false
+                when (result) {
+                    is Result.Failure -> {
+                        Toast.makeText(this, "Request failed", Toast.LENGTH_SHORT).show()
+                    }
+                    is Result.Success -> {
+                        val data = result.get().obj().getJSONObject("data")
+                        println("me services")
+                        println(data)
+                        if (data.has(serviceName)) {
+                            add.isEnabled = false
+                        } else {
+                            delete.isEnabled = false
+                        }
+                    }
                 }
             }
 
         add.setOnClickListener{
             this.redirectToService(serviceName)
-        }
-
-        modify.setOnClickListener {
-            Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show()
         }
 
         delete.setOnClickListener {
@@ -110,7 +113,6 @@ class ServiceActivity : AppCompatActivity() {
                     when (result) {
                         is Result.Success -> {
                             add.isEnabled = true
-                            modify.isEnabled = false
                             delete.isEnabled = false
                             Toast.makeText(this, "Service deleted", Toast.LENGTH_SHORT).show()
                         }
@@ -138,14 +140,21 @@ class ServiceActivity : AppCompatActivity() {
         val url = app.serverUrl + "/auth/oauth/authorize_url/$serviceName/android"
         Fuel.get(url)
             .responseJson { request, response, result ->
-                val data = result.get().obj().getString("data")
+                when (result) {
+                    is Result.Failure -> {
+                        Toast.makeText(this, "Request failed", Toast.LENGTH_SHORT).show()
+                    }
+                    is Result.Success -> {
+                        val data = result.get().obj().getString("data")
 
-                app.redirectAction = AreaApplication.ActionType.AddService
-                app.authService = serviceName
-                val webpage: Uri = Uri.parse(data)
-                val intent = Intent(Intent.ACTION_VIEW, webpage)
-                startActivity(intent)
-                finish()
+                        app.redirectAction = AreaApplication.ActionType.AddService
+                        app.authService = serviceName
+                        val webpage: Uri = Uri.parse(data)
+                        val intent = Intent(Intent.ACTION_VIEW, webpage)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
             }
     }
 }

@@ -79,7 +79,7 @@ class SettingsFragment : Fragment() {
                 .setPositiveButton("Ok") { _, _ ->
 
                     val requestData = hashMapOf<String, Any?>(
-                        "username" to usernameEdit.text
+                        "username" to usernameEdit.text.toString()
                     )
 
                     Fuel.put(app.serverUrl + "/me")
@@ -96,6 +96,7 @@ class SettingsFragment : Fragment() {
                                     val data : JSONObject = obj.getJSONObject("data")
 
                                     username.text = data.getString("username")
+                                    Toast.makeText(this.activity, "Success", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
@@ -104,6 +105,40 @@ class SettingsFragment : Fragment() {
                 .show()
 
         }
+
+        changePassword.setOnClickListener {
+            val passwordEdit = EditText(this.activity)
+            passwordEdit.hint = "New username"
+            AlertDialog.Builder(this.activity!!)
+                .setTitle("Change password")
+                .setMessage("Enter the new password")
+                .setView(passwordEdit)
+                .setPositiveButton("Ok") { _, _ ->
+
+                    val requestData = hashMapOf<String, Any?>(
+                        "password" to passwordEdit.text.toString()
+                    )
+
+                    Fuel.put(app.serverUrl + "/me")
+                        .authentication()
+                        .bearer(app.token!!)
+                        .jsonBody(JSONObject(requestData).toString())
+                        .responseJson { request, response, result ->
+                            when (result) {
+                                is Result.Failure -> {
+                                    Toast.makeText(this.activity, "Request failed", Toast.LENGTH_SHORT).show()
+                                }
+                                is Result.Success -> {
+                                    Toast.makeText(this.activity, "Success", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+
+        }
+
         return root
     }
 }

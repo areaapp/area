@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light">
-        <activity android:name=".NewAreaActivity"></activity>
+        <activity android:name=".DisplayAreaActivity"></activity>
+        <activity android:name=".ModifyAreaActivity" />
+        <activity android:name=".NewAreaActivity" />
         <activity android:name=".ServiceActivity" />
         <activity android:name=".DropboxAuthActivity">
             <intent-filter>
@@ -42,9 +44,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:host="auth" android:scheme="area-android" />
+                <data
+                    android:host="auth"
+                    android:scheme="area-android" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

@@ -1,22 +1,14 @@
 package com.example.area_android
 
-import android.os.Bundle
-import android.widget.TextView
-import android.widget.Toast
 import android.content.Intent
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.extensions.authentication
-import com.github.kittinunf.fuel.json.responseJson
-import com.github.kittinunf.result.Result
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.activity_service.*
-import org.json.JSONObject
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class MainActivity : AppCompatActivity() {
 

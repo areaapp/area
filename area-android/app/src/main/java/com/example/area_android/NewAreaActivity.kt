@@ -1,5 +1,6 @@
 package com.example.area_android
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
@@ -13,7 +14,6 @@ import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
-import org.json.JSONArray
 import org.json.JSONObject
 
 class NewAreaActivity : AppCompatActivity() {
@@ -36,12 +36,21 @@ class NewAreaActivity : AppCompatActivity() {
         val chooseReactionButton = findViewById<ImageButton>(R.id.chooseReactionButton)
 
         Fuel.get(app!!.serverUrl + "/services")
-            .responseJson { request, response, result ->  
-                val tmp: String = result.get().obj().getJSONObject("data").toString(0)
-                services = Gson().fromJson<Any>(tmp, object : TypeToken<HashMap<String, Any>>() {}.type)
-                as HashMap<String, Any>
+            .responseJson { request, response, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        Toast.makeText(this, "Request failed", Toast.LENGTH_SHORT).show()
+                    }
+                    is Result.Success -> {
+                        val tmp: String = result.get().obj().getJSONObject("data").toString(0)
+                        services = Gson().fromJson<Any>(
+                            tmp,
+                            object : TypeToken<HashMap<String, Any>>() {}.type
+                        ) as HashMap<String, Any>
 
-                this.getUserActionsReactions()
+                        this.getUserActionsReactions()
+                    }
+                }
             }
         
         chooseActionButton.setOnClickListener {
@@ -107,6 +116,7 @@ class NewAreaActivity : AppCompatActivity() {
                         }
                         is Result.Success -> {
                             Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                            setResult(Activity.RESULT_OK)
                             finish()
                         }
                     }
@@ -119,32 +129,41 @@ class NewAreaActivity : AppCompatActivity() {
             .authentication()
             .bearer(app!!.token!!)
             .responseJson { request, response, result ->
-                val data = result.get().obj().getJSONObject("data")
-                val iter: MutableIterator<String> = data.keys()
-                while (iter.hasNext()) {
-                    val serviceName = iter.next()
-
-                    val service = services!![serviceName] as LinkedTreeMap<String, Any>
-                    val serviceActions = service["actions"] as ArrayList<LinkedTreeMap<String, Any>>
-                    for (i in 0 until serviceActions.size) {
-                        val a = serviceActions[i]
-                        a["service"] = serviceName
-                        userActions.add(a.toMap())
+                when (result) {
+                    is Result.Failure -> {
+                        Toast.makeText(this, "Request failed", Toast.LENGTH_SHORT).show()
                     }
+                    is Result.Success -> {
+                        val data = result.get().obj().getJSONObject("data")
+                        val iter: MutableIterator<String> = data.keys()
+                        while (iter.hasNext()) {
+                            val serviceName = iter.next()
 
-                    val serviceReactions = service["reactions"] as ArrayList<LinkedTreeMap<String, Any>>
-                    for (i in 0 until serviceReactions.size) {
-                        println(serviceReactions[i]["name"] as String)
-                        val r = serviceReactions[i]
-                        r["service"] = serviceName
-                        userReactions.add(r.toMap())
+                            val service = services!![serviceName] as LinkedTreeMap<String, Any>
+                            val serviceActions =
+                                service["actions"] as ArrayList<LinkedTreeMap<String, Any>>
+                            for (i in 0 until serviceActions.size) {
+                                val a = serviceActions[i]
+                                a["service"] = serviceName
+                                userActions.add(a.toMap())
+                            }
+
+                            val serviceReactions =
+                                service["reactions"] as ArrayList<LinkedTreeMap<String, Any>>
+                            for (i in 0 until serviceReactions.size) {
+                                println(serviceReactions[i]["name"] as String)
+                                val r = serviceReactions[i]
+                                r["service"] = serviceName
+                                userReactions.add(r.toMap())
+                            }
+                        }
                     }
                 }
             }
     }
 
     private fun openActionDialog() {
-        val actionNameText = findViewById<TextView>(R.id.actionName)
+        val actionNameText = findViewById<TextView>(R.id.areaName)
         val adapter = this.getActionsAdapter()
         val listView = ListView(this)
         val dialog = AlertDialog.Builder(this)
