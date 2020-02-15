@@ -29,7 +29,12 @@ class UserController {
 
         return response.json({
             status: 'success',
-            data: user
+            data: {
+                username: user.username,
+                email: user.email,
+                register_source: user.register_source,
+                avatar: user.avatar
+            }
         });
     }
 }
