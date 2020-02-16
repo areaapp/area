@@ -94,10 +94,10 @@ export default {
                 '^/api': '/'
             }
         },
-        '/docs': {
-            target: `${docUrl}`,
+        '/docs/dev': {
+            target: `${docUrl}/dev`,
             pathRewrite: {
-                '^/docs': '/'
+                '^/docs/dev': '/'
             }
         }
     },
