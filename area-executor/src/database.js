@@ -19,10 +19,18 @@ export default class Database {
         return res;
     }
 
-    async getAreas() {
-        const result = await this._request('SELECT * FROM areas');
+    async _getAllFrom(table) {
+        try {
+            const res = await this._request(`SELECT * FROM ${table}`);
+            return res;
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
+    }
 
-        console.log(result.rows);
+    async getAreas() {
+        return await this._getAllFrom('areas');
     }
 
     end() {

@@ -24,6 +24,8 @@ import Database from './database.js';
 
     const areas = await db.getAreas();
 
+    console.log(areas.rows);
+
     db.end();
     // try {
     //     await db.authenticate();
