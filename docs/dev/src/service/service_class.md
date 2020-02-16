@@ -80,26 +80,27 @@ async getUser(accessToken) {
 
 If the service use a irregular way to get the access_token, you have to write the following function (only for authorization code flow):
 ```javascript
-async getAccessToken(code, clientType)
+async getAccessToken(oauthHelper, code, clientType)
 ```
 
 This function must return the access_token.
 
-> Node: This function must return `null` if an error as occured
-> Node: You can access to the config file by adding `require('../../oauth.config.js');`
+> Note: This function must return `null` if an error as occured
+
+> Note: You can access to the oauth config by using the following function: `oauthHelper.getService(clientType, serviceName)`
 
 Example:
 ```javascript
 const axios = require('axios');
-const ApiInfos = require('../../oauth.config.js');
 
-async getAccessToken(code, clientType) {
+async getAccessToken(oauthHelper, code, clientType) {
+    const oauthService = oauthHelper.getService(clientType, this.name)
     const data = {
-        client_id: ApiInfos[clientType][this.name].client_id,
-        client_secret: ApiInfos[clientType][this.name].client_secret,
+        client_id: oauthService.client_id,
+        client_secret: oauthService.client_secret,
         code,
         grant_type: 'authorization_code',
-        redirect_uri: ApiInfos[clientType][this.name].redirect_uri
+        redirect_uri: oauthService.redirect_uri
     };
 
     try {

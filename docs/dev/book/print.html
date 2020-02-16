@@ -166,7 +166,7 @@
 <h3><a class="header" href="#oauth-configuration" id="oauth-configuration">Oauth configuration</a></h3>
 <p>First create your application in the service you want to add.
 You can find a list of possible services <a href="https://en.wikipedia.org/wiki/List_of_OAuth_providers">here</a>.
-Once you created your application, add your service in <code>area-api/oauth.config.js</code>, inside both the <code>web</code> and the <code>android</code> objects.
+Once you created your application, add your service in <code>area-api/config/oauth.config.js</code>, inside both the <code>web</code> and the <code>android</code> objects.
 Add the following informations:</p>
 <table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody>
 <tr><td>client_id</td><td>The client id received when creating the application in the service</td></tr>
@@ -199,7 +199,7 @@ android: {
 </blockquote>
 <h3><a class="header" href="#area-configuration" id="area-configuration">Area configuration</a></h3>
 <p>One you added your new service in the oauth config file, you have to had it in the area config, to list the actions and reactions models of this service.</p>
-<p>In <code>area-api/area.config.js</code>, juste add your service as a new object, containing two keys: <code>actions</code> and <code>reactions</code>, that are both arrays.</p>
+<p>In <code>area-api/config/area.config.js</code>, juste add your service as a new object, containing two keys: <code>actions</code> and <code>reactions</code>, that are both arrays.</p>
 <p>Example:</p>
 <pre><code class="language-javascript">module.exports = {
     ...
@@ -280,24 +280,26 @@ async getUser(accessToken) {
 }
 </code></pre>
 <p>If the service use a irregular way to get the access_token, you have to write the following function (only for authorization code flow):</p>
-<pre><code class="language-javascript">async getAccessToken(code, clientType)
+<pre><code class="language-javascript">async getAccessToken(oauthHelper, code, clientType)
 </code></pre>
 <p>This function must return the access_token.</p>
 <blockquote>
-<p>Node: This function must return <code>null</code> if an error as occured
-Node: You can access to the config file by adding <code>require('../../oauth.config.js');</code></p>
+<p>Note: This function must return <code>null</code> if an error as occured</p>
+</blockquote>
+<blockquote>
+<p>Note: You can access to the oauth config by using the following function: <code>oauthHelper.getService(clientType, serviceName)</code></p>
 </blockquote>
 <p>Example:</p>
 <pre><code class="language-javascript">const axios = require('axios');
-const ApiInfos = require('../../oauth.config.js');
 
-async getAccessToken(code, clientType) {
+async getAccessToken(oauthHelper, code, clientType) {
+    const oauthService = oauthHelper.getService(clientType, this.name)
     const data = {
-        client_id: ApiInfos[clientType][this.name].client_id,
-        client_secret: ApiInfos[clientType][this.name].client_secret,
+        client_id: oauthService.client_id,
+        client_secret: oauthService.client_secret,
         code,
         grant_type: 'authorization_code',
-        redirect_uri: ApiInfos[clientType][this.name].redirect_uri
+        redirect_uri: oauthService.redirect_uri
     };
 
     try {
@@ -312,7 +314,7 @@ async getAccessToken(code, clientType) {
 </code></pre>
 <h1><a class="header" href="#add-actionreaction" id="add-actionreaction">Add action/reaction</a></h1>
 <h1><a class="header" href="#configuration-files-1" id="configuration-files-1">Configuration files</a></h1>
-<p>You have to add all your action and reaction models in <code>area-api/area.config.js</code></p>
+<p>You have to add all your action and reaction models in <code>area-api/config/area.config.js</code></p>
 <p>In the coresponding service, add an object containing the following keys:</p>
 <table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody>
 <tr><td>name</td><td>Name of the action/reaction. Lowercase letters and underscores only. Must be prefixed by the service name and must be unique</td></tr>

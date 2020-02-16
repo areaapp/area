@@ -1,6 +1,6 @@
 # Configuration files
 
-You have to add all your action and reaction models in `area-api/area.config.js`
+You have to add all your action and reaction models in `area-api/config/area.config.js`
 
 In the coresponding service, add an object containing the following keys:
 

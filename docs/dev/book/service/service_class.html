@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Configuration files - Area developer documentation</title>
+        <title>Service class - Area developer documentation</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="expanded "><a href="../service/add_service.html"><strong aria-hidden="true">2.</strong> Add service</a></li><li><ol class="section"><li class="expanded "><a href="../service/configuration_files.html" class="active"><strong aria-hidden="true">2.1.</strong> Configuration files</a></li><li class="expanded "><a href="../service/service_class.html"><strong aria-hidden="true">2.2.</strong> Service class</a></li></ol></li><li class="expanded "><a href="../area/index.html"><strong aria-hidden="true">3.</strong> Add action/reaction</a></li><li><ol class="section"><li class="expanded "><a href="../area/configuration_files.html"><strong aria-hidden="true">3.1.</strong> Configuration files</a></li><li class="expanded "><a href="../area/logic.html"><strong aria-hidden="true">3.2.</strong> Action/Reaction logic</a></li></ol></li></ol>
+                <ol class="chapter"><li class="expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="expanded "><a href="../service/add_service.html"><strong aria-hidden="true">2.</strong> Add service</a></li><li><ol class="section"><li class="expanded "><a href="../service/configuration_files.html"><strong aria-hidden="true">2.1.</strong> Configuration files</a></li><li class="expanded "><a href="../service/service_class.html" class="active"><strong aria-hidden="true">2.2.</strong> Service class</a></li></ol></li><li class="expanded "><a href="../area/index.html"><strong aria-hidden="true">3.</strong> Add action/reaction</a></li><li><ol class="section"><li class="expanded "><a href="../area/configuration_files.html"><strong aria-hidden="true">3.1.</strong> Configuration files</a></li><li class="expanded "><a href="../area/logic.html"><strong aria-hidden="true">3.2.</strong> Action/Reaction logic</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -148,50 +148,106 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#configuration-files" id="configuration-files">Configuration files</a></h1>
-<h3><a class="header" href="#oauth-configuration" id="oauth-configuration">Oauth configuration</a></h3>
-<p>First create your application in the service you want to add.
-You can find a list of possible services <a href="https://en.wikipedia.org/wiki/List_of_OAuth_providers">here</a>.
-Once you created your application, add your service in <code>area-api/oauth.config.js</code>, inside both the <code>web</code> and the <code>android</code> objects.
-Add the following informations:</p>
-<table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody>
-<tr><td>client_id</td><td>The client id received when creating the application in the service</td></tr>
-<tr><td>client_secret</td><td>The client secret received when creating the application in the service</td></tr>
-<tr><td>redirect_uri</td><td>The uri where users are sent after authorization. This must match exactly the redirect uri that you entered in the service application. <br><br>Inside the web object, the url must match the following syntax: <code>http://host:port/auth/oauth/serviceName/callback</code><br>Inside the android object, the url must match the following syntax: <code>area-android://auth/serviceName</code></td></tr>
+                        <h1><a class="header" href="#service-class" id="service-class">Service class</a></h1>
+<p>Now, you can add the properties of the new service.
+Create a file in <code>area-api/app/Services/</code> called as your service, and it in <code>area-api/app/Services/index.js</code>.
+Your new file must export an object containing the following keys:</p>
+<table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>authType</td><td>String</td><td>Type of authentication. Only <code>oauth</code> is accepted for now</td></tr>
+<tr><td>name</td><td>String</td><td>Name of the service. In only lowercase letters and underscores accepted, no space or digits.</td></tr>
+<tr><td>displayName</td><td>String</td><td>Name of the service that will be displayed</td></tr>
+<tr><td>description</td><td>String</td><td>Description of the service</td></tr>
+<tr><td>baseUrl</td><td>String</td><td>Base url of the service</td></tr>
+<tr><td>iconName</td><td>String</td><td>Icon name representing the service. Can be found <a href="https://materialdesignicons.com/">here</a></td></tr>
+<tr><td>foreground</td><td>String</td><td>Foreground color of the service, in hexadecimal</td></tr>
+<tr><td>background</td><td>String</td><td>Background color of the service, in hexadecimal</td></tr>
+<tr><td>irregularAccessToken</td><td>Boolean</td><td>True if the service use different arguments or a different way to get the access_token. You must implement the <code>getAccessToken</code> function if this parameter is true</td></tr>
+<tr><td>codeFlow</td><td>Boolean</td><td>True if the service use the authorization code flow. If false, it will use the implicit authorization flow</td></tr>
+<tr><td>authorizeUrl</td><td>String</td><td>Url where the user will be redirected to authorize the application. Cannot contains query parameters</td></tr>
+<tr><td>accessTokenUrl</td><td>String</td><td>Url of the service to get the accessToken</td></tr>
+<tr><td>scopeSeparator</td><td>String</td><td>Url-encoded separator of the scopes</td></tr>
+<tr><td>scopes</td><td>Array</td><td>Scopes that must be authorized</td></tr>
 </tbody></table>
 <p>Example:</p>
-<pre><code class="language-javascript">web: {
-     ...
-     github: {
-        client_id: '********************',
-        client_secret: '****************************************',
-        redirect_uri: 'http://localhost:3000/auth/oauth/github/callback'
-    }
-},
-android: {
-     ...
-     github: {
-        client_id: '********************',
-        client_secret: '****************************************',
-        redirect_uri: 'area-android://auth/github'
-     }
+<pre><code class="language-javascript">module.exports = {
+    authType: 'oauth',
+    name: 'github',
+    displayName: 'Github',
+    description: 'plus tard',
+    baseUrl: 'www.github.com',
+    iconName: 'github-circle',
+    foreground: '#ffffff',
+    background: '#211f1f',
+    irregularAccessToken: true,
+    codeFlow: true,
+    authorizeUrl: &quot;https://github.com/login/oauth/authorize&quot;,
+    accessTokenUrl: 'https://github.com/login/oauth/access_token',
+    scopeSeparator: '%20',
+    scopes: [
+        'user'
+    ],
+
+    ...
+
 }
 </code></pre>
+<p>Then, you have to add the <code>getUser</code> method. Here is the prototype:</p>
+<pre><code class="language-javascript">async getUser(accessToken)
+</code></pre>
+<p>This function must return an object with the <code>username</code> and <code>email</code> key.</p>
 <blockquote>
-<p>Note: Some services do not handle multiple redirect uri. In that case, you can create two application, one for the web client, an the other for the android application.</p>
+<p>Node: This function must return <code>null</code> if an error as occured</p>
 </blockquote>
-<blockquote>
-<p>Warning: Some services do not ask for a redirect uri for an mobile application. In that case, you have to search in the service documentation where the service redirect the user after authorization. For those services, you also have to modify the android application itself.</p>
-</blockquote>
-<h3><a class="header" href="#area-configuration" id="area-configuration">Area configuration</a></h3>
-<p>One you added your new service in the oauth config file, you have to had it in the area config, to list the actions and reactions models of this service.</p>
-<p>In <code>area-api/area.config.js</code>, juste add your service as a new object, containing two keys: <code>actions</code> and <code>reactions</code>, that are both arrays.</p>
 <p>Example:</p>
-<pre><code class="language-javascript">module.exports = {
-    ...
-    github: {
-        actions: [],
-        reactions: []
+<pre><code class="language-javascript">const axios = require('axios');
+
+async getUser(accessToken) {
+    const url = &quot;https://api.twitch.tv/helix/users&quot;;
+
+    try {
+        const response = await axios.get(url, {
+            headers: {'Authorization': 'Bearer ' + accessToken}
+        });
+
+        return {
+            username: response.data.data[0].display_name,
+            email: response.data.data[0].email
+        };
+    } catch (err) {
+        return null;
+    }
+}
+</code></pre>
+<p>If the service use a irregular way to get the access_token, you have to write the following function (only for authorization code flow):</p>
+<pre><code class="language-javascript">async getAccessToken(oauthHelper, code, clientType)
+</code></pre>
+<p>This function must return the access_token.</p>
+<blockquote>
+<p>Note: This function must return <code>null</code> if an error as occured</p>
+</blockquote>
+<blockquote>
+<p>Note: You can access to the oauth config by using the following function: <code>oauthHelper.getService(clientType, serviceName)</code></p>
+</blockquote>
+<p>Example:</p>
+<pre><code class="language-javascript">const axios = require('axios');
+
+async getAccessToken(oauthHelper, code, clientType) {
+    const oauthService = oauthHelper.getService(clientType, this.name)
+    const data = {
+        client_id: oauthService.client_id,
+        client_secret: oauthService.client_secret,
+        code,
+        grant_type: 'authorization_code',
+        redirect_uri: oauthService.redirect_uri
+    };
+
+    try {
+        const response = await axios.post(this.accessTokenUrl, data, {
+            headers: {'Accept': 'application/json'}
+        });
+        return response.data.access_token;
+    } catch (err) {
+        return null;
     }
 }
 </code></pre>
@@ -201,13 +257,13 @@ android: {
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../service/add_service.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../service/configuration_files.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../service/service_class.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../area/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -219,13 +275,13 @@ android: {
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../service/add_service.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../service/configuration_files.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../service/service_class.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../area/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

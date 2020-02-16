@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div id="sidebar-scrollbox" class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="expanded "><a href="../service/add_service.html"><strong aria-hidden="true">2.</strong> Add service</a></li><li><ol class="section"><li class="expanded "><a href="../service/configuration_files.html"><strong aria-hidden="true">2.1.</strong> Configuration files</a></li><li class="expanded "><a href="../service/service_class.html"><strong aria-hidden="true">2.2.</strong> Service class</a></li></ol></li><li class="expanded "><a href="../area/index.html"><strong aria-hidden="true">3.</strong> Add action/reaction</a></li><li><ol class="section"><li class="expanded "><a href="../area/configuration_files.html" class="active"><strong aria-hidden="true">3.1.</strong> Configuration files</a></li><li class="expanded "><a href="../area/logic.html"><strong aria-hidden="true">3.2.</strong> Action/Reaction logic</a></li></ol></li></ol>
+                <ol class="chapter"><li class="expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="expanded "><a href="../service/add_service.html"><strong aria-hidden="true">2.</strong> Add service</a></li><li><ol class="section"><li class="expanded "><a href="../service/configuration_files.html" class="active"><strong aria-hidden="true">2.1.</strong> Configuration files</a></li><li class="expanded "><a href="../service/service_class.html"><strong aria-hidden="true">2.2.</strong> Service class</a></li></ol></li><li class="expanded "><a href="../area/index.html"><strong aria-hidden="true">3.</strong> Add action/reaction</a></li><li><ol class="section"><li class="expanded "><a href="../area/configuration_files.html"><strong aria-hidden="true">3.1.</strong> Configuration files</a></li><li class="expanded "><a href="../area/logic.html"><strong aria-hidden="true">3.2.</strong> Action/Reaction logic</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -149,52 +149,50 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#configuration-files" id="configuration-files">Configuration files</a></h1>
-<p>You have to add all your action and reaction models in <code>area-api/area.config.js</code></p>
-<p>In the coresponding service, add an object containing the following keys:</p>
+<h3><a class="header" href="#oauth-configuration" id="oauth-configuration">Oauth configuration</a></h3>
+<p>First create your application in the service you want to add.
+You can find a list of possible services <a href="https://en.wikipedia.org/wiki/List_of_OAuth_providers">here</a>.
+Once you created your application, add your service in <code>area-api/config/oauth.config.js</code>, inside both the <code>web</code> and the <code>android</code> objects.
+Add the following informations:</p>
 <table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody>
-<tr><td>name</td><td>Name of the action/reaction. Lowercase letters and underscores only. Must be prefixed by the service name and must be unique</td></tr>
-<tr><td>displayName</td><td>Name of the action/reaction that will be displayed</td></tr>
-<tr><td>description</td><td>Description of the action/reaction</td></tr>
-<tr><td>params</td><td>Parameters nedded by the action/reaction. It's an object where the keys are the parameters name and the values are the parameter type</td></tr>
+<tr><td>client_id</td><td>The client id received when creating the application in the service</td></tr>
+<tr><td>client_secret</td><td>The client secret received when creating the application in the service</td></tr>
+<tr><td>redirect_uri</td><td>The uri where users are sent after authorization. This must match exactly the redirect uri that you entered in the service application. <br><br>Inside the web object, the url must match the following syntax: <code>http://host:port/auth/oauth/serviceName/callback</code><br>Inside the android object, the url must match the following syntax: <code>area-android://auth/serviceName</code></td></tr>
 </tbody></table>
 <p>Example:</p>
-<pre><code class="language-javascript">google: {
-    actions: [
-        {
-            name: 'google_gmail_new_mail',
-            displayName: 'New email on Gmail',
-            description: 'Triggered when a email is received in gmail',
-            params: {
-            }
-        },
-        {
-            name: 'google_youtube_new_video',
-            displayName: 'New video uploaded on a Youtube channel',
-            description: 'Triggered when a video is uploaded on youtube channel',
-            params: {
-                channel: 'string'
-            }
-        }
-    ],
-    reactions: [
-        {
-            name: 'google_gmail_send_email',
-            displayName: 'Send email with Gmail',
-            description: 'Send email with Gmail',
-            params: {
-                addres: 'string',
-                content: 'string'
-            }
-        },
-        {
-            name: 'google_youtube_add_to_watch_later',
-            displayName: 'Add to watch later',
-            description: 'Add a video to &quot;watch later&quot; playlist',
-            params: {
-                video: 'string'
-            }
-        }
-    ]
+<pre><code class="language-javascript">web: {
+     ...
+     github: {
+        client_id: '********************',
+        client_secret: '****************************************',
+        redirect_uri: 'http://localhost:3000/auth/oauth/github/callback'
+    }
+},
+android: {
+     ...
+     github: {
+        client_id: '********************',
+        client_secret: '****************************************',
+        redirect_uri: 'area-android://auth/github'
+     }
+}
+</code></pre>
+<blockquote>
+<p>Note: Some services do not handle multiple redirect uri. In that case, you can create two application, one for the web client, an the other for the android application.</p>
+</blockquote>
+<blockquote>
+<p>Warning: Some services do not ask for a redirect uri for an mobile application. In that case, you have to search in the service documentation where the service redirect the user after authorization. For those services, you also have to modify the android application itself.</p>
+</blockquote>
+<h3><a class="header" href="#area-configuration" id="area-configuration">Area configuration</a></h3>
+<p>One you added your new service in the oauth config file, you have to had it in the area config, to list the actions and reactions models of this service.</p>
+<p>In <code>area-api/config/area.config.js</code>, juste add your service as a new object, containing two keys: <code>actions</code> and <code>reactions</code>, that are both arrays.</p>
+<p>Example:</p>
+<pre><code class="language-javascript">module.exports = {
+    ...
+    github: {
+        actions: [],
+        reactions: []
+    }
 }
 </code></pre>
 
@@ -203,13 +201,13 @@
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../area/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../service/add_service.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../area/logic.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../service/service_class.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -221,13 +219,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="../area/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="../service/add_service.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="../area/logic.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="../service/service_class.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

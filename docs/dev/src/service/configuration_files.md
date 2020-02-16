@@ -4,7 +4,7 @@
 
 First create your application in the service you want to add.
 You can find a list of possible services [here](https://en.wikipedia.org/wiki/List_of_OAuth_providers).
-Once you created your application, add your service in `area-api/oauth.config.js`, inside both the `web` and the `android` objects.
+Once you created your application, add your service in `area-api/config/oauth.config.js`, inside both the `web` and the `android` objects.
 Add the following informations:
 
 Name | Description
@@ -40,7 +40,7 @@ android: {
 
 One you added your new service in the oauth config file, you have to had it in the area config, to list the actions and reactions models of this service.
 
-In `area-api/area.config.js`, juste add your service as a new object, containing two keys: `actions` and `reactions`, that are both arrays.
+In `area-api/config/area.config.js`, juste add your service as a new object, containing two keys: `actions` and `reactions`, that are both arrays.
 
 Example:
 ```javascript
