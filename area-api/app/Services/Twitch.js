@@ -14,6 +14,7 @@ module.exports = {
     foreground: '#ffffff',
     background: '#6441a4',
     irregularAccessToken: false,
+    codeFlow: true,
     authorizeUrl: 'https://id.twitch.tv/oauth2/authorize',
     accessTokenUrl: 'https://id.twitch.tv/oauth2/token',
     scopeSeparator: '+',

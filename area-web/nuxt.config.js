@@ -8,7 +8,7 @@ export default {
     */
     head: {
         titleTemplate: '%s - ' + process.env.npm_package_name,
-        title: process.env.npm_package_name || '',
+        title: 'Area',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -32,6 +32,10 @@ export default {
     ** Plugins to load before mounting the App
     */
     plugins: [
+        {
+            src: '~/plugins/oauth.js',
+            mode: 'client'
+        }
     ],
     /*
     ** Nuxt.js dev-modules
@@ -54,9 +58,8 @@ export default {
         'cookie-universal-nuxt'
     ],
 
-
     router: {
-        middleware: ['auth']
+        middleware: ['auth', 'messages']
     },
 
     /*
@@ -89,12 +92,24 @@ export default {
     vuetify: {
         customVariables: ['~/assets/variables.scss'],
         theme: {
-            dark: true,
             themes: {
+                light: {
+                    primary: colors.lightBlue.darken1,
+                    accent: '#eeeeee',
+                    background: '#eeeeee',
+                    secondary: '#151b2b',
+                    tertiary: '#3c4154',
+                    info: colors.teal.lighten1,
+                    warning: colors.amber.base,
+                    error: colors.deepOrange.accent4,
+                    success: colors.green.accent3
+                },
                 dark: {
-                    primary: colors.blue.darken2,
-                    accent: colors.grey.darken3,
-                    secondary: colors.amber.darken3,
+                    primary: colors.lightBlue.darken1,
+                    accent: '#eeeeee',
+                    background: '#3c4154',
+                    secondary: '#151b2b',
+                    tertiary: '#3c4154',
                     info: colors.teal.lighten1,
                     warning: colors.amber.base,
                     error: colors.deepOrange.accent4,
@@ -125,7 +140,7 @@ export default {
                     login: {
                         url: '/auth/signin',
                         method: 'post',
-                        propertyName: 'token'
+                        propertyName: 'data.token'
                     },
                     user: {
                         url: '/me',

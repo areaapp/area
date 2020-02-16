@@ -35,6 +35,35 @@ module.exports = {
     },
 
     android: {
-
+        github: {
+            client_id: '1216cb3b7eaa4c4fc208',
+            client_secret: 'e631d3548508f9a7b19f41c647b905d3613a25c2',
+            redirect_uri: 'area-android://auth/github'
+        },
+        twitch: {
+            client_id: 'qmuagfy1fh2vx5fay1ekf6e17scrye',
+            client_secret: 'wkzlsel2r7uldsmi4hds52qmbkq8e3',
+            redirect_uri: 'area-android://auth/twitch'
+        },
+        dropbox: {
+            client_id: 'rloqxt3qhdnqeyf',
+            client_secret: 'xr7rz8e8wyqc9yk',
+            redirect_uri: ''
+        },
+        spotify: {
+            client_id: '45335b4169014a4ab5375d21707fbdb4',
+            client_secret: '1ee2c54d5a094b6f8a431e68acc5db13',
+            redirect_uri: 'area-android://auth/spotify'
+        },
+        office: {
+            client_id: '267ebe42-ef2d-46e2-933e-956b72977c7d',
+            client_secret: 'H9d@vrRklkspaVQBK3=5_IMABGq4nBL/',
+            redirect_uri: 'area-android://auth/office'
+        },
+        google: {
+            client_id: '414833544494-3mp46u11g0k3d1hn13nbmu27b85uvuea.apps.googleusercontent.com',
+            client_secret: '',
+            redirect_uri: 'com.googleusercontent.apps.414833544494-3mp46u11g0k3d1hn13nbmu27b85uvuea:/oauth2redirect'
+        }
     }
 };

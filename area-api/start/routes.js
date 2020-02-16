@@ -45,6 +45,7 @@ Route.group(() => {
      * @api {post} /auth/signin Signin a user using basic authentication
      * @apiName Signin
      * @apiGroup Auth
+     * @apiGroup Auth
      * @apiParam {String} password password
      * @apiParam {String} email email
      *
@@ -101,6 +102,344 @@ Route.group(() => {
     Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl');
 }).prefix('auth');
 
+Route.group(() => {
+
+    /**
+     * @api {post} /me/services/:name Add a service instance
+     * @apiName AddService
+     * @apiGroup User
+     * @apiHeader {String} authorization Bearer \<token\>
+     * @apiParam {String} name Name of the service
+     * @apiParam {String} authCode OAuth code got from authorize url
+     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
+     * @apiSuccess {String} username Username of the user
+     * @apiSuccess {String} email Email of the user
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "name": "google",
+     *          "email": "kylian.maugue@epitech.eu"
+     *        }
+     */
+    Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware('auth');
+
+    /**
+     * @api {get} /me Get current user
+     * @apiName GetUser
+     * @apiGroup User
+     * @apiSuccess {String} username Username of the user
+     * @apiSuccess {String} email Email of the user
+     * @apiSuccess {String} register_source Source of the register (can be a service name or 'area')
+     * @apiSuccess {String} avatar Md5 hash of the user's email (used for the avatar)
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "username": "kylianm",
+     *          "email": "kylian.maugue@epitech.eu"
+     *          "register_source": "area"
+     *          "avatar": "9cb9af3a4d2894dd0b75a2d56bb5f70a"
+     *        }
+     */
+    Route.get('/', 'User/UserController.getUser').middleware('auth');
+
+    /**
+     * @api {put} /me Modify infos of username
+     * @apiName ModifyUser
+     * @apiGroup User
+     * @apiParam {String} password New password
+     * @apiSuccess {String} username New username
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "username": "jlemoine",
+     *          "email" : "jonathan.lemoine@epitech.eu",
+     *          "register_source": "github",
+     *          "avatar": "c502f2cbaf600e20ca5028ffac157742"
+     *        }
+     */
+    Route.put('/', 'User/UserController.setUserInfos').middleware('auth');
+
+    /**
+     * @api {get} /me/services Get user services
+     * @apiName GetUserServices
+     * @apiGroup User
+     * @apiSuccess {String} name Name of the service
+     * @apiSuccess {String} email Email used to connect to the service
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *        {
+     *          "google": {
+     *            "name": "google",
+     *            "email": "kylianm@tek.eu"
+     *          }
+     *        }
+     */
+    Route.get('/services', 'User/UserServiceController.getUserServices').middleware('auth');
+
+    /**
+     * @api {delete} /me/services/:name Delete a user service
+     * @apiName DeleteUserService
+     * @apiGroup User
+     * @apiParam {String} name Name of the service to delete
+     * @apiSuccess {String} name Name of the service
+     * @apiSuccess {String} email Email used to connect to the service
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "google": {
+     *         "name": "google",
+     *         "email": "kylianm@tek.eu"
+     *       }
+     *     }
+     */
+    Route.delete('/services/:name([a-zA-Z]+)', 'User/UserServiceController.deleteService').middleware('auth');
+
+    /**
+     * @api {post} /me/area Add an area
+     * @apiName Area
+     * @apiGroup User
+     * @apiParam {String} name Name of the AREA
+     * @apiParam {String} action Action object
+     * @apiParam {String} Reaction Reaction object
+     * @apiParamExample {json} Request-Example:
+     *     {
+     *       "name": "My Area",
+     *       "action": {
+     *         "name": "twitch_streamer_connected",
+     *         "params": {
+     *           "streamer": "mistermv"
+     *          }
+     *        },
+     *        "reaction": {
+     *          "name": "google_youtube_add_to_watch_later",
+     *          "params": {
+     *            "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
+     *          }
+     *        }
+     *      }
+     * @apiSuccess {Integer} id Id of the area
+     * @apiSuccess {String} name Name of the area
+     * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
+     * @apiSuccess {Object} action Object action link to the area
+     * @apiSuccess {Object} reaction Object reaction link to the area
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "id": 1,
+     *       "name": "My Area",
+     *       "last_execution": null,
+     *       "action": {
+     *         "name": "twitch_streamer_connected",
+     *         "args": {
+     *           "streamer": "mistermv"
+     *         }
+     *       },
+     *       "reaction": {
+     *         "name": "google_youtube_add_to_watch_later",
+     *         "args": {
+     *           "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
+     *         }
+     *       }
+     *     }
+     */
+    Route.post('/area', 'AreaController.addArea').middleware('auth').middleware('area');
+
+    /**
+     * @api {get} /me/areas Get user areas
+     * @apiName GetUserAreas
+     * @apiGroup User
+     * @apiSuccess {Integer} id Id of the area
+     * @apiSuccess {String} name Name of the area
+     * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
+     * @apiSuccess {Object} action Object action link to the area
+     * @apiSuccess {Object} reaction Object reaction link to the area
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     [
+     *       {
+     *         "id": 1,
+     *         "name": "My Area",
+     *         "last_execution": null,
+     *         "action": {
+     *           "name": "twitch_streamer_connected",
+     *           "args": {
+     *             "streamer": "mistermv"
+     *           }
+     *         },
+     *         "reaction": {
+     *           "name": "google_youtube_add_to_watch_later",
+     *           "args": {
+     *             "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
+     *           }
+     *         }
+     *       }
+     *     ]
+     */
+    Route.get('/areas', 'AreaController.getAreas').middleware('auth').middleware('area');
+
+    /**
+     * @api {get} /me/area Get user area by id
+     * @apiName GetUserArea
+     * @apiGroup User
+     * @apiSuccess {Integer} id Id of the area
+     * @apiSuccess {String} name Name of the area
+     * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
+     * @apiSuccess {Object} action Object action link to the area
+     * @apiSuccess {Object} reaction Object reaction link to the area
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *       {
+     *         "id": 1,
+     *         "name": "My Area",
+     *         "last_execution": null,
+     *         "action": {
+     *           "name": "twitch_streamer_connected",
+     *           "args": {
+     *             "streamer": "mistermv"
+     *           }
+     *         },
+     *         "reaction": {
+     *           "name": "google_youtube_add_to_watch_later",
+     *           "args": {
+     *             "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
+     *           }
+     *         }
+     *       }
+     */
+    Route.get('/area/:id(\\d+)', 'AreaController.getArea').middleware('auth').middleware('area');
+
+    /**
+     * @api {delete} /me/area/:id Delete a user area
+     * @apiName DeleteUserArea
+     * @apiGroup User
+     * @apiParam {Integer} id Id of the AREA to suppress
+     * @apiSuccess {Integer} id Id of the area
+     * @apiSuccess {String} name Name of the area
+     * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
+     * @apiSuccess {Object} action Object action link to the area
+     * @apiSuccess {Object} reaction Object reaction link to the area
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *       {
+     *         "id": 1,
+     *         "name": "My Area",
+     *         "last_execution": null,
+     *         "action": {
+     *           "name": "twitch_streamer_connected",
+     *           "args": {
+     *             "streamer": "mistermv"
+     *           }
+     *         },
+     *         "reaction": {
+     *           "name": "google_youtube_add_to_watch_later",
+     *           "args": {
+     *             "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
+     *           }
+     *         }
+     *       }
+     */
+    Route.delete('/area/:id(\\d+)', 'AreaController.deleteArea').middleware('auth').middleware('area');
+
+    /**
+     * @api {put} /me/area/:id Modify a user area
+     * @apiName ModifyUserArea
+     * @apiGroup User
+     * @apiParam {String} name New name of the area
+     * @apiParam {Date} last_execution Date of the last execution
+     * @apiParam {Json} action_args Arguments of the action link to the area
+     * @apiParam {String} reaction_args Arguments of the reaction link to the area
+     * @apiSuccess {Integer} id Id of the area
+     * @apiSuccess {String} name Name of the area
+     * @apiSuccess {Integer} user_id Id of the area's user
+     * @apiSuccess {Date} last_execution Date of the last execution
+     * @apiSuccess {Object} action Object action link to the area
+     * @apiSuccess {Object} reaction Object reaction link to the area
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *       {
+     *         "id": 1,
+     *         "name": "My Area",
+     *         "last_execution": null,
+     *         "action": {
+     *           "name": "twitch_streamer_connected",
+     *           "args": {
+     *             "streamer": "mistermv"
+     *           }
+     *         },
+     *         "reaction": {
+     *           "name": "google_youtube_add_to_watch_later",
+     *           "args": {
+     *             "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
+     *           }
+     *         }
+     *       }
+     */
+    Route.put('/area/:id(\\d+)', 'AreaController.modifyArea').middleware('auth').middleware('area');
+
+    /**
+     * @api {get} /me/notifications Get user notifications
+     * @apiName GetUserNotifications
+     * @apiGroup User
+     * @apiSuccess {Integer} user_id Id of the user
+     * @apiSuccess {String} message Message of the notification
+     * @apiSuccess {Boolean} readed Status of the notification (readed or not)
+     * @apiSuccess {Date}   created_at Date of the notfication's creation
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "user_id": 1,
+     *       "message": "Nouveau mail",
+     *       "readed": false,
+     *       "created_at": "2020-02-09 00:00:00"
+     *     }
+     */
+    Route.get('/notifications', 'NotificationController.getNotifications').middleware('auth');
+
+    /**
+     * @api {put} /me/notification/:id Modify readed property of a notification
+     * @apiName ModifyUserNotification
+     * @apiGroup User
+     * @apiParams {Boolean} readed Status of the notification (readed or not)
+     * @apiSuccess {Integer} user_id Id of the user
+     * @apiSuccess {String} message Message of the notification
+     * @apiSuccess {Boolean} readed Status of the notification (readed or not)
+     * @apiSuccess {Date}   created_at Date of the notfication's creation
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "user_id": 1,
+     *       "message": "Nouveau mail",
+     *       "readed": false,
+     *       "created_at": "2020-02-09 00:00:00"
+     *     }
+     */
+    Route.put('/notification/:id(\\d+)', 'NotificationController.modifyNotification').middleware('auth');
+
+    /**
+     * @api {delete} /me/notification/id Delete user notification
+     * @apiName DeleteUserNotification
+     * @apiGroup User
+     * @apiSuccess {Integer} id Id of the notification suppressed
+     * @apiSuccess {Integer} user_id Id of the user
+     * @apiSuccess {String} message Message of the notification
+     * @apiSuccess {Boolean} readed Status of the notification (readed or not)
+     * @apiSuccess {Date}   created_at Date of the notfication's creation
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *     {
+     *       "id": "1"
+     *       user_id": 1,
+     *       "message": "Nouveau mail",
+     *       "readed": false,
+     *       "created_at": "2020-02-09 00:00:00"
+     *     }
+     */
+    Route.delete('/notification/:id(\\d+)', 'NotificationController.deleteNotification').middleware('auth');
+}).prefix('me');
 
 Route.group(() => {
 
@@ -160,7 +499,6 @@ Route.group(() => {
      *       ]
      *     }
      */
-
     Route.get('/', 'ServiceController.getServices').middleware('area');
 
     /**
@@ -361,31 +699,7 @@ Route.group(() => {
     Route.get('/:name', 'ReactionController.getReactionByName').middleware('area');
 }).prefix('reactions');
 
-Route.group(() => {
-
-    /**
-     * @api {get} /me Get connected user
-     * @apiName getUser
-     * @apiGroup User
-     * @apiSuccess {String} username Username
-     * @apiSuccess {String} email Email of the user
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/2 200 OK
-     *     {
-     *       "username": "jlemoine",
-     *       "email": "lemoine.jonathan.sg@gmail.com"
-     *     }
-     */
-    Route.get('/', 'User/UserController.getUser').middleware('auth');
-
-    /**
-     * @api {post} /me/services/:name Create a service instance for this user
-     * @apiName Service
-     * @apiGroup User
-     * @apiHeader {String} authorization Bearer \<token\>
-     * @apiParam {String} name Name of the service
-     * @apiParam {String} authCode OAuth code got from authorize url
-     * @apiParam {String} clientType Type of client making the call. Can be 'web' or 'android'
-     */
-    Route.post('services/:serviceName', 'User/UserServiceController.addService').middleware('auth');
-}).prefix('me');
+Route.get('auth/social/callback/:service', ({ params, request }) => {
+    console.log(params.service);
+    console.log(request.all());
+});

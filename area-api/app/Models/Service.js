@@ -15,6 +15,10 @@ class Service extends Model {
     user() {
         return this.belongsTo('App/Models/User');
     }
+
+    static get hidden() {
+        return ['oauth_token', 'oauth_refresh_token'];
+    }
 }
 
 module.exports = Service

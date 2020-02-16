@@ -86,6 +86,50 @@ class AreaHelper {
                     return null;
                 }
                 return res;
+            },
+
+            getServiceNameByAction(actionName) {
+
+                for (let service in Area) {
+                    for (var i = 0; i < Area[service].actions.length; i++) {
+                        if (Area[service].actions[i].name == actionName) {
+                            return service;
+                        }
+                    }
+                }
+                return null;
+            },
+
+            getServiceNameByReaction(reactionName) {
+
+                for (let service in Area) {
+                    for (var i = 0; i < Area[service].reactions.length; i++) {
+                        if (Area[service].reactions[i].name == reactionName) {
+                            return service;
+                        }
+                    }
+                }
+                return null;
+            },
+
+            areaSerialize(area, action, reaction) {
+                const actionInfos = {
+                    name: action.name,
+                    args: action.args
+                };
+                const reactionInfos = {
+                    name: reaction.name,
+                    args: reaction.args
+                };
+                const data = {
+                    id: area.id,
+                    name: area.name,
+                    last_execution: area.last_execution,
+                    action: actionInfos,
+                    reaction: reactionInfos
+                };
+
+                return data;
             }
         };
 

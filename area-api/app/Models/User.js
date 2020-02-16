@@ -4,7 +4,8 @@
 const Model = use('Model')
 
 /** @type {import('@adonisjs/framework/src/Hash')} */
-const Hash = use('Hash')
+const Hash = use('Hash');
+const md5 = require('md5');
 
 class User extends Model {
     static boot () {
@@ -18,7 +19,8 @@ class User extends Model {
             if (userInstance.dirty.password) {
                 userInstance.password = await Hash.make(userInstance.password);
             }
-        })
+            userInstance.avatar = md5(userInstance.email);
+        });
     }
 
     /**
@@ -37,6 +39,10 @@ class User extends Model {
 
     services() {
         return this.hasMany('App/Models/Service');
+    }
+
+    areas() {
+        return this.hasMany('App/Models/Area');
     }
 
     static get createdAtColumn () {

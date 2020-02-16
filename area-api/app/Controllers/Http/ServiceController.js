@@ -19,13 +19,13 @@ class ServiceController {
     }
 
     getServices({ request, response }) {
-        let services = [];
+        let services = {};
         for (let serviceName in Services) {
             let service = this.getServiceInfos(Services[serviceName]);
             const { actions, reactions } = request.areaHelper.getServiceAll(serviceName);
             service.actions = actions;
             service.reactions = reactions;
-            services.push(service);
+            services[service.name] = service;
         }
 
         return response.json({

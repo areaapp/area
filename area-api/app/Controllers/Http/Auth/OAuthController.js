@@ -31,9 +31,8 @@ class OAuthController {
         });
     }
 
-    async connectUser(auth, userService, response) {
+    async connectUser(auth, user, response) {
         try {
-            const user = await userService.user().fetch();
             const userAuth = await auth.generate(user);
 
             return response.json({
@@ -54,7 +53,7 @@ class OAuthController {
             username: serviceUser.username,
             email: serviceUser.email,
             password: null,
-            login_source: serviceName
+            register_source: serviceName
         };
 
         const serviceInfos = {
@@ -84,14 +83,19 @@ class OAuthController {
     }
 
     async signin({ auth, request, response }) {
-        const parameters = request.only(['authCode', 'clientType', 'service']);
+        const parameters = request.only(['authCode', 'accessToken', 'clientType', 'service']);
 
-        if (typeof parameters.authCode === 'undefined' ||
-            typeof parameters.clientType === 'undefined' ||
-            typeof parameters.service === 'undefined') {
+        if (!parameters.clientType || !parameters.service) {
             return response.status(400).json({
                 status: 'error',
                 message: 'Invalid parameters'
+            });
+        }
+
+        if (typeof parameters.authCode === typeof parameters.accessToken) {
+            return response.status(400).json({
+                status: 'error',
+                message: 'authCode or accessToken invalid'
             });
         }
 
@@ -103,14 +107,22 @@ class OAuthController {
         }
 
         const service = Services[parameters.service];
-        const accessToken = await this.constructor.getAccessToken(
-            service,
-            parameters.authCode,
-            parameters.clientType
-        );
+
+        let accessToken = null;
+
+        if (typeof parameters.accessToken !== 'undefined') {
+            accessToken = parameters.accessToken;
+
+            // Check access token ?
+        } else {
+            accessToken = await this.constructor.getAccessToken(
+                service,
+                parameters.authCode,
+                parameters.clientType
+            );
+        }
 
         if (accessToken === null) {
-            console.log('ERROR');
             return response.status(400).json({
                 status: 'error',
                 message: 'Cannot retreive access_token'
@@ -120,19 +132,23 @@ class OAuthController {
         const serviceUser = await service.getUser(accessToken);
 
         if (serviceUser === null) {
-            console.log('ERROR');
             return response.status(400).json({
                 status: 'error',
                 message: 'An error as occured. Please, try again later'
             });
         }
 
-        let userService = null;
+        let user = null;
         try {
-            userService = await Service.query()
-                  .where('email', serviceUser.email)
-                  .where('name', parameters.service)
-                  .first();
+            user = await User.findBy('email', serviceUser.email);
+
+            if (user !== null && user.register_source !== parameters.service) {
+                return response.status(400).json({
+                    status: 'error',
+                    message: 'This user registered through ' + user.register_source + '.'
+                });
+            }
+
         } catch (err) {
             console.log(err);
             return response.status(400).json({
@@ -141,8 +157,8 @@ class OAuthController {
             });
         }
 
-        if (userService !== null) {
-            return await this.connectUser(auth, userService, response);
+        if (user !== null) {
+            return await this.connectUser(auth, user, response);
         } else {
             return await this.createUser(auth, parameters.service, serviceUser, accessToken, response);
         }
@@ -152,8 +168,11 @@ class OAuthController {
     getServiceAuthorizeUrl(service, clientType) {
         const scopes = service.scopes.length > 0 ? 'scope=' + service.scopes.join(service.scopeSeparator) : '';
         const client_id = 'client_id=' + ApiInfos[clientType][service.name].client_id;
-        const redirect_uri = 'redirect_uri=' + encodeURIComponent(ApiInfos[clientType][service.name].redirect_uri);
-        const response_type = 'response_type=code';
+        let redirect_uri = ''
+        if (ApiInfos[clientType][service.name].redirect_uri) {
+            redirect_uri = 'redirect_uri=' + encodeURIComponent(ApiInfos[clientType][service.name].redirect_uri);
+        }
+        const response_type = 'response_type=' + (service.codeFlow ? 'code' : 'token');
         const url = service.authorizeUrl + '?' + [scopes, client_id, redirect_uri, response_type].filter(Boolean).join('&');
         return url;
     }
@@ -163,13 +182,17 @@ class OAuthController {
             return await service.getAccessToken(code, clientType);
         }
 
-        const data = querystring.stringify({
+        let dataObj = {
             client_id: ApiInfos[clientType][service.name].client_id,
             client_secret: ApiInfos[clientType][service.name].client_secret,
             code,
             grant_type: 'authorization_code',
-            redirect_uri: ApiInfos[clientType][service.name].redirect_uri
-        });
+        }
+
+        if (ApiInfos[clientType][service.name].redirect_uri) {
+            dataObj.redirect_uri = ApiInfos[clientType][service.name].redirect_uri
+        }
+        const data = querystring.stringify(dataObj);
 
         try {
             const response = await axios.post(service.accessTokenUrl, data);

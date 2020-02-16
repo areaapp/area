@@ -6,7 +6,7 @@
 
 <script>
  export default {
-     auth: 'guest',
+     auth: false,
      middleware: 'oauthRedirection'
- }
+ };
 </script>
