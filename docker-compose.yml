@@ -11,6 +11,7 @@ services:
       - "8082:8082"
     volumes:
       - v-nginx:/etc/nginx/conf.d
+      - v-docs:/opt/area/docs
     restart: always
     networks:
       - net-web
