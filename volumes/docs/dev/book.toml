@@ -1,0 +1,6 @@
+[book]
+authors = ["Jonathan Lemoine"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Area developer documentation"
