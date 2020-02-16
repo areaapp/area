@@ -71,9 +71,9 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: `${process.env.BASE_URL}/api`,
-        browserUrl: `${process.env.BASE_URL}/api`,
-        prefix: `${process.env.BASE_URL}/api`,
+        baseURL: `http://nginx:8081/api`,
+        browserUrl: `http://nginx:8081/api`,
+        prefix: `http://nginx:8081/api`,
         proxy: true
     },
 
@@ -82,7 +82,7 @@ export default {
     */
     proxy: {
         '/api': {
-            target: process.env.API_URL,
+            target: 'http://nginx:8080',
             pathRewrite: {
                 '^/api': '/'
             }
