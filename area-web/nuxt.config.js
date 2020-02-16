@@ -1,6 +1,8 @@
 import colors from 'vuetify/es5/util/colors';
 require('dotenv').config();
 
+const isProd = process.env['NODE_ENV'] === 'production';
+
 export default {
     mode: 'universal',
     /*
@@ -66,14 +68,15 @@ export default {
         middleware: ['auth', 'messages']
     },
 
+
     /*
     ** Axios module configuration
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: `http://nginx:8081/api`,
-        browserUrl: `http://nginx:8081/api`,
-        prefix: `http://nginx:8081/api`,
+        baseURL: isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL'],
+        browserUrl: isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL'],
+        prefix: isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL'],
         proxy: true
     },
 
@@ -82,7 +85,7 @@ export default {
     */
     proxy: {
         '/api': {
-            target: 'http://nginx:8080',
+            target: isProd ? process.env['DEV_API_URL'] : process.env['DEV_API_URL'],
             pathRewrite: {
                 '^/api': '/'
             }
