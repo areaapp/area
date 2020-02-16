@@ -1,11 +1,23 @@
 {
-  "name": "area-executor",
-  "version": "1.0.0",
-  "description": "A service to execute areas",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "area-executor",
+    "version": "1.0.0",
+    "description": "A service to execute areas",
+    "main": "src/index.js",
+    "type": "module",
+    "scripts": {
+        "build": "webpack --mode production && chmod +x executor",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.19.2",
+        "dotenv": "^8.2.0",
+        "sequelize": "^5.21.4",
+        "yargs": "^15.1.0"
+    },
+    "devDependencies": {
+        "webpack": "^4.41.6",
+        "webpack-cli": "^3.3.11"
+    }
 }
