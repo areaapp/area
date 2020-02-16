@@ -15,7 +15,7 @@ export function parseArgs() {
               type: 'number',
               description: 'Area database port',
               demandOption: !process.env['AREADB_PORT'],
-              default: process.env['AREADB_PORT']
+              default: Number(process.env['AREADB_PORT'])
           })
           .option('db_name', {
               alias: 'N',
@@ -37,6 +37,13 @@ export function parseArgs() {
               demandOption: !process.env['AREADB_PASS'],
               default: process.env['AREADB_PASS']
           })
+          .option('api_url', {
+              alias: 'a',
+              type: 'string',
+              description: 'Area API url',
+              demandOption: !process.env['AREA_APIURL'],
+              default: process.env['AREA_APIURL']
+          })
           .option('key', {
               alias: 'k',
               type: 'string',
@@ -49,14 +56,14 @@ export function parseArgs() {
               type: 'number',
               description: 'Minimum number of areas per worker',
               demandOption: !process.env['EXECUTOR_MIN_AREAS'],
-              default: process.env['EXECUTOR_MIN_AREAS'] || 10
+              default: Number(process.env['EXECUTOR_MIN_AREAS']) || 10
           })
           .option('workers', {
               alias: 'w',
               type: 'number',
               description: 'Number of workers used by the executor',
               demandOption: !process.env['EXECUTOR_WORKERS'],
-              default: process.env['EXECUTOR_WORKERS'] || 4
+              default: Number(process.env['EXECUTOR_WORKERS']) || 4
           })
           .help()
           .argv;
@@ -84,6 +91,7 @@ export function parseArgs() {
             user: argv.db_user,
             pass: argv.db_pass
         },
+        apiUrl: argv.api_url,
         key: argv.key,
         minAreas: argv.min_areas,
         workers: argv.workers
