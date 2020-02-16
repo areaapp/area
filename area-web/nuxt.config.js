@@ -35,6 +35,10 @@ export default {
         {
             src: '~/plugins/oauth.js',
             mode: 'client'
+        },
+        {
+            src: '~/plugins/messages.js',
+            mode: 'client'
         }
     ],
     /*

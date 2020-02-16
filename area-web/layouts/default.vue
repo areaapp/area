@@ -57,10 +57,7 @@
                     <v-flex class="pa-3">
                         <v-row class="px-4" align="center">
                             <v-avatar color="primary" class="mr-3">
-                                <!-- <img :src="avatar" :alt="user.username" /> -->
-                                <span class="accent--text healine font-weight-bold text-capitalize">
-                                    {{ user.username[0] }}
-                                </span>
+                                <img :src="userAvatar" :alt="user.username" />
                             </v-avatar>
                             <v-col>
                                 <v-row>
@@ -176,6 +173,10 @@
 
          userAreas () {
              return this.$store.state.user.areas;
+         },
+
+         userAvatar () {
+             return this.$store.state.user.avatar;
          },
 
          items () {

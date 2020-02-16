@@ -15,6 +15,7 @@
             :background="service.background"
             :foreground="service.foreground"
             :themeBg="$vuetify.theme.themes[theme].background"
+            :noedit="$auth.user.register_source === service.name"
             v-on:editMode="editMode"
             v-on:addService="addService"
         />

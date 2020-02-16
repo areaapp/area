@@ -121,6 +121,7 @@
              };
              try {
                  await this.$auth.loginWith('local', { data });
+                 this.$store.dispatch('user/setAvatar', this.$auth.user.email_md5);
                  this.$router.push('/');
              } catch (e) {
                  this.errors.push({
