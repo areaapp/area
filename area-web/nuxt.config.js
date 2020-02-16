@@ -2,6 +2,10 @@ import colors from 'vuetify/es5/util/colors';
 require('dotenv').config();
 
 const isProd = process.env['NODE_ENV'] === 'production';
+const baseUrl = `${isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL']}/api`;
+const apiUrl = isProd ? process.env['DEV_API_URL'] : process.env['DEV_API_URL'];
+const docUrl = process.env['DOC_URl'];
+
 
 export default {
     mode: 'universal',
@@ -74,9 +78,9 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL'],
-        browserUrl: isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL'],
-        prefix: isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL'],
+        baseURL: baseUrl,
+        browserUrl: baseUrl,
+        prefix: baseUrl,
         proxy: true
     },
 
@@ -85,9 +89,15 @@ export default {
     */
     proxy: {
         '/api': {
-            target: isProd ? process.env['DEV_API_URL'] : process.env['DEV_API_URL'],
+            target: apiUrl,
             pathRewrite: {
                 '^/api': '/'
+            }
+        },
+        '/docs': {
+            target: `${docUrl}`,
+            pathRewrite: {
+                '^/docs': '/'
             }
         }
     },
