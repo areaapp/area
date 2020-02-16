@@ -2,7 +2,6 @@
 
 const axios = require('axios');
 const querystring = require('querystring');
-const ApiInfos = require('../../oauth.config.js');
 
 module.exports = {
     authType: 'oauth',
@@ -28,7 +27,6 @@ module.exports = {
             headers: {'Authorization': 'Bearer ' + accessToken}
         });
 
-        console.log(response);
         const user = {
             username: response.data.displayName,
             email: response.data.mail

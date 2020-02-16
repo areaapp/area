@@ -39,6 +39,7 @@ class UserServiceController {
             accessToken = parameters.accessToken;
         } else {
             accessToken = await OAuthController.getAccessToken(
+                request.oauthHelper,
                 service,
                 parameters.authCode,
                 parameters.clientType

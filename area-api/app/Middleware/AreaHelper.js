@@ -3,7 +3,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Area = require('../../area.config.js');
+const Config = use('Config');
+const Area = Config.get('area.config');
 
 class AreaHelper {
     /**

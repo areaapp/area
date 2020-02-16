@@ -2,7 +2,6 @@
 
 const axios = require('axios');
 const querystring = require('querystring');
-const ApiInfos = require('../../oauth.config.js');
 
 module.exports = {
     authType: 'oauth',

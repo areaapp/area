@@ -1,7 +1,8 @@
 'use strict'
 
+const Config = use('Config');
 const axios = require('axios');
-const ApiInfos = require('../../oauth.config.js');
+const ApiInfos = Config.get('oauth.config');
 
 module.exports = {
     authType: 'oauth',
@@ -21,13 +22,14 @@ module.exports = {
         'user'
     ],
 
-    async getAccessToken(code, clientType) {
+    async getAccessToken(oauthHelper, code, clientType) {
+        const oauthService = oauthHelper[clientType][this.name];
         const data = {
-            client_id: ApiInfos[clientType][this.name].client_id,
-            client_secret: ApiInfos[clientType][this.name].client_secret,
+            client_id: oauthService.client_id,
+            client_secret: oauthService.client_secret,
             code,
             grant_type: 'authorization_code',
-            redirect_uri: ApiInfos[clientType][this.name].redirect_uri
+            redirect_uri: oauthService.redirect_uri
         };
 
         try {

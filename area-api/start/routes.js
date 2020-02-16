@@ -82,7 +82,7 @@ Route.group(() => {
      *       "refreshToken": null
      *     }
      */
-    Route.post('oauth/signin', 'Auth/OAuthController.signin');
+    Route.post('oauth/signin', 'Auth/OAuthController.signin').middleware('oauth');
 
 
     /**
@@ -99,7 +99,7 @@ Route.group(() => {
      *       "https://www.dropbox.com/oauth2/authorize?client_id=00000&redirect_uri=http://localhost:8081/callback&response_type=code"
      *     }
      */
-    Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl');
+    Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl').middleware('oauth');
 }).prefix('auth');
 
 Route.group(() => {
@@ -121,7 +121,7 @@ Route.group(() => {
      *          "email": "kylian.maugue@epitech.eu"
      *        }
      */
-    Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware('auth');
+    Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware(['auth', 'oauth']);
 
     /**
      * @api {get} /me Get current user
