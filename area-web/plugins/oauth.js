@@ -11,7 +11,7 @@ async function oauthConnect ({ $auth, store, app, query, params, redirect, route
     case 'addService':
         try {
             await store.dispatch('user/addService', {
-                service: params.service,
+                name: params.service,
                 authCode: query.code,
                 accessToken
             });

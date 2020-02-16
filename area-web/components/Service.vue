@@ -18,7 +18,10 @@
                         </v-avatar>
                         {{ email }}
                     </v-chip>
-                    <v-tooltip bottom>
+                    <v-tooltip
+                        v-if="!noedit"
+                        bottom
+                    >
                         <template v-slot:activator="{ on }">
                             <v-btn
                                 v-on="on"
@@ -86,7 +89,8 @@
          'reactions',
          'background',
          'foreground',
-         'themeBg'
+         'themeBg',
+         'noedit'
      ]
  };
 </script>

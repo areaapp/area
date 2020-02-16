@@ -38,6 +38,7 @@ export const actions = {
     },
 
     resetSuccess ({ commit }, msg) {
+        console.log('CLEAR');
         this.app.$cookies.remove('areaSuccess');
         commit('clearSuccess');
     }

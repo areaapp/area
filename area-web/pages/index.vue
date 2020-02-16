@@ -16,14 +16,15 @@
          };
      },
 
-     asyncData ({ areaErrors, areaSuccess }) {
-         return {
-             errors: areaErrors || [],
-             success: areaSuccess || null
-         };
-     },
-
      computed: {
+         errors () {
+             return this.$getErrors();
+         },
+
+         success () {
+             return this.$getSuccess();
+         },
+
          userAreas () {
              return this.$store.state.user.areas;
          }
