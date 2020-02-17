@@ -703,3 +703,5 @@ Route.get('auth/social/callback/:service', ({ params, request }) => {
     console.log(params.service);
     console.log(request.all());
 });
+
+Route.get('about.json', 'ServerController.getServerInfos');

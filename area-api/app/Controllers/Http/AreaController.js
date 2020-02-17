@@ -166,7 +166,7 @@ class AreaController {
     }
 
     async modifyArea({auth, params, request, response}) {
-        const parametersArea = request.only(['last_execution', 'name']);
+        const parametersArea = request.only(['name']);
         const parametersArgs = request.only(['action_args', 'reaction_args']);
         const area = await Area.find(params.id);
 
