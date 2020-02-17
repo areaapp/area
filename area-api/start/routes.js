@@ -704,4 +704,54 @@ Route.get('auth/social/callback/:service', ({ params, request }) => {
     console.log(request.all());
 });
 
-Route.get('about.json', 'ServerController.getServerInfos');
+    /**
+     * @api {get} Get about.json
+     * @apiName About
+     * @apiGroup about.json
+     * @apiSuccess {Object} client Object client with host informations
+     * @apiSuccess {Object} server Object server with current time and services infos (name, list of actions, list of reactions)
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *  {
+     *   "client": {
+     *       "host": "127.0.0.1"
+     *   },
+     *   "server": {
+     *       "current_time": 1581950176,
+     *       "services": [
+     *           {
+     *               "name": "dropbox",
+     *               "actions": [],
+     *               "reactions": []
+     *           },
+     *           {
+     *               "name": "github",
+     *               "actions": [],
+     *               "reactions": []
+     *           },
+     *           {
+     *               "name": "google",
+     *               "actions": [
+     *                   {
+     *                       "name": "New email on Gmail",
+     *                       "description": "Triggered when a email is received in gmail"
+     *                   },
+     *                   {
+     *                       "name": "New video uploaded on a Youtube channel",
+     *                       "description": "Triggered when a video is uploaded on youtube channel"
+     *                   }
+     *               ],
+     *               "reactions": [
+     *                   {
+     *                       "name": "Send email with Gmail",
+     *                       "description": "Send email with Gmail"
+     *                   },
+     *                   {
+     *                       "name": "Add to watch later",
+     *                       "description": "Add a video to \"watch later\" playlist"
+     *                   }
+     *               ]
+     *           },
+     */
+
+Route.get('about.json', 'AboutController.generateAbout');
