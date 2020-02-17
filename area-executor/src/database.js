@@ -12,6 +12,11 @@ export default class Database {
         });
     }
 
+    async tryConnection() {
+        const client = await this._pool.connect();
+        client.release();
+    }
+
     async _request(req) {
         const client = await this._pool.connect();
         const res = await client.query(req);
@@ -19,18 +24,57 @@ export default class Database {
         return res;
     }
 
-    async _getAllFrom(table) {
+    async _selectAllFrom(table) {
         try {
             const res = await this._request(`SELECT * FROM ${table}`);
             return res;
         } catch (e) {
-            console.error(e);
-            return null;
+            console.error('Request to database failed.');
+            throw e;
+        }
+    }
+
+    async _selectAllFromWhere(table, condition) {
+        try {
+            const res = await this._request(`SELECT * FROM ${table} WHERE ${condition}`);
+            return res;
+        } catch (e) {
+            console.error('Request to database failed.');
+            throw e;
         }
     }
 
     async getAreas() {
-        return await this._getAllFrom('areas');
+        let areas = [];
+        const _areas = await this._selectAllFrom('areas');
+        if (_areas.rows.length > 0) {
+            let relatedActions = [];
+            let relatedReactions = [];
+
+            for (const a of _areas.rows) {
+                relatedActions.push(`id = ${a.action_id}`);
+                relatedReactions.push(`id = ${a.reaction_id}`);
+            }
+
+            const actions = await this._selectAllFromWhere('actions', relatedActions.join(' OR '));
+            const reactions = await this._selectAllFromWhere('reactions', relatedReactions.join(' OR '));
+
+            for (const a of _areas.rows) {
+                const action = actions.rows.find(x => x.id === a.action_id);
+                const reaction = actions.rows.find(x => x.id === a.reaction_id);
+
+                areas.push({
+                    id: a.id,
+                    userId: a.user_id,
+                    name: a.name,
+                    lastExecution: a.last_execution,
+                    action,
+                    reaction
+                });
+            }
+        }
+
+        return areas;
     }
 
     end() {

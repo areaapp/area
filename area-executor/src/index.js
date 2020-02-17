@@ -22,24 +22,32 @@ import Database from './database.js';
 
     const db = new Database(config.db);
 
-    const areas = await db.getAreas();
+    try {
+        await db.tryConnection();
+    } catch (e) {
+        console.error(e.message);
+        process.exit(1);
+    }
 
-    console.log(areas.rows);
+    const _axios = axios.create({
+        baseURL: config.apiUrl
+    });
 
-    db.end();
-    // try {
-    //     await db.authenticate();
-    // } catch (e) {
-    //     console.error('Cannot connect to the specified database.');
-    //     process.exit(1);
-    // }
+    const ctx = new Context({
+        db,
+        axios: _axios,
+        workers: config.workers,
+        minAreas: config.minAreas
+    });
 
-    // const ctx = new Context({ db, apiUrl: config.apiUrl });
+    await ctx.init();
 
-    // console.log(ctx);
+    console.log(ctx);
     // const threadsNb = process.env.threadsNb;
 
     // while (true) {
     //     await executor({ threadsNb });
     // }
+
+    ctx.db.end();
 })();

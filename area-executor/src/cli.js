@@ -44,13 +44,6 @@ export function parseArgs() {
               demandOption: !process.env['AREA_APIURL'],
               default: process.env['AREA_APIURL']
           })
-          .option('key', {
-              alias: 'k',
-              type: 'string',
-              description: 'Executor key (can be found in API config)',
-              demandOption: !process.env['EXECUTOR_KEY'],
-              default: process.env['EXECUTOR_KEY']
-          })
           .option('min_areas', {
               alias: 'm',
               type: 'number',
@@ -92,7 +85,6 @@ export function parseArgs() {
             pass: argv.db_pass
         },
         apiUrl: argv.api_url,
-        key: argv.key,
         minAreas: argv.min_areas,
         workers: argv.workers
     };

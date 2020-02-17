@@ -4,8 +4,12 @@ require('dotenv').config();
 const isProd = process.env['NODE_ENV'] === 'production';
 const baseUrl = `${isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL']}/api`;
 const apiUrl = isProd ? process.env['DEV_API_URL'] : process.env['DEV_API_URL'];
-const docUrl = process.env['DOC_URl'];
+const docUrl = isProd ? process.env['DOC_URL'] : process.env['DEV_DOC_URL'];
 
+console.log(isProd);
+console.log(baseUrl);
+console.log(apiUrl);
+console.log(docUrl);
 
 export default {
     mode: 'universal',
@@ -71,7 +75,6 @@ export default {
     router: {
         middleware: ['auth', 'messages']
     },
-
 
     /*
     ** Axios module configuration
