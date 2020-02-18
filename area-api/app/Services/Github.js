@@ -23,7 +23,7 @@ module.exports = {
     ],
 
     async getAccessToken(oauthHelper, code, clientType) {
-        const oauthService = oauthHelper[clientType][this.name];
+        const oauthService = oauthHelper.getService(clientType,this.name);
         const data = {
             client_id: oauthService.client_id,
             client_secret: oauthService.client_secret,

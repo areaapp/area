@@ -182,7 +182,7 @@ class OAuthController {
             return await service.getAccessToken(oauthHelper, code, clientType);
         }
 
-        const oauthService = oauthHelper[clientType][service.name];
+        const oauthService = oauthHelper.getService(clientType,service.name);
 
         let dataObj = {
             client_id: oauthService.client_id,

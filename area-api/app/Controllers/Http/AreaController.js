@@ -56,13 +56,15 @@ class AreaController {
         const newActionInfos = {
             name: action.name,
             args: action.params,
-            service_id: actionServiceId
+            service_id: actionServiceId,
+            service_name: actionServiceName
         };
 
         const newReactionInfos = {
             name: reaction.name,
             args: reaction.params,
-            service_id: reactionServiceId
+            service_id: reactionServiceId,
+            service_name: reactionServiceName
         };
 
         const newAction = await Action.create(newActionInfos);

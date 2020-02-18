@@ -233,13 +233,15 @@ Route.group(() => {
      *         "name": "twitch_streamer_connected",
      *         "args": {
      *           "streamer": "mistermv"
-     *         }
+     *         },
+     *         "service_name": "twitch"
      *       },
      *       "reaction": {
      *         "name": "google_youtube_add_to_watch_later",
      *         "args": {
      *           "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
-     *         }
+     *         },
+     *         "service_name": "google"
      *       }
      *     }
      */
