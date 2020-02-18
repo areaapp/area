@@ -1,7 +1,10 @@
+import Identicon from 'identicon.js';
+
 export const state = () => ({
     services: [],
     servicesNb: 0,
-    areas: []
+    areas: [],
+    avatar: null
 });
 
 export const mutations = {
@@ -24,6 +27,10 @@ export const mutations = {
 
     setAreas (state, value) {
         state.areas = value;
+    },
+
+    setAvatar (state, value) {
+        state.avatar = value;
     }
 };
 
@@ -44,10 +51,10 @@ export const actions = {
         }
     },
 
-    async addService ({ commit }, { name, authCode }) {
+    async addService ({ commit }, { name, authCode, accessToken }) {
         const resService = await this.$axios.$post(`/me/services/${name}`, {
-            name,
             authCode,
+            accessToken,
             clientType: 'web'
         });
 
@@ -62,5 +69,12 @@ export const actions = {
         if (resService.status === 'success') {
             commit('deleteService', name);
         }
+    },
+
+    setAvatar ({ commit }, value) {
+        const identIcon = new Identicon(value, 500).toString();
+        const avatar = `data:image/png;base64,${identIcon}`;
+
+        commit('setAvatar', avatar);
     }
 };

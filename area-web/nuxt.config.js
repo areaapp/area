@@ -1,6 +1,12 @@
 import colors from 'vuetify/es5/util/colors';
 require('dotenv').config();
 
+const isProd = process.env['NODE_ENV'] === 'production';
+const baseUrl = `${isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL']}/api`;
+const apiUrl = isProd ? process.env['DEV_API_URL'] : process.env['DEV_API_URL'];
+const docUrl = process.env['DOC_URl'];
+
+
 export default {
     mode: 'universal',
     /*
@@ -32,6 +38,14 @@ export default {
     ** Plugins to load before mounting the App
     */
     plugins: [
+        {
+            src: '~/plugins/oauth.js',
+            mode: 'client'
+        },
+        {
+            src: '~/plugins/messages.js',
+            mode: 'client'
+        }
     ],
     /*
     ** Nuxt.js dev-modules
@@ -58,14 +72,15 @@ export default {
         middleware: ['auth', 'messages']
     },
 
+
     /*
     ** Axios module configuration
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: `${process.env.BASE_URL}/api`,
-        browserUrl: `${process.env.BASE_URL}/api`,
-        prefix: `${process.env.BASE_URL}/api`,
+        baseURL: baseUrl,
+        browserUrl: baseUrl,
+        prefix: baseUrl,
         proxy: true
     },
 
@@ -74,9 +89,15 @@ export default {
     */
     proxy: {
         '/api': {
-            target: process.env.API_URL,
+            target: apiUrl,
             pathRewrite: {
                 '^/api': '/'
+            }
+        },
+        '/docs/dev': {
+            target: `${docUrl}/dev`,
+            pathRewrite: {
+                '^/docs/dev': '/'
             }
         }
     },

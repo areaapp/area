@@ -8,8 +8,10 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
+      - "8082:8082"
     volumes:
       - v-nginx:/etc/nginx/conf.d
+      - v-docs:/opt/area/docs
     restart: always
     networks:
       - net-web
@@ -63,6 +65,12 @@ services:
     volumes:
       - v-releases:/opt/area/releases
 
+  docs:
+    container_name: "area_docs"
+    build: ./docs
+    volumes:
+      - v-docs:/opt/area/docs
+
 
 volumes:
   v-releases:
@@ -93,4 +101,3 @@ networks:
     driver: bridge
   net-db:
     driver: bridge
-

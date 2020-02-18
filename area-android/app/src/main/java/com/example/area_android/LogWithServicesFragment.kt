@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.json.responseJson
@@ -141,12 +142,20 @@ class LogWithServicesFragment : Fragment() {
         val url = app.serverUrl + "/auth/oauth/authorize_url/$serviceName/android"
         Fuel.get(url)
             .responseJson { request, response, result ->
-                val data = result.get().obj().getString("data")
+                when (result) {
+                    is Result.Failure -> {
+                        Toast.makeText(this.activity, "Request failed", Toast.LENGTH_SHORT).show()
+                    }
+                    is Result.Success -> {
+                        val data = result.get().obj().getString("data")
 
-                app.redirectAction = AreaApplication.ActionType.Signin
-                val webpage: Uri = Uri.parse(data)
-                val intent = Intent(Intent.ACTION_VIEW, webpage)
-                startActivity(intent)
+                        app.redirectAction = AreaApplication.ActionType.Signin
+                        app.authService = serviceName
+                        val webpage: Uri = Uri.parse(data)
+                        val intent = Intent(Intent.ACTION_VIEW, webpage)
+                        startActivity(intent)
+                    }
+                }
             }
     }
 }

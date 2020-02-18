@@ -2,7 +2,9 @@ package com.example.area_android.ui.settings
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.area_android.AreaApplication
+import com.example.area_android.LoginActivity
 import com.example.area_android.R
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
@@ -50,18 +53,18 @@ class SettingsFragment : Fragment() {
             .responseJson { request, response, result ->
                 when (result) {
                     is Result.Failure -> {
-                        print("FAILURE SETTINGS FRAGMENT : " + result.toString() + "\n")
-
                     }
                     is Result.Success -> {
                         val obj : JSONObject = result.get().obj()
                         val data : JSONObject = obj.getJSONObject("data")
 
+                        println(data)
+
                         email.text = "Email : " + data.getString("email")
                         username.text = data.getString("username")
-                        avatar.hash = data.getString("email_md5").hashCode()
+                        avatar.hash = data.getString("avatar").hashCode()
 
-                        if (data.getString("register_source") !== "area") {
+                        if (data.getString("register_source") != "area") {
                             changePassword.isEnabled = false
                         }
                     }
@@ -79,7 +82,7 @@ class SettingsFragment : Fragment() {
                 .setPositiveButton("Ok") { _, _ ->
 
                     val requestData = hashMapOf<String, Any?>(
-                        "username" to usernameEdit.text
+                        "username" to usernameEdit.text.toString()
                     )
 
                     Fuel.put(app.serverUrl + "/me")
@@ -96,6 +99,7 @@ class SettingsFragment : Fragment() {
                                     val data : JSONObject = obj.getJSONObject("data")
 
                                     username.text = data.getString("username")
+                                    Toast.makeText(this.activity, "Success", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
@@ -104,6 +108,50 @@ class SettingsFragment : Fragment() {
                 .show()
 
         }
+
+        changePassword.setOnClickListener {
+            val passwordEdit = EditText(this.activity)
+            passwordEdit.hint = "New username"
+            passwordEdit.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            AlertDialog.Builder(this.activity!!)
+                .setTitle("Change password")
+                .setMessage("Enter the new password")
+                .setView(passwordEdit)
+                .setPositiveButton("Ok") { _, _ ->
+
+                    val requestData = hashMapOf<String, Any?>(
+                        "password" to passwordEdit.text.toString()
+                    )
+
+                    Fuel.put(app.serverUrl + "/me")
+                        .authentication()
+                        .bearer(app.token!!)
+                        .jsonBody(JSONObject(requestData).toString())
+                        .responseJson { request, response, result ->
+                            when (result) {
+                                is Result.Failure -> {
+                                    Toast.makeText(this.activity, "Request failed", Toast.LENGTH_SHORT).show()
+                                }
+                                is Result.Success -> {
+                                    Toast.makeText(this.activity, "Success", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+
+        }
+
+        val logoutButton = root.findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            app.token = ""
+            val intent = Intent(this.activity, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
+            this.activity!!.finish()
+        }
+
         return root
     }
 }

@@ -9,6 +9,7 @@ class AreaApplication : Application() {
     var serverUrl: String? = null
     var token: String? = null
     var redirectAction: ActionType? = null
+    var authService: String? = null
 
     enum class ActionType {
         Signin,

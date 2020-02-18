@@ -63,7 +63,7 @@ module.exports = {
         google: {
             client_id: '414833544494-3mp46u11g0k3d1hn13nbmu27b85uvuea.apps.googleusercontent.com',
             client_secret: '',
-            redirect_uri: 'area-android://auth/office'
+            redirect_uri: 'com.googleusercontent.apps.414833544494-3mp46u11g0k3d1hn13nbmu27b85uvuea:/oauth2redirect'
         }
     }
 };

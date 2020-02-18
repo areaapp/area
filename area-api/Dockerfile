@@ -8,13 +8,13 @@ COPY package*.json ./
 RUN npm install
 RUN npm i -g adonis-cli
 RUN npm i -g apidoc
-RUN npm run doc
 
 COPY . .
 
 # Build documentation
 RUN npm run doc
-COPY doc /opt/area/docs/api
+RUN mkdir -p /opt/area/docs/api
+RUN cp -rf doc/* /opt/area/docs/api
 
 EXPOSE 5002
 

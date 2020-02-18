@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
@@ -16,13 +17,18 @@ class SendAuthCodeActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_send_auth_code)
 
         val app = this.application as AreaApplication
         val data: Uri? = intent?.data
 
-        val service = data!!.path!!.substring(1)
-        val code = data.getQueryParameter("code")
-        var accessToken: String? = null//Regex("(access_token=)(\\w+)").find(data?.fragment?).groups[2]!!.value
+        val service = app.authService!!
+
+        val text = findViewById<TextView>(R.id.text)
+        text.text = "Connecting to $service"
+
+        val code = data!!.getQueryParameter("code")
+        var accessToken: String? = null
 
         if (data.fragment !== null) {
             accessToken = Regex("(access_token=)(\\w+)").find(data.fragment!!)!!.groups[2]!!.value
