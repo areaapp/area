@@ -1,3 +1,5 @@
+'use strict';
+
 import Notifier from './notifier.js';
 
 export default class Context {
@@ -10,17 +12,29 @@ export default class Context {
         this.services = [];
     }
 
+    /**
+     * @function _get
+     * GET HTTP request to Area API
+     *
+     * @param {String} route
+     * @return {Promise}
+     */
     async _get(route) {
         try {
-            const { data } = await this._axios.get('/services');
+            const { data } = await this._axios.get(route);
 
             return data;
         } catch (e) {
-            console.error('Request to Area API failed:', e.message);
-            throw e;
+            throw new Error(`Request to Area API failed.\n${e.message}`);
         }
     }
 
+    /**
+     * @function init
+     * Initialize context by getting required informations
+     *
+     * @return {Promise}
+     */
     async init() {
         const services = await this._get('/services');
 

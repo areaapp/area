@@ -12,38 +12,71 @@ export default class Database {
         });
     }
 
+    /**
+     * @function tryConnection
+     * Try to etablishing connection with db
+     * throw an error if failed
+     *
+     * @return {Promise}
+     */
     async tryConnection() {
-        const client = await this._pool.connect();
-        client.release();
+        try {
+            const client = await this._pool.connect();
+            client.release();
+        } catch (e) {
+            throw new Error(`Connection to database failed.\n${e.message}`);
+        }
     }
 
+    /**
+     * @function _request
+     * Make a raw request to a postgres database
+     *
+     * @param {String} req - Raw request
+     * @return {Promise}
+     */
     async _request(req) {
-        const client = await this._pool.connect();
-        const res = await client.query(req);
-        client.release();
+        try {
+            const client = await this._pool.connect();
+            const res = await client.query(req);
+            client.release();
+            return res;
+        } catch (e) {
+            throw new Error(`Request to database failed.\n${e.message}`);
+        }
+    }
+
+    /**
+     * @function _selectAllFrom
+     * SELECT * FROM `table`
+     *
+     * @param {String} table - Name of table
+     * @return {Promise}
+     */
+    async _selectAllFrom(table) {
+        const res = await this._request(`SELECT * FROM ${table}`);
         return res;
     }
 
-    async _selectAllFrom(table) {
-        try {
-            const res = await this._request(`SELECT * FROM ${table}`);
-            return res;
-        } catch (e) {
-            console.error('Request to database failed.');
-            throw e;
-        }
-    }
-
+    /**
+     * @function _selectAllFromWhere
+     * SELECT * FROM `table` WHERE `condition`
+     *
+     * @param {String} table - Name of table
+     * @param {String} condition - Selection condition
+     * @return {Promise}
+     */
     async _selectAllFromWhere(table, condition) {
-        try {
-            const res = await this._request(`SELECT * FROM ${table} WHERE ${condition}`);
-            return res;
-        } catch (e) {
-            console.error('Request to database failed.');
-            throw e;
-        }
+        const res = await this._request(`SELECT * FROM ${table} WHERE ${condition}`);
+        return res;
     }
 
+    /**
+     * @function getAreas
+     * Get all areas from database
+     *
+     * @return {Promise}
+     */
     async getAreas() {
         let areas = [];
         const _areas = await this._selectAllFrom('areas');

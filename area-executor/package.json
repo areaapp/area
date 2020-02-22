@@ -5,13 +5,14 @@
     "main": "src/index.js",
     "type": "module",
     "scripts": {
-        "build": "webpack --mode production && chmod +x executor",
+        "build": "webpack --mode production && chmod +x dist/executor",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "axios": "^0.19.2",
+        "consola": "^2.11.3",
         "dotenv": "^8.2.0",
         "pg": "^7.18.1",
         "yargs": "^15.1.0"

@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const fs = require('fs');
+const path = require('path');
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
@@ -10,20 +11,42 @@ fs.readdirSync('node_modules')
         nodeModules[mod] = 'commonjs ' + mod;
     });
 
-module.exports = {
+const WorkerConfig = {
+    entry: './src/workers/executionWorker.js',
+    target: 'node',
+    mode: 'production',
+    devtool: 'none',
+    output: {
+        filename: 'executionWorker.js',
+        path: path.join(__dirname, 'dist/workers')
+    },
+    externals: nodeModules
+};
+
+
+const ExecutorConfig = {
     entry: './src/index.js',
     target: 'node',
     mode: 'production',
-    devtool: "none",
+    devtool: 'none',
+    node: {
+        __filename: true,
+        __dirname: true
+    },
     output: {
         filename: 'executor',
-        path: __dirname
+        path: path.join(__dirname, 'dist')
     },
     externals: nodeModules,
     plugins: [
         new webpack.BannerPlugin({
             banner: '#!/usr/bin/env node',
             raw: true,
-        }),
+        })
     ]
 };
+
+
+module.exports = [ WorkerConfig, ExecutorConfig ];
+
+

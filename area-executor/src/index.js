@@ -3,10 +3,13 @@
 require('dotenv').config();
 
 import axios from 'axios';
+import consola from 'consola';
 
 import { parseArgs } from './cli.js';
+import { sleep } from './utils.js';
 import Context from './context.js';
 import Database from './database.js';
+import executor from './executor.js';
 
 // import executor from './executor.js';
 
@@ -16,7 +19,7 @@ import Database from './database.js';
     try {
         config = parseArgs();
     } catch (e) {
-        console.error(`Invalid parameters. ${e.message}`);
+        consola.error(`Invalid parameters. ${e.message}`);
         process.exit(1);
     }
 
@@ -25,29 +28,32 @@ import Database from './database.js';
     try {
         await db.tryConnection();
     } catch (e) {
-        console.error(e.message);
+        consola.error(e.message);
         process.exit(1);
     }
 
-    const _axios = axios.create({
-        baseURL: config.apiUrl
-    });
-
     const ctx = new Context({
         db,
-        axios: _axios,
+        axios: axios.create({
+            baseURL: config.apiUrl
+        }),
         workers: config.workers,
         minAreas: config.minAreas
     });
 
-    await ctx.init();
+    try {
+        await ctx.init();
+    } catch (e) {
+        consola.error(e.message);
+        process.exit(1);
+    }
 
-    console.log(ctx);
-    // const threadsNb = process.env.threadsNb;
+    const msClock = config.clock * 1000;
 
-    // while (true) {
-    //     await executor({ threadsNb });
-    // }
+    while (true) {
+        await sleep(msClock);
+        await executor(ctx);
+    }
 
     ctx.db.end();
 })();

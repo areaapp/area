@@ -1,6 +1,7 @@
-import { Worker } from 'worker_threads';
+'use strict';
 
-import services from './services';
+import path from 'path';
+import { Worker } from 'worker_threads';
 
 
 /**
@@ -10,11 +11,11 @@ import services from './services';
  * @param {Object} opts - Executor options
  * @return {Promise}
  */
-export default function executor({ threadsNb }) {
-    const areas = []; // get areas form db
-    const areasChunks = makeChunks(areas, threadsNb);
+export default async function executor(ctx) {
+    const areas = await ctx.db.getAreas();
+    const areasChunks = distributeAreas(areas, ctx.workers, ctx.minAreas);
 
-    return Promise.all(areasChunks.map(runWorker));
+    return Promise.all(areasChunks.map(async chunk => runWorker(chunk, ctx)));
 };
 
 
@@ -25,14 +26,42 @@ export default function executor({ threadsNb }) {
  * @param {Array} areas - A group of areas to execute
  * @return {Promise}
  */
-function runWorker(areas) {
+function runWorker(areas, ctx) {
     return new Promise((resolve, reject) => {
-        const worker = new Worker('./executionWorker.js', { areas });
+        const worker = new Worker(
+            path.resolve(__dirname, 'workers/executionWorker.js'),
+            {
+                workerData: {
+                    areas,
+                    ctx
+                }
+            }
+        );
 
         worker.on('message', resolve);
         worker.on('error', reject);
         worker.on('exit', reject);
     });
+}
+
+
+/**
+ * @function distributeAreas
+ * Make distribution of areas on multiple workers
+ *
+ * @param {Array} areas - All areas
+ * @param {Number} workers - Number of workers
+ * @param {Number} minAreas - Minimum number of areas per worker
+ * @return {Array} An array of areas to dispatch in workers
+ */
+function distributeAreas(areas, workers, minAreas) {
+    const minWorkers = Math.floor(areas.length / minAreas);
+
+    if (minWorkers >= workers) {
+        return makeChunks(areas, workers);
+    }
+
+    return makeChunks(areas, minWorkers);
 }
 
 
@@ -45,10 +74,13 @@ function runWorker(areas) {
  * @return {Array} - A 2d array
  */
 function makeChunks(arr, size) {
+    const len = arr.length;
     const result = [];
+    let minChunkSize = Math.ceil(len / size);
 
-    for (let i = 0; i < arr.length; i += size) {
-        result.push(arr.slice(i, i + size));
+    for (let index = 0; index < len; index += minChunkSize) {
+        result.push(arr.slice(index, index + minChunkSize));
     }
+
     return result;
 }

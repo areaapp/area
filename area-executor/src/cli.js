@@ -1,6 +1,13 @@
+'use strict';
+
 import yargs from 'yargs';
 
-
+/**
+* @function parseArgs
+* Parse arguments or take env by default
+*
+* @return {Object} config
+*/
 export function parseArgs() {
     const argv = yargs
           .option('db_host', {
@@ -44,6 +51,13 @@ export function parseArgs() {
               demandOption: !process.env['AREA_APIURL'],
               default: process.env['AREA_APIURL']
           })
+          .option('clock', {
+              alias: 'c',
+              type: 'number',
+              description: 'Executor clock in seconds',
+              demandOption: !process.env['AREA_APIURL'],
+              default: process.env['EXECUTOR_CLOCK'] || 300
+          })
           .option('min_areas', {
               alias: 'm',
               type: 'number',
@@ -86,6 +100,7 @@ export function parseArgs() {
         },
         apiUrl: argv.api_url,
         minAreas: argv.min_areas,
-        workers: argv.workers
+        workers: argv.workers,
+        clock: argv.clock
     };
 }

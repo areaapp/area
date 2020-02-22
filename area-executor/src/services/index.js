@@ -1,3 +1,3 @@
 export default {
-    github: require('github')
+    github: require('./github')
 };
