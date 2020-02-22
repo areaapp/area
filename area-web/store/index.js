@@ -49,9 +49,9 @@ export const actions = {
         }
 
         // Get success
-        const successMsg = app.$cookies.get('areaSuccess');
-        if (successMsg) {
-            commit('messages/setSuccess', successMsg);
+        const success = app.$cookies.get('areaSuccess');
+        if (success) {
+            commit('messages/setSuccess', success);
         }
 
         if ($auth.loggedIn) {
@@ -63,7 +63,9 @@ export const actions = {
     },
 
     setDarkTheme ({ commit }, value) {
-        this.app.$cookies.set('darkTheme', value);
+        this.app.$cookies.set('darkTheme', value, {
+            maxAge: 315360000
+        });
         commit('setDarkTheme', value);
     }
 };

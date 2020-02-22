@@ -4,8 +4,8 @@ export const state = () => ({
 });
 
 export const mutations = {
-    setSuccess (state, message) {
-        state.success = { message };
+    setSuccess (state, value) {
+        state.success = value;
     },
 
     clearSuccess (state) {
@@ -32,13 +32,12 @@ export const actions = {
         commit('clearError');
     },
 
-    setSuccess ({ commit }, msg) {
-        this.app.$cookies.set('areaSuccess', msg);
-        commit('setSuccess', msg);
+    setSuccess ({ commit }, value) {
+        this.app.$cookies.set('areaSuccess', value);
+        commit('setSuccess', value);
     },
 
     resetSuccess ({ commit }, msg) {
-        console.log('CLEAR');
         this.app.$cookies.remove('areaSuccess');
         commit('clearSuccess');
     }

@@ -43,21 +43,20 @@
                 </v-container>
             </v-sheet>
         </v-bottom-sheet>
-        <v-snackbar v-model="snackInfo" v-if="success" color="secondary">
-            {{ success.message }}
-            <v-icon color="primary" right>mdi-check-decagram</v-icon>
-        </v-snackbar>
+        <Success />
     </v-layout>
 </template>
 
 <script>
  import Errors from '../components/Errors.vue';
+ import Success from '../components/Success.vue';
  import Service from '../components/Service.vue';
 
  export default {
      components: {
          Errors,
-         Service
+         Service,
+         Success
      },
 
      data () {
@@ -65,7 +64,8 @@
              title: 'Services',
              edit: false,
              editService: null,
-             snackInfo: false
+             snackInfo: false,
+             errors: []
          };
      },
 
@@ -91,20 +91,11 @@
          }
      },
 
-     asyncData ({ areaErrors, areaSuccess }) {
-         return {
-             errors: areaErrors || [],
-             success: areaSuccess || null
-         };
-     },
-
      mounted () {
          this.title = `Services (${this.servicesNb})`;
          this.$store.commit('setTitle', this.title);
-
-         if (this.success) {
-             this.snackInfo = true;
-         }
+         const errors = this.$getErrors();
+         this.errors = this.errors.concat(errors);
      },
 
      methods: {
