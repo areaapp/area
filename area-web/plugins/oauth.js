@@ -37,6 +37,7 @@ async function oauthConnect ({ $auth, store, app, query, params, redirect, route
                     clientType: 'web'
                 }
             });
+            await store.dispatch('initUser');
             store.dispatch('messages/setSuccess', {
                 message: `Hi ${$auth.user.username} !`,
                 icon: 'mdi-human-greeting'

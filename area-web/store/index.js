@@ -54,11 +54,15 @@ export const actions = {
             commit('messages/setSuccess', success);
         }
 
-        if ($auth.loggedIn) {
+        await dispatch('initUser');
+    },
+
+    async initUser ({ dispatch }) {
+        if (this.$auth.loggedIn) {
             await dispatch('user/getServices');
             await dispatch('user/getAreas');
 
-            dispatch('user/setAvatar', $auth.user.avatar);
+            dispatch('user/setAvatar', this.$auth.user.avatar);
         }
     },
 
