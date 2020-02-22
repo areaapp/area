@@ -2,6 +2,7 @@
 
 const User = use('App/Models/User');
 const Services = use('App/Services/index');
+const Mail = use('Mail');
 
 class AuthController {
 
@@ -23,6 +24,13 @@ class AuthController {
         try {
             const user = await User.create(userInfos);
             const token = await auth.generate(user);
+
+            await Mail.send('emails.welcome', user.toJSON(), (message) => {
+                message
+                    .to(userInfos.email)
+                    .from('jonathan.lemoine@epitech.eu')
+                    .subject('Welcome to AREA')
+            });
 
             return response.json({
                 status: 'success',
