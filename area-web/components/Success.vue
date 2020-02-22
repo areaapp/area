@@ -14,7 +14,7 @@
              message: '',
              icon: '',
              snackInfo: false
-         }
+         };
      },
 
      mounted () {

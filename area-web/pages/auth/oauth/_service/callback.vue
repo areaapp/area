@@ -6,7 +6,7 @@
             :width="7"
             color="primary"
             indeterminate
-        ></v-progress-circular>
+        />
     </div>
 </template>
 
@@ -14,16 +14,16 @@
  export default {
      auth: false,
 
-     asyncData ({ params }) {
-         return {
-             serviceName: params.service
-         };
-     },
-
      computed: {
          service () {
              return this.$store.state.services[this.serviceName];
          }
+     },
+
+     asyncData ({ params }) {
+         return {
+             serviceName: params.service
+         };
      },
 
      async mounted () {

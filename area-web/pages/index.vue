@@ -8,14 +8,14 @@
  import Success from '../components/Success.vue';
 
  export default {
+
+     components: {
+         Success
+     },
      data () {
          return {
              title: 'My Areas'
          };
-     },
-
-     components: {
-         Success
      },
 
      computed: {

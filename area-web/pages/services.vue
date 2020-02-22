@@ -29,9 +29,6 @@
                 <v-container class="d-flex flex-column">
                     <h1 class="mb-6">{{ services[editService].displayName }} settings</h1>
                     <v-row class="justify-center">
-                        <v-btn color="primary" class="ma-4">
-                            Switch account<v-icon right>mdi-account-circle</v-icon>
-                        </v-btn>
                         <v-btn
                             v-on:click="deleteService(editService)"
                             color="error"
