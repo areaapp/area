@@ -69,7 +69,7 @@ export default {
     ],
 
     router: {
-        middleware: ['auth', 'messages']
+        middleware: ['auth']
     },
 
 
