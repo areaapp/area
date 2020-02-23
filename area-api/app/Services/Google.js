@@ -18,6 +18,7 @@ module.exports = {
     accessTokenUrl: 'https://oauth2.googleapis.com/token',
     scopeSeparator: '%20',
     scopes: [
+        encodeURIComponent('https://mail.google.com'),
         'profile',
         'email'
     ],

@@ -1,31 +1,46 @@
 'use strict';
 
 import { workerData, parentPort } from 'worker_threads';
-
-import services from '../services';
 import consola from 'consola';
+import axios from 'axios';
+
+import Context from '../context.js';
+import services from '../services';
+import Database from '../database.js';
+
 
 async function executeArea(area, ctx) {
-    const action = services[area.serviceName][area.action.name];
-    const reaction = services[area.serviceName][area.reaction.name];
+    console.log('EXECUTE AREA');
+    const action = services[area.action.service_name].default.actions.default[area.action.name];
+    const reaction = services[area.reaction.service_name].default.reactions.default[area.reaction.name];
 
     try {
         await action(area, reaction, ctx);
     } catch (e) {
         consola.error(e.message);
     }
-    // if (actionResult) {
-    //     return services[area.serviceName][area.actionName]();
-    // }
 }
 
 
-(function executionWorker() {
+(async function executionWorker() {
     console.log('Thread spawned');
     const areas = workerData.areas;
-    const ctx = workerData.ctx;
+    const services = workerData.services;
+    const dbConfig = workerData.dbConfig;
+    const _axios = axios.create({});
+    const db = new Database(dbConfig);
+    const ctx = new Context({
+        axios: _axios,
+        services,
+        dbConfig,
+        db
+    });
 
-    return Promise.all(areas.map(async area => await executeArea(area, ctx)));
+    await Promise.all(areas.map(async area => (
+        await executeArea(area, ctx)
+    )));
+
+    ctx.db.end();
 })()
     .then(() => parentPort.postMessage({ code: 0 }))
     .catch(() => parentPort.postMessage({ code: 84 }));

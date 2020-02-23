@@ -15,7 +15,7 @@ export default async function executor(ctx) {
     const areas = await ctx.db.getAreas();
     const areasChunks = distributeAreas(areas, ctx.workers, ctx.minAreas);
 
-    return Promise.all(areasChunks.map(async chunk => runWorker(chunk, ctx)));
+    return Promise.all(areasChunks.map(async chunk => await runWorker(chunk, ctx)));
 };
 
 
@@ -29,11 +29,12 @@ export default async function executor(ctx) {
 function runWorker(areas, ctx) {
     return new Promise((resolve, reject) => {
         const worker = new Worker(
-            path.resolve(__dirname, 'workers/executionWorker.js'),
+            path.resolve(__dirname, '../dist/workers/executionWorker.js'),
             {
                 workerData: {
                     areas,
-                    ctx
+                    services: ctx.services,
+                    dbConfig: ctx.dbConfig
                 }
             }
         );

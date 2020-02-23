@@ -12,7 +12,7 @@ module.exports = {
     google: {
         actions: [
             {
-                name: 'google_gmail_new_mail',
+                name: 'google_gmail_new_email',
                 displayName: 'New email on Gmail',
                 description: 'Triggered when a email is received in gmail',
                 params: {
@@ -33,7 +33,8 @@ module.exports = {
                 displayName: 'Send email with Gmail',
                 description: 'Send email with Gmail',
                 params: {
-                    addresses: 'Array',
+                    to: 'string',
+                    subject: 'string',
                     content: 'string'
                 }
             },

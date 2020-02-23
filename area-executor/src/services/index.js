@@ -1,3 +1,4 @@
 export default {
-    github: require('./github')
+    github: require('./github'),
+    google: require('./google')
 };

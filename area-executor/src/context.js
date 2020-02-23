@@ -3,10 +3,11 @@
 import Notifier from './notifier.js';
 
 export default class Context {
-    constructor({ axios, db, workers, minAreas }) {
+    constructor({ axios, db, workers, minAreas, dbConfig }) {
         this._axios = axios;
         this.workers = workers;
         this.minAreas = minAreas;
+        this.dbConfig = dbConfig;
         this.db = db;
         this.notifier = new Notifier(this);
         this.services = [];

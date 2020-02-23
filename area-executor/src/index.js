@@ -34,6 +34,7 @@ import executor from './executor.js';
 
     const ctx = new Context({
         db,
+        dbConfig: config.db,
         axios: axios.create({
             baseURL: config.apiUrl
         }),

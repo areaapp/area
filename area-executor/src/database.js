@@ -82,20 +82,20 @@ export default class Database {
      * @return {Promise}
      */
     async _updateWhere(table, column, value, condition) {
-        const res = await this._request(`UPDATE ${table} SET ${column} = ${value} WHERE ${condition}`);
+        const res = await this._request(`UPDATE ${table} SET ${column} = '${value}' WHERE ${condition}`);
 
         return res;
     }
 
     /**
      * @function updateBuffer
-     * Update buffer of an Area
+     * Update buffer of an action
      *
      * @param {String} areaId
      * @param {String} value
      */
-    async updateBuffer(areaId, value) {
-        await this._updateWhere('areas', 'buffer', value, `id = ${areaId}`);
+    async updateBuffer(actionId, value) {
+        await this._updateWhere('actions', 'buffer', value, `id = ${actionId}`);
     }
 
     /**
@@ -122,14 +122,12 @@ export default class Database {
             relatedReactions = unique(relatedReactions);
             relatedUsers = unique(relatedUsers);
 
-            const actions = await this._selectAllFromWhere('actions', relatedActions.join(' OR '));
-            const reactions = await this._selectAllFromWhere('reactions', relatedReactions.join(' OR '));
-
+            const { actions, reactions } = await this.getActionsReactions(relatedActions, relatedReactions);
             const users = await this._selectAllFromWhere('users', relatedUsers.join(' OR '));
 
             for (const a of _areas.rows) {
                 const action = actions.rows.find(x => x.id === a.action_id);
-                const reaction = actions.rows.find(x => x.id === a.reaction_id);
+                const reaction = reactions.rows.find(x => x.id === a.reaction_id);
                 const user = users.rows.find(x => x.id === a.user_id);
 
                 areas.push({
@@ -144,6 +142,24 @@ export default class Database {
         }
 
         return areas;
+    }
+
+    async getActionsReactions(relatedActions, relatedReactions) {
+        const reactions = await this._selectAllFromWhere('reactions', relatedReactions.join(' OR '));
+        const actions = await this._selectAllFromWhere('actions', relatedActions.join(' OR '));
+        let relatedServices = [];
+
+        actions.rows.forEach(a => relatedServices.push(`id = ${a.service_id}`));
+        reactions.rows.forEach(r => relatedServices.push(`id = ${r.service_id}`));
+
+        relatedServices = unique(relatedServices);
+
+        const services = await this._selectAllFromWhere('services', relatedServices.join(' OR '));
+
+        actions.rows.forEach(a => a.service = services.rows.find(s => s.id === a.service_id));
+        reactions.rows.forEach(r => r.service = services.rows.find(s => s.id === r.service_id));
+
+        return { actions, reactions };
     }
 
     end() {
