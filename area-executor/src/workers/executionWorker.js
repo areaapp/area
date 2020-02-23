@@ -2,7 +2,7 @@
 
 import { workerData, parentPort } from 'worker_threads';
 
-import services from './services';
+import services from '../services';
 import consola from 'consola';
 
 async function executeArea(area, ctx) {
