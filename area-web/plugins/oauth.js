@@ -17,7 +17,10 @@ async function oauthConnect ({ $auth, store, app, query, params, redirect, route
             });
             const displayName = store.state.services[params.service].displayName;
 
-            store.dispatch('messages/setSuccess', `${displayName} successfully added !`);
+            store.dispatch('messages/setSuccess', {
+                message: `${displayName} successfully added !`,
+                icon: 'mdi-check-decagram'
+            });
             redirect(sUrl);
         } catch (e) {
             store.dispatch('messages/setError', e.response.data.message);
@@ -34,7 +37,11 @@ async function oauthConnect ({ $auth, store, app, query, params, redirect, route
                     clientType: 'web'
                 }
             });
-            store.dispatch('messages/setSuccess', `Hi ${$auth.user.username} !`);
+            await store.dispatch('initUser');
+            store.dispatch('messages/setSuccess', {
+                message: `Hi ${$auth.user.username} !`,
+                icon: 'mdi-human-greeting'
+            });
             redirect(sUrl);
         } catch (e) {
             store.dispatch('messages/setError', e.response.data.message);

@@ -29,6 +29,10 @@ export const mutations = {
         state.areas = value;
     },
 
+    addArea (state, area) {
+        state.areas.push(area);
+    },
+
     setAvatar (state, value) {
         state.avatar = value;
     }
@@ -48,6 +52,14 @@ export const actions = {
 
         if (resAreas.status === 'success') {
             commit('setAreas', resAreas.data);
+        }
+    },
+
+    async addArea ({ commit }, area) {
+        const resArea = await this.$axios.$post(`/me/area`, area);
+
+        if (resArea.status === 'success') {
+            commit('addArea', resArea.data);
         }
     },
 

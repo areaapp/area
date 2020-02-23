@@ -152,7 +152,7 @@
              try {
                  await this.$axios.$post('auth/signup', data);
                  await this.$auth.loginWith('local', { data });
-                 this.$store.dispatch('user/setAvatar', this.$auth.user.email_md5);
+                 await this.$store.dispatch('initUser');
                  this.$router.push('/');
              } catch (e) {
                  this.errors.push({
