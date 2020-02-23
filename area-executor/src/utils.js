@@ -10,3 +10,15 @@
 export async function sleep (time) {
     return await new Promise(res => setTimeout(res, time));
 };
+
+
+/**
+* @function unique
+* Make array elements unique
+*
+* @param {Array} arr
+* @return {Array}
+*/
+export function unique(arr) {
+    return [...new Set(arr)];
+}

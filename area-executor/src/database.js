@@ -1,5 +1,7 @@
 import { Pool } from 'pg';
 
+import { unique }  from './utils.js';
+
 
 export default class Database {
     constructor({ host, port, name, user, pass }) {
@@ -72,6 +74,31 @@ export default class Database {
     }
 
     /**
+     * @function _updateWhere
+     * UPDATE `table` SET `column` = `value` WHERE `condition`
+     *
+     * @param {String} table - Name of table
+     * @param {String} condition - Selection condition
+     * @return {Promise}
+     */
+    async _updateWhere(table, column, value, condition) {
+        const res = await this._request(`UPDATE ${table} SET ${column} = ${value} WHERE ${condition}`);
+
+        return res;
+    }
+
+    /**
+     * @function updateBuffer
+     * Update buffer of an Area
+     *
+     * @param {String} areaId
+     * @param {String} value
+     */
+    async updateBuffer(areaId, value) {
+        await this._updateWhere('areas', 'buffer', value, `id = ${areaId}`);
+    }
+
+    /**
      * @function getAreas
      * Get all areas from database
      *
@@ -83,22 +110,31 @@ export default class Database {
         if (_areas.rows.length > 0) {
             let relatedActions = [];
             let relatedReactions = [];
+            let relatedUsers = [];
 
             for (const a of _areas.rows) {
                 relatedActions.push(`id = ${a.action_id}`);
                 relatedReactions.push(`id = ${a.reaction_id}`);
+                relatedUsers.push(`id = ${a.user_id}`);
             }
+
+            relatedActions = unique(relatedActions);
+            relatedReactions = unique(relatedReactions);
+            relatedUsers = unique(relatedUsers);
 
             const actions = await this._selectAllFromWhere('actions', relatedActions.join(' OR '));
             const reactions = await this._selectAllFromWhere('reactions', relatedReactions.join(' OR '));
 
+            const users = await this._selectAllFromWhere('users', relatedUsers.join(' OR '));
+
             for (const a of _areas.rows) {
                 const action = actions.rows.find(x => x.id === a.action_id);
                 const reaction = actions.rows.find(x => x.id === a.reaction_id);
+                const user = users.rows.find(x => x.id === a.user_id);
 
                 areas.push({
                     id: a.id,
-                    userId: a.user_id,
+                    user,
                     name: a.name,
                     lastExecution: a.last_execution,
                     action,

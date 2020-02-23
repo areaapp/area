@@ -1,20 +1,22 @@
 'use strict';
 
 import { workerData, parentPort } from 'worker_threads';
-import services from './services';
 
+import services from './services';
+import consola from 'consola';
 
 async function executeArea(area, ctx) {
+    const action = services[area.serviceName][area.action.name];
+    const reaction = services[area.serviceName][area.reaction.name];
 
-    console.log('Area:', area);
-
-    const action = services[area.serviceName][area.actionName];
-    const actionResult = await action(area, ctx);
-
+    try {
+        await action(area, reaction, ctx);
+    } catch (e) {
+        consola.error(e.message);
+    }
     // if (actionResult) {
     //     return services[area.serviceName][area.actionName]();
     // }
-    return null;
 }
 
 
