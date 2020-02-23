@@ -82,7 +82,7 @@ Route.group(() => {
      *       "refreshToken": null
      *     }
      */
-    Route.post('oauth/signin', 'Auth/OAuthController.signin');
+    Route.post('oauth/signin', 'Auth/OAuthController.signin').middleware('oauth');
 
 
     /**
@@ -99,7 +99,7 @@ Route.group(() => {
      *       "https://www.dropbox.com/oauth2/authorize?client_id=00000&redirect_uri=http://localhost:8081/callback&response_type=code"
      *     }
      */
-    Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl');
+    Route.get('oauth/authorize_url/:serviceName/:clientType', 'Auth/OAuthController.getAuthorizeUrl').middleware('oauth');
 }).prefix('auth');
 
 Route.group(() => {
@@ -121,7 +121,7 @@ Route.group(() => {
      *          "email": "kylian.maugue@epitech.eu"
      *        }
      */
-    Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware('auth');
+    Route.post('services/:serviceName([a-zA-Z]+)', 'User/UserServiceController.addService').middleware(['auth', 'oauth']);
 
     /**
      * @api {get} /me Get current user
@@ -233,13 +233,15 @@ Route.group(() => {
      *         "name": "twitch_streamer_connected",
      *         "args": {
      *           "streamer": "mistermv"
-     *         }
+     *         },
+     *         "service_name": "twitch"
      *       },
      *       "reaction": {
      *         "name": "google_youtube_add_to_watch_later",
      *         "args": {
      *           "video": "https://www.youtube.com/watch?v=fsmKwdVOJFY"
-     *         }
+     *         },
+     *         "service_name": "google"
      *       }
      *     }
      */
@@ -703,3 +705,55 @@ Route.get('auth/social/callback/:service', ({ params, request }) => {
     console.log(params.service);
     console.log(request.all());
 });
+
+    /**
+     * @api {get} Get about.json
+     * @apiName About
+     * @apiGroup about.json
+     * @apiSuccess {Object} client Object client with host informations
+     * @apiSuccess {Object} server Object server with current time and services infos (name, list of actions, list of reactions)
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/2 200 OK
+     *  {
+     *   "client": {
+     *       "host": "127.0.0.1"
+     *   },
+     *   "server": {
+     *       "current_time": 1581950176,
+     *       "services": [
+     *           {
+     *               "name": "dropbox",
+     *               "actions": [],
+     *               "reactions": []
+     *           },
+     *           {
+     *               "name": "github",
+     *               "actions": [],
+     *               "reactions": []
+     *           },
+     *           {
+     *               "name": "google",
+     *               "actions": [
+     *                   {
+     *                       "name": "New email on Gmail",
+     *                       "description": "Triggered when a email is received in gmail"
+     *                   },
+     *                   {
+     *                       "name": "New video uploaded on a Youtube channel",
+     *                       "description": "Triggered when a video is uploaded on youtube channel"
+     *                   }
+     *               ],
+     *               "reactions": [
+     *                   {
+     *                       "name": "Send email with Gmail",
+     *                       "description": "Send email with Gmail"
+     *                   },
+     *                   {
+     *                       "name": "Add to watch later",
+     *                       "description": "Add a video to \"watch later\" playlist"
+     *                   }
+     *               ]
+     *           },
+     */
+
+Route.get('about.json', 'AboutController.generateAbout');

@@ -1,15 +1,10 @@
 import colors from 'vuetify/es5/util/colors';
 require('dotenv').config();
 
-const isProd = process.env['NODE_ENV'] === 'production';
-const baseUrl = `${isProd ? process.env['BASE_URL'] : process.env['DEV_BASE_URL']}/api`;
-const apiUrl = isProd ? process.env['DEV_API_URL'] : process.env['DEV_API_URL'];
-const docUrl = isProd ? process.env['DOC_URL'] : process.env['DEV_DOC_URL'];
-
-console.log(isProd);
-console.log(baseUrl);
-console.log(apiUrl);
-console.log(docUrl);
+const isProd = process.env.NODE_ENV === 'production';
+const baseUrl = `${isProd ? process.env.PROD_BASE_URL : process.env.DEV_BASE_URL}/api`;
+const apiUrl = isProd ? process.env.PROD_API_URL : process.env.DEV_API_URL;
+const docUrl = isProd ? process.env.PROD_DOC_URL : process.env.DEV_DOC_URL;
 
 export default {
     mode: 'universal',
@@ -73,7 +68,7 @@ export default {
     ],
 
     router: {
-        middleware: ['auth', 'messages']
+        middleware: ['auth']
     },
 
     /*

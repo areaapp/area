@@ -4,19 +4,20 @@
 const Schema = use('Schema')
 
 class ActionSchema extends Schema {
-  up () {
-    this.create('actions', (table) => {
-      table.increments();
-      table.text('name').notNullable();
-      table.json('args');
-      table.text('buffer').nullable();
-      table.integer('service_id').unsigned().notNullable().references('id').inTable('services').onDelete('cascade');
-    })
-  }
+    up () {
+        this.create('actions', (table) => {
+            table.increments();
+            table.text('name').notNullable();
+            table.json('args');
+            table.text('buffer').nullable();
+            table.integer('service_id').unsigned().notNullable().references('id').inTable('services').onDelete('cascade');
+            table.string('service_name', 80).notNullable();
+        })
+    }
 
-  down () {
-    this.drop('actions')
-  }
+    down () {
+        this.drop('actions')
+    }
 }
 
 module.exports = ActionSchema

@@ -57,7 +57,7 @@
                     <v-flex class="pa-3">
                         <v-row class="px-4" align="center">
                             <v-avatar color="primary" class="mr-3">
-                                <img :src="userAvatar" :alt="user.username" />
+                                <img :src="userAvatar" :alt="user.username">
                             </v-avatar>
                             <v-col>
                                 <v-row>

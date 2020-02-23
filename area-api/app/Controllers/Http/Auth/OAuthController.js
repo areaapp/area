@@ -1,14 +1,14 @@
 'use strict'
 
+const Config = use('Config');
 const Services = use('App/Services/index');
 const Service = use('App/Models/Service');
 const User = use('App/Models/User');
-const ApiInfos = require('../../../../oauth.config.js');
 const axios = require('axios');
 const querystring = require('querystring');
 
 class OAuthController {
-    getAuthorizeUrl({ params, response }) {
+    getAuthorizeUrl({ request, params, response }) {
         if (!(params.serviceName in Services)) {
             return response.status(404).json({
                 status: 'error',
@@ -27,7 +27,7 @@ class OAuthController {
 
         return response.json({
             status: 'success',
-            data: this.getServiceAuthorizeUrl(service, params.clientType)
+            data: this.getServiceAuthorizeUrl(request.oauthHelper, service, params.clientType)
         });
     }
 
@@ -40,7 +40,6 @@ class OAuthController {
                 data: userAuth
             });
         } catch (err) {
-            console.log(err);
             return response.status(400).json({
                 status: 'error',
                 message: 'Cannot connect the user. Please, try again later.'
@@ -112,10 +111,9 @@ class OAuthController {
 
         if (typeof parameters.accessToken !== 'undefined') {
             accessToken = parameters.accessToken;
-
-            // Check access token ?
         } else {
             accessToken = await this.constructor.getAccessToken(
+                request.oauthHelper,
                 service,
                 parameters.authCode,
                 parameters.clientType
@@ -165,32 +163,36 @@ class OAuthController {
     }
 
 
-    getServiceAuthorizeUrl(service, clientType) {
+    getServiceAuthorizeUrl(oauthHelper, service, clientType) {
+        const oauthService = oauthHelper.getService(clientType, service.name);
+
         const scopes = service.scopes.length > 0 ? 'scope=' + service.scopes.join(service.scopeSeparator) : '';
-        const client_id = 'client_id=' + ApiInfos[clientType][service.name].client_id;
+        const client_id = 'client_id=' + oauthService.client_id;
         let redirect_uri = ''
-        if (ApiInfos[clientType][service.name].redirect_uri) {
-            redirect_uri = 'redirect_uri=' + encodeURIComponent(ApiInfos[clientType][service.name].redirect_uri);
+        if (oauthService.redirect_uri) {
+            redirect_uri = 'redirect_uri=' + encodeURIComponent(oauthService.redirect_uri);
         }
         const response_type = 'response_type=' + (service.codeFlow ? 'code' : 'token');
         const url = service.authorizeUrl + '?' + [scopes, client_id, redirect_uri, response_type].filter(Boolean).join('&');
         return url;
     }
 
-    static async getAccessToken(service, code, clientType) {
+    static async getAccessToken(oauthHelper, service, code, clientType) {
         if (service.irregularAccessToken) {
-            return await service.getAccessToken(code, clientType);
+            return await service.getAccessToken(oauthHelper, code, clientType);
         }
 
+        const oauthService = oauthHelper.getService(clientType,service.name);
+
         let dataObj = {
-            client_id: ApiInfos[clientType][service.name].client_id,
-            client_secret: ApiInfos[clientType][service.name].client_secret,
+            client_id: oauthService.client_id,
+            client_secret: oauthService.client_secret,
             code,
             grant_type: 'authorization_code',
         }
 
-        if (ApiInfos[clientType][service.name].redirect_uri) {
-            dataObj.redirect_uri = ApiInfos[clientType][service.name].redirect_uri
+        if (oauthService.redirect_uri) {
+            dataObj.redirect_uri = oauthService.redirect_uri
         }
         const data = querystring.stringify(dataObj);
 
@@ -198,7 +200,6 @@ class OAuthController {
             const response = await axios.post(service.accessTokenUrl, data);
             return response.data.access_token;
         } catch (err) {
-            console.log(err);
             return null;
         }
     }
