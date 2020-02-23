@@ -15,13 +15,22 @@
             <v-row class="pa-2">
                 <v-chip x-small :color="foreground" :text-color="background">action</v-chip>
                 <v-spacer></v-spacer>
-                <v-icon right small>mdi-{{ icon }}</v-icon>
+                <v-icon right small :color="foreground">mdi-{{ icon }}</v-icon>
             </v-row>
             <v-row class="px-2">
-                <span class="subtitle-2 text-left">{{ title }}</span>
+                <span
+                    class="subtitle-2 text-left"
+                    :style="{ color: foreground }"
+                >
+                    {{ title }}
+                </span>
             </v-row>
         </v-container>
-        <v-card-subtitle>{{ description }}</v-card-subtitle>
+        <v-card-subtitle
+            :style="{ color: foreground }"
+        >
+            {{ description }}
+        </v-card-subtitle>
         <v-spacer></v-spacer>
         <v-card-actions>
             <v-row justify="center">

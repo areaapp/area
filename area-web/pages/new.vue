@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Errors :errors="errors" />
         <v-stepper
             v-model="stepper"
             :vertical="vertical"
@@ -27,45 +28,13 @@
 
                 <v-stepper-items>
                     <v-stepper-content step="1">
-                        <h1 class="title mb-2">Choose an action:</h1>
-                        <v-card
-                            class="mb-12 scrollable"
-                            height="50vh"
-                            color="grey lighten-3"
-                        >
-                            <v-container fluid>
-                                <v-radio-group v-model="radioAction" :mandatory="true">
-                                    <v-col
-                                        :key="i"
-                                        v-for="(service, i) in services"
-                                        v-if="allServices[i].actions.length"
-                                        align="center"
-                                    >
-                                        <h1 class="subtitle-2 primary--text">{{ allServices[i].displayName }}</h1>
-                                        <v-row
-                                            align="center"
-                                            justify="center"
-                                        >
-                                            <Action
-                                                v-for="(action, j) in allServices[i].actions"
-                                                :key="j"
-                                                :background="allServices[i].background"
-                                                :foreground="allServices[i].foreground"
-                                                :icon="allServices[i].iconName"
-                                                :title="action.displayName"
-                                                :description="action.description">
-                                                <v-radio
-                                                    :color="allServices[i].foreground"
-                                                    :value="action"
-                                                    on-icon="mdi-check-circle"
-                                                >
-                                                </v-radio>
-                                            </Action>
-                                        </v-row>
-                                    </v-col>
-                                </v-radio-group>
-                            </v-container>
-                        </v-card>
+                        <h1 class="title mb-2 accent--text">Choose an action:</h1>
+                        <ChooseAction
+                            v-model="radioAction"
+                            :allServices="allServices"
+                            :userServices="services"
+                            :color="$vuetify.theme.themes[theme].background"
+                        />
                         <v-row class="justify-center">
                             <v-btn
                                 @click="nextStep(1)"
@@ -76,48 +45,24 @@
                         </v-row>
                     </v-stepper-content>
                     <v-stepper-content step="2">
-                        <h1 class="title mb-2">Choose a reaction:</h1>
-                        <v-card
-                            class="mb-12 scrollable"
-                            height="50vh"
-                            color="grey lighten-3"
-                        >
-                            <v-container fluid>
-                                <v-radio-group v-model="radioReaction" :mandatory="true">
-                                    <v-col
-                                        :key="i"
-                                        v-for="(service, i) in services"
-                                        v-if="allServices[i].reactions.length"
-                                        align="center"
-                                    >
-                                        <h1 class="subtitle-2 primary--text">{{ allServices[i].displayName }}</h1>
-                                        <v-row
-                                            align="center"
-                                            justify="center"
-                                        >
-                                            <Reaction
-                                                v-for="(reaction, j) in allServices[i].reactions"
-                                                :key="j"
-                                                :background="allServices[i].background"
-                                                :foreground="allServices[i].foreground"
-                                                :icon="allServices[i].iconName"
-                                                :title="reaction.displayName"
-                                                :description="reaction.description">
-                                                <v-radio
-                                                    :color="allServices[i].foreground"
-                                                    :value="reaction"
-                                                    on-icon="mdi-check-circle"
-                                                >
-                                                </v-radio>
-                                            </Reaction>
-                                        </v-row>
-                                    </v-col>
-                                </v-radio-group>
-                            </v-container>
-                        </v-card>
+                        <h1 class="title mb-2  accent--text">Choose a reaction:</h1>
+                        <ChooseReaction
+                            v-model="radioReaction"
+                            :allServices="allServices"
+                            :userServices="services"
+                            :color="$vuetify.theme.themes[theme].background"
+                        />
                         <v-row class="justify-center">
                             <v-btn
+                                @click="previousStep(2)"
+                                class="mx-3"
+                                color="white primary--text"
+                            >
+                                Back
+                            </v-btn>
+                            <v-btn
                                 @click="nextStep(2)"
+                                class="mx-3"
                                 color="primary"
                             >
                                 Continue
@@ -125,23 +70,57 @@
                         </v-row>
                     </v-stepper-content>
                     <v-stepper-content step="3">
-                        <h1 class="title mb-2">Configure your area:</h1>
+                        <h1 class="title mb-2" dark>Configure your area:</h1>
                         <v-card
                             class="mb-12 scrollable"
                             height="50vh"
-                            color="grey lighten-3"
+                            :color="$vuetify.theme.themes[theme].background"
                         >
                             <v-container fluid>
-                                <p>{{ radioAction }}</p>
-                                <p>{{ radioReaction }}</p>
+                                <h1 class="subtitle-2 mb-2">Global configuration:</h1>
+                                <v-form v-model="areaForm">
+                                    <v-text-field
+                                        color="primary"
+                                        v-model="areaTitle"
+                                        :rules="[x => !!x || 'Area name is required.']"
+                                        required
+                                        label="Area name"
+                                        outlined
+                                        :dark="theme === 'dark'"
+                                    />
+                                </v-form>
+                                <h1 class="subtitle-2 mb-2">Selected action configuration:</h1>
+                                <ActionConfig
+                                    v-if="selectedAction"
+                                    v-model="actionConfig"
+                                    :action="selectedAction.action"
+                                    :service="selectedAction.service"
+                                />
+                                <h1 class="subtitle-2 mb-2">Selected reaction configuration:</h1>
+                                <ReactionConfig
+                                    v-if="selectedReaction"
+                                    v-model="reactionConfig"
+                                    :reaction="selectedReaction.reaction"
+                                    :service="selectedReaction.service"
+                                />
                             </v-container>
                         </v-card>
                         <v-row class="justify-center">
                             <v-btn
-                                @click="nextStep(3)"
+                                @click="previousStep(3)"
+                                class="mx-3"
+                                color="white primary--text"
+                            >
+                                Back
+                            </v-btn>
+                            <v-btn
+                                @click="newArea"
+                                :disabled="!actionConfig || !reactionConfig || !areaForm"
+                                class="mx-3"
                                 color="primary"
                             >
-                                Continue
+                                Create Area
+                                <v-icon right>mdi-plus-circle</v-icon>
                             </v-btn>
                         </v-row>
                     </v-stepper-content>
@@ -152,13 +131,19 @@
 </template>
 
 <script>
- import Action from '../components/Action.vue';
- import Reaction from '../components/Reaction.vue';
+ import Errors from '../components/Errors.vue';
+ import ChooseReaction from '../components/AreaConfig/ChooseReaction.vue';
+ import ChooseAction from '../components/AreaConfig/ChooseAction.vue';
+ import ActionConfig from '../components/AreaConfig/ActionConfig.vue';
+ import ReactionConfig from '../components/AreaConfig/ReactionConfig.vue';
 
  export default {
      components: {
-         Action,
-         Reaction
+         ChooseReaction,
+         ChooseAction,
+         ActionConfig,
+         ReactionConfig,
+         Errors
      },
      data () {
          return {
@@ -169,7 +154,14 @@
              altLabels: false,
              editable: true,
              radioAction: null,
-             radioReaction: null
+             radioReaction: null,
+             actionForm: false,
+             reactionForm: false,
+             areaForm: false,
+             actionConfig: {},
+             reactionConfig: {},
+             areaTitle: '',
+             errors: []
          };
      },
 
@@ -184,6 +176,30 @@
 
          allServices () {
              return this.$store.state.services;
+         },
+
+         selectedAction () {
+             if (!this.radioAction) {
+                 return null;
+             }
+             const data = this.radioAction.split('-');
+
+             return {
+                 service: this.allServices[data[0]],
+                 action: this.allServices[data[0]].actions.find(a => a.name === data[1])
+             };
+         },
+
+         selectedReaction () {
+             if (!this.radioReaction) {
+                 return null;
+             }
+             const data = this.radioReaction.split('-');
+
+             return {
+                 service: this.allServices[data[0]],
+                 reaction: this.allServices[data[0]].reactions.find(a => a.name === data[1])
+             };
          }
      },
 
@@ -205,6 +221,28 @@
      },
 
      methods: {
+         async newArea () {
+             const area = {
+                 name: this.areaTitle,
+                 action: {
+                     name: this.selectedAction.action.name,
+                     params: this.actionConfig
+                 },
+                 reaction: {
+                     name: this.selectedReaction.reaction.name,
+                     params: this.reactionConfig
+                 }
+             };
+
+             try {
+                 await this.$store.dispatch('user/addArea', area);
+                 this.$router.push('/');
+             } catch (e) {
+                 console.log(e);
+                 this.errors.push({ message: e.response.data.message });
+             }
+         },
+
          onInput (val) {
              this.steps = parseInt(val);
          },
@@ -214,6 +252,14 @@
                  this.stepper = 1;
              } else {
                  this.stepper = n + 1;
+             }
+         },
+
+         previousStep (n) {
+             if (n === 0) {
+                 this.stepper = this.steps;
+             } else {
+                 this.stepper = n - 1;
              }
          }
      }
