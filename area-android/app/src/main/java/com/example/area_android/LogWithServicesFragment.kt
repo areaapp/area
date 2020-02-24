@@ -107,10 +107,17 @@ class LogWithServicesFragment : Fragment() {
             val serviceName = iter.next()
             val service: JSONObject = data.getJSONObject(serviceName)
             val icon = service.getString("iconName").replace('-', '_').toUpperCase()
+            var iconValue: MaterialDrawableBuilder.IconValue? = null
+
+            try {
+                iconValue = MaterialDrawableBuilder.IconValue.valueOf(icon)
+            } catch (e: IllegalArgumentException) {
+                iconValue = MaterialDrawableBuilder.IconValue.CANCEL
+            }
 
             val d: Drawable =
                 MaterialDrawableBuilder.with(this.activity) // provide a context
-                    .setIcon(MaterialDrawableBuilder.IconValue.valueOf(icon)) // provide an icon
+                    .setIcon(iconValue) // provide an icon
                     .setColor(Color.WHITE) // set the icon color
                     .setToActionbarSize() // set the icon size
                     .build() // Finally call build
