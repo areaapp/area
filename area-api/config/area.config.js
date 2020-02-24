@@ -16,7 +16,19 @@ module.exports = {
                 }
             }
         ],
-        reactions: []
+        reactions: [
+            {
+                name: 'github_create_issue',
+                displayName: 'Create an issue',
+                description: 'Create an issue',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    title: 'string',
+                    body: 'string'
+                }
+            }
+        ]
     },
     google: {
         actions: [
