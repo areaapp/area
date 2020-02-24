@@ -12,6 +12,7 @@ module.exports = {
     iconName: 'twitch',
     foreground: '#ffffff',
     background: '#6441a4',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
     authorizeUrl: 'https://id.twitch.tv/oauth2/authorize',

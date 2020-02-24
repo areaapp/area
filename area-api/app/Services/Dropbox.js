@@ -12,6 +12,7 @@ module.exports = {
     iconName: 'dropbox',
     foreground: '#ffffff',
     background: '#3d9ae8',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
     authorizeUrl: "https://www.dropbox.com/oauth2/authorize",
