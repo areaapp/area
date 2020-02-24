@@ -12,6 +12,7 @@ module.exports = {
     iconName: 'office',
     foreground: '#dc3e15',
     background: '#ffffff',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
     authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',

@@ -32,6 +32,11 @@ module.exports = {
             client_secret: 'e06c2ba9269d4f018ff616af65350155',
             redirect_uri: 'http://localhost:3000/auth/oauth/spotify/callback'
         },
+        gitlab: {
+            client_id: '5404cab859b0d18311af7afc26976002bb104971dc26fa2faf6ace8c48a03f20',
+            client_secret: '5cf336b7feebb665c4db605d70e4bed8d66bd76f34cd40f3157e8da7226966a3',
+            redirect_uri: 'http://localhost:3000/auth/oauth/gitlab/callback'
+        }
     },
 
     android: {
@@ -64,6 +69,12 @@ module.exports = {
             client_id: '414833544494-3mp46u11g0k3d1hn13nbmu27b85uvuea.apps.googleusercontent.com',
             client_secret: '',
             redirect_uri: 'com.googleusercontent.apps.414833544494-3mp46u11g0k3d1hn13nbmu27b85uvuea:/oauth2redirect'
+        },
+        gitlab: {
+            client_id: 'e653a83edb97234ecdfd6a9c847d66425ca5d17546b381c6e4724956b1a704ed',
+            client_secret: 'd48c7f35b0996140ba9dc892d9b3f9a5a8410a641f50f6434e21eaf38ed88e98',
+            redirect_uri: 'area-android://auth/gitlab'
         }
+
     }
 };

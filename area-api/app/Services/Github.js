@@ -13,6 +13,7 @@ module.exports = {
     iconName: 'github-circle',
     foreground: '#ffffff',
     background: '#211f1f',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: true,
     codeFlow: true,
     authorizeUrl: "https://github.com/login/oauth/authorize",

@@ -94,5 +94,9 @@ module.exports = {
             }
         ],
         reactions: []
+    },
+    gitlab: {
+        actions: [],
+        reactions: []
     }
 };
