@@ -102,5 +102,31 @@ export default {
                 Authorization: `Bearer ${area.reaction.service.oauth_token}`
             }
         })
+    },
+
+    async spotify_set_volume(area, ctx) {
+        console.log("SET VOLUME");
+        const device = await getDevice(area, ctx);
+        
+        if (device == undefined || !device.is_active) {
+            console.log("Device unknown or inactive");
+            return;
+        }
+
+        if (area.reaction.args.volume_percent < 0 || area.reaction.args.volume_percent > 100) {
+            console.log("Volume percentage must be between 0 and 100");
+            return;
+        }
+
+        const paramsUrl = 'volume_percent=' + area.reaction.args.volume_percent + '&device_id=' + device.id;
+        const setVolumeUrl = 'https://api.spotify.com/v1/me/player/volume?'
+        const url = setVolumeUrl + paramsUrl;
+
+        await ctx._axios.put(url, null, {
+            headers: {
+                Authorization: `Bearer ${area.reaction.service.oauth_token}`
+            }
+        });
+
     }
 };

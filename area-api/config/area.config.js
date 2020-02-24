@@ -143,6 +143,15 @@ module.exports = {
                 params: {
                     device: 'string'
                 }
+            },
+            {
+                name: "spotify_set_volume",
+                displayName: 'Set volume',
+                description: 'Change the volume (percentage)',
+                params: {
+                    device: 'string',
+                    volume_percent: 'integer'
+                }
             }
         ]
     },
