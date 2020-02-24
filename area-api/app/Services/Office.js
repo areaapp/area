@@ -19,7 +19,9 @@ module.exports = {
     scopeSeparator: '%20',
     scopes: [
         'User.Read',
-        'mail.read'
+        'mail.read',
+        'mail.send',
+        'Mail.ReadWrite'
     ],
 
     async getUser(accessToken) {

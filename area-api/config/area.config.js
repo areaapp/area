@@ -37,14 +37,6 @@ module.exports = {
                     subject: 'string',
                     content: 'string'
                 }
-            },
-            {
-                name: 'google_youtube_add_to_watch_later',
-                displayName: 'Add to watch later',
-                description: 'Add a video to "watch later" playlist',
-                params: {
-                    video: 'string'
-                }
             }
         ]
     },
@@ -78,7 +70,18 @@ module.exports = {
                 params: {}
             }
         ],
-        reactions: []
+        reactions: [
+            {
+                name: 'office_outlook_send_email',
+                displayName: 'Send email with Outlook',
+                description: 'Send email with Outlook',
+                params: {
+                    to: 'string',
+                    subject: 'string',
+                    content: 'string'
+                }
+            },
+        ]
     },
     twitch: {
         actions: [
