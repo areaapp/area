@@ -5,39 +5,39 @@ const querystring = require('querystring');
 
 module.exports = {
     authType: 'oauth',
-    name: 'spotify',
-    displayName: 'Spotify',
+    name: 'gitlab',
+    displayName: 'Gitlab',
     description: 'plus tard',
-    baseUrl: 'www.spotify.com',
-    iconName: 'spotify',
+    baseUrl: 'www.gitlab.com',
+    iconName: 'gitlab',
     foreground: '#ffffff',
-    background: '#1ed761',
+    background: '#7289da',
     irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
-    authorizeUrl: "https://accounts.spotify.com/authorize",
-    accessTokenUrl: 'https://accounts.spotify.com/api/token',
+    authorizeUrl: "https://gitlab.com/oauth/authorize",
+    accessTokenUrl: 'https://gitlab.com/oauth/token',
     scopeSeparator: '%20',
     scopes: [
-        'user-read-email'
+        'profile',
+        'read_user'
     ],
 
     async getUser(accessToken) {
         try {
-            const url = "https://api.spotify.com/v1/me";
+            const url = "https://gitlab.com/api/v4/user";
             const response = await axios.get(url, {
-                headers: {
-                    'Authorization': 'Bearer ' + accessToken,
-                }
+                headers: {'Authorization': 'Bearer ' + accessToken}
             });
 
             const user = {
-                username: response.data.display_name,
+                username: response.data.username,
                 email: response.data.email
             };
             return user;
         } catch (err) {
             console.log(err);
+            return null;
         }
     }
 }

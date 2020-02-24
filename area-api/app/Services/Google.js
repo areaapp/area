@@ -12,6 +12,7 @@ module.exports = {
     iconName: 'google',
     foreground: '#ffffff',
     background: '#3484f0',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
     authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",

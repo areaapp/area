@@ -173,6 +173,10 @@ class OAuthController {
 
 
     getServiceAuthorizeUrl(oauthHelper, service, clientType) {
+        if (service.irregularAuthorizeUrl) {
+            return service.getAuthorizeUrl(oauthHelper, clientType);
+        }
+
         const oauthService = oauthHelper.getService(clientType, service.name);
 
         const scopes = service.scopes.length > 0 ? 'scope=' + service.scopes.join(service.scopeSeparator) : '';
@@ -209,6 +213,7 @@ class OAuthController {
             const response = await axios.post(service.accessTokenUrl, data);
             return response.data.access_token;
         } catch (err) {
+            console.log(err);
             return null;
         }
     }
