@@ -160,5 +160,34 @@ export default {
             ctx.db.updateBuffer(area.action.id, data.data[0].id);
             await reaction(area, ctx);
         }
-    }
+    },
+
+    async twitch_new_clip_of_streamer(area, reaction, ctx) {
+        const streamerId = await getStreamerId(ctx._axios, area.action.service.oauth_token, area.action.args.streamer);
+
+        if (streamerId === null) {
+            // Streamer not found
+            return;
+        }
+
+        const url = 'https://api.twitch.tv/helix/clips?first=1&broadcaster_id=' + streamerId;
+        const { data } = await ctx._axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${area.action.service.oauth_token}`
+            }
+        });
+
+        if (data.data.length === 0) {
+            // No videos
+            return;
+        }
+
+        const lastId = area.action.buffer;
+        if (lastId === null) {
+            ctx.db.updateBuffer(area.action.id, data.data[0].id);
+        } else if (data.data[0].id !== lastId) {
+            ctx.db.updateBuffer(area.action.id, data.data[0].id);
+            await reaction(area, ctx);
+        }
+    },
 };
