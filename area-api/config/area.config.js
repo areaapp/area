@@ -59,7 +59,16 @@ module.exports = {
                 }
             }
         ],
-        reactions: []
+        reactions: [
+            {
+                name: 'spotify_pause_music',
+                displayName: 'Pause music',
+                description: 'The current music is stopped',
+                params: {
+                    device: 'string'
+                }
+            }
+        ]
     },
     office: {
         actions: [
