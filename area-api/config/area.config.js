@@ -2,12 +2,72 @@
 
 module.exports = {
     dropbox: {
-        actions: [],
-        reactions: []
+        actions: [
+            {
+                name: 'dropbox_new_content',
+                displayName: 'New content on Dropbox',
+                description: 'New content on Dropbox',
+                params: {
+                }
+            }
+        ],
+        reactions: [
+            {
+                name: 'dropbox_add_folder',
+                displayName: 'Create folder',
+                description: 'Create a new folder on Dropbox',
+                params: {
+                    path: 'string'
+                }
+            }
+        ]
     },
     github: {
-        actions: [],
-        reactions: []
+        actions: [
+            {
+                name: 'github_new_repo_of_user',
+                displayName: 'New repository of a user',
+                description: 'Triggered when a new repository is created',
+                params: {
+                    user: 'string'
+                }
+            }
+        ],
+        reactions: [
+            {
+                name: 'github_create_issue',
+                displayName: 'Create an issue',
+                description: 'Create an issue',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    title: 'string',
+                    body: 'string'
+                }
+            },
+            {
+                name: 'github_add_reaction_issue_comment',
+                displayName: 'Add reaction to issue comment',
+                description: 'Add reaction to issue comment',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    commentId: 'string',
+                    reaction: 'string'
+                }
+            },
+            {
+                name: 'github_add_reaction_issue',
+                displayName: 'Add reaction to issue',
+                description: 'Add reaction to issue',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    issueNumber: 'integer',
+                    reaction: 'string'
+                }
+            }
+        ]
     },
     google: {
         actions: [
@@ -16,14 +76,6 @@ module.exports = {
                 displayName: 'New email on Gmail',
                 description: 'Triggered when a email is received on gmail',
                 params: {
-                }
-            },
-            {
-                name: 'google_youtube_new_video',
-                displayName: 'New video uploaded on a Youtube channel',
-                description: 'Triggered when a video is uploaded on youtube channel',
-                params: {
-                    channel: 'string'
                 }
             }
         ],
@@ -36,14 +88,6 @@ module.exports = {
                     to: 'string',
                     subject: 'string',
                     content: 'string'
-                }
-            },
-            {
-                name: 'google_youtube_add_to_watch_later',
-                displayName: 'Add to watch later',
-                description: 'Add a video to "watch later" playlist',
-                params: {
-                    video: 'string'
                 }
             }
         ]
@@ -95,7 +139,18 @@ module.exports = {
                 params: {}
             }
         ],
-        reactions: []
+        reactions: [
+            {
+                name: 'office_outlook_send_email',
+                displayName: 'Send email with Outlook',
+                description: 'Send email with Outlook',
+                params: {
+                    to: 'string',
+                    subject: 'string',
+                    content: 'string'
+                }
+            },
+        ]
     },
     twitch: {
         actions: [
@@ -149,5 +204,29 @@ module.exports = {
             }
         ],
         reactions: []
+    },
+    gitlab: {
+        actions: [
+            {
+                name: 'gitlab_new_project',
+                displayName: 'New project',
+                description: 'A project has been created',
+                params: {
+                    user: 'string'
+                }
+            }
+        ],
+        reactions: [
+            {
+                name: 'gitlab_add_project',
+                displayName: 'Add project',
+                description: 'Add project on GitLab',
+                params: {
+                    name: 'string',
+                    description: 'string',
+                    visibility: 'string'
+                }
+            }
+        ]
     }
 };

@@ -13,13 +13,15 @@ module.exports = {
     iconName: 'github-circle',
     foreground: '#ffffff',
     background: '#211f1f',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: true,
     codeFlow: true,
     authorizeUrl: "https://github.com/login/oauth/authorize",
     accessTokenUrl: 'https://github.com/login/oauth/access_token',
     scopeSeparator: '%20',
     scopes: [
-        'user'
+        'user',
+        'repo'
     ],
 
     async getAccessToken(oauthHelper, code, clientType) {

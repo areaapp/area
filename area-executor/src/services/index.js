@@ -4,4 +4,5 @@ export default {
     twitch: require('./twitch'),
     office: require('./office'),
     spotify: require('./spotify'),
+    dropbox: require('./dropbox'),
 };

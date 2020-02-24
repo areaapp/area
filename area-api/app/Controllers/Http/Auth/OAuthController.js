@@ -6,6 +6,7 @@ const Service = use('App/Models/Service');
 const User = use('App/Models/User');
 const axios = require('axios');
 const querystring = require('querystring');
+const Mail = use('Mail');
 
 class OAuthController {
     getAuthorizeUrl({ request, params, response }) {
@@ -65,6 +66,14 @@ class OAuthController {
         try {
             const user = await User.create(userInfos);
             await user.services().create(serviceInfos);
+
+            await Mail.send('emails.welcome', user.toJSON(), (message) => {
+                message
+                    .to(userInfos.email)
+                    .from('jonathan.lemoine@epitech.eu')
+                    .subject('Welcome to AREA')
+            });
+
             return response.json({
                 status: 'success',
                 data: await auth.generate(user)
@@ -164,6 +173,10 @@ class OAuthController {
 
 
     getServiceAuthorizeUrl(oauthHelper, service, clientType) {
+        if (service.irregularAuthorizeUrl) {
+            return service.getAuthorizeUrl(oauthHelper, clientType);
+        }
+
         const oauthService = oauthHelper.getService(clientType, service.name);
 
         const scopes = service.scopes.length > 0 ? 'scope=' + service.scopes.join(service.scopeSeparator) : '';
@@ -200,6 +213,7 @@ class OAuthController {
             const response = await axios.post(service.accessTokenUrl, data);
             return response.data.access_token;
         } catch (err) {
+            console.log(err);
             return null;
         }
     }

@@ -5,38 +5,39 @@ const querystring = require('querystring');
 
 module.exports = {
     authType: 'oauth',
-    name: 'google',
-    displayName: 'Google',
+    name: 'gitlab',
+    displayName: 'Gitlab',
     description: 'plus tard',
-    baseUrl: 'www.google.com',
-    iconName: 'google',
+    baseUrl: 'www.gitlab.com',
+    iconName: 'gitlab',
     foreground: '#ffffff',
-    background: '#3484f0',
+    background: '#7289da',
     irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
-    authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
-    accessTokenUrl: 'https://oauth2.googleapis.com/token',
+    authorizeUrl: "https://gitlab.com/oauth/authorize",
+    accessTokenUrl: 'https://gitlab.com/oauth/token',
     scopeSeparator: '%20',
     scopes: [
-        encodeURIComponent('https://mail.google.com'),
         'profile',
-        'email'
+        'read_user',
+        'api'
     ],
 
     async getUser(accessToken) {
         try {
-            const url = "https://people.googleapis.com/v1/people/me?personFields=emailAddresses%2Cnames";
+            const url = "https://gitlab.com/api/v4/user";
             const response = await axios.get(url, {
                 headers: {'Authorization': 'Bearer ' + accessToken}
             });
 
             const user = {
-                username: response.data.names[0].displayName,
-                email: response.data.emailAddresses[0].value
+                username: response.data.username,
+                email: response.data.email
             };
             return user;
         } catch (err) {
+            console.log(err);
             return null;
         }
     }

@@ -12,6 +12,7 @@ module.exports = {
     iconName: 'office',
     foreground: '#dc3e15',
     background: '#ffffff',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
     authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
@@ -19,7 +20,9 @@ module.exports = {
     scopeSeparator: '%20',
     scopes: [
         'User.Read',
-        'mail.read'
+        'mail.read',
+        'mail.send',
+        'Mail.ReadWrite'
     ],
 
     async getUser(accessToken) {
