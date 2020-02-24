@@ -6,7 +6,16 @@ module.exports = {
         reactions: []
     },
     github: {
-        actions: [],
+        actions: [
+            {
+                name: 'github_new_repo_of_user',
+                displayName: 'New repository of a user',
+                description: 'Triggered when a new repository is created',
+                params: {
+                    user: 'string'
+                }
+            }
+        ],
         reactions: []
     },
     google: {
@@ -16,14 +25,6 @@ module.exports = {
                 displayName: 'New email on Gmail',
                 description: 'Triggered when a email is received on gmail',
                 params: {
-                }
-            },
-            {
-                name: 'google_youtube_new_video',
-                displayName: 'New video uploaded on a Youtube channel',
-                description: 'Triggered when a video is uploaded on youtube channel',
-                params: {
-                    channel: 'string'
                 }
             }
         ],
