@@ -1,4 +1,5 @@
 export default {
     github: require('./github'),
-    google: require('./google')
+    google: require('./google'),
+    twitch: require('./twitch')
 };

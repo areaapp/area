@@ -84,12 +84,19 @@ module.exports = {
                 }
             },
             {
-                name: 'twitch_game_has_x_viewers',
-                displayName: 'Game has X viewers',
-                description: 'Triggered when a game exceeds X viewers on Twitch',
+                name: 'twitch_new_follow',
+                displayName: 'New follower',
+                description: 'A streamer has a new follower',
                 params: {
-                    game: 'string',
-                    viewers: 'integer'
+                    streamer: 'string',
+                }
+            },
+            {
+                name: 'twitch_new_video_of_streamer',
+                displayName: 'New video of a streamer',
+                description: 'A new video of a streamer is available',
+                params: {
+                    streamer: 'string'
                 }
             }
         ],
