@@ -14,7 +14,7 @@ module.exports = {
             {
                 name: 'google_gmail_new_email',
                 displayName: 'New email on Gmail',
-                description: 'Triggered when a email is received in gmail',
+                description: 'Triggered when a email is received on gmail',
                 params: {
                 }
             },
@@ -79,7 +79,14 @@ module.exports = {
         ]
     },
     office: {
-        actions: [],
+        actions: [
+            {
+                name: 'office_outlook_new_email',
+                displayName: 'new email on Outlook',
+                description: 'Triggered when a email is received on outlook',
+                params: {}
+            }
+        ],
         reactions: []
     },
     twitch: {
