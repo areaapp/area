@@ -127,6 +127,22 @@ module.exports = {
                 params: {
                     device: 'string'
                 }
+            },
+            {
+                name: "spotify_next_music",
+                displayName: 'Next music',
+                description: 'The device skip to the next music in queue',
+                params: {
+                    device: 'string'
+                }
+            },
+            {
+                name: "spotify_previous_music",
+                displayName: 'Previous music',
+                description: 'The device skip to the previous music in queue',
+                params: {
+                    device: 'string'
+                }
             }
         ]
     },

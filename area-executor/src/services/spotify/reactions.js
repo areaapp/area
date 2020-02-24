@@ -66,5 +66,41 @@ export default {
                 Authorization: `Bearer ${area.reaction.service.oauth_token}`
             }
         })
+    },
+
+    async spotify_next_music(area, ctx) {
+        console.log("NEXT MUSIC");
+        const device = await getDevice(area, ctx);
+
+        if (device == undefined || !device.is_active) {
+            console.log("Device unknown or inactive");
+            return;
+        }
+
+        const nextTrackUrl = 'https://api.spotify.com/v1/me/player/next?device_id=' + device.id;
+
+        await ctx._axios.post(nextTrackUrl, null, {
+            headers: {
+                Authorization: `Bearer ${area.reaction.service.oauth_token}`
+            }
+        })
+    },
+
+    async spotify_previous_music(area, ctx) {
+        console.log("PREVIOUS MUSIC");
+        const device = await getDevice(area, ctx);
+
+        if (device == undefined || !device.is_active) {
+            console.log("Device unknown or inactive");
+            return;
+        }
+
+        const previousTrackUrl = 'https://api.spotify.com/v1/me/player/previous?device_id=' + device.id;
+
+        await ctx._axios.post(previousTrackUrl, null, {
+            headers: {
+                Authorization: `Bearer ${area.reaction.service.oauth_token}`
+            }
+        })
     }
 };
