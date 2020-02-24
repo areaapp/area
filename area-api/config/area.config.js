@@ -106,6 +106,14 @@ module.exports = {
                 params: {
                     game: 'string'
                 }
+            },
+            {
+                name: 'twitch_new_clip_of_game',
+                displayName: 'New clip of a game',
+                description: 'A new clip of a game is available',
+                params: {
+                    game: 'string'
+                }
             }
         ],
         reactions: []

@@ -131,5 +131,34 @@ export default {
             ctx.db.updateBuffer(area.action.id, data.data[0].id);
             await reaction(area, ctx);
         }
+    },
+
+    async twitch_new_clip_of_game(area, reaction, ctx) {
+        const gameId = await getGameId(ctx._axios, area.action.service.oauth_token, area.action.args.game);
+
+        if (gameId === null) {
+            // Game not found
+            return;
+        }
+
+        const url = 'https://api.twitch.tv/helix/clips?first=1&game_id=' + gameId;
+        const { data } = await ctx._axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${area.action.service.oauth_token}`
+            }
+        });
+
+        if (data.data.length === 0) {
+            // No videos
+            return;
+        }
+
+        const lastId = area.action.buffer;
+        if (lastId === null) {
+            ctx.db.updateBuffer(area.action.id, data.data[0].id);
+        } else if (data.data[0].id !== lastId) {
+            ctx.db.updateBuffer(area.action.id, data.data[0].id);
+            await reaction(area, ctx);
+        }
     }
 };
