@@ -14,5 +14,35 @@ export default {
                 Authorization: `token ${area.reaction.service.oauth_token}`
             }
         });
+    },
+
+    async github_add_reaction_issue_comment(area, ctx) {
+        const args = area.reaction.args;
+        const url = `https://api.github.com/repos/${args.owner}/${args.repo}/issues/comments/${args.commentId}/reactions`;
+
+        await ctx._axios.post(url, {
+            content: args.reaction
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/vnd.github.squirrel-girl-preview+json',
+                Authorization: `token ${area.reaction.service.oauth_token}`
+            }
+        });
+    },
+
+    async github_add_reaction_issue(area, ctx) {
+        const args = area.reaction.args;
+        const url = `https://api.github.com/repos/${args.owner}/${args.repo}/issues/${args.issueNumber}/reactions`;
+
+        await ctx._axios.post(url, {
+            content: args.reaction
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/vnd.github.squirrel-girl-preview+json',
+                Authorization: `token ${area.reaction.service.oauth_token}`
+            }
+        });
     }
 };

@@ -2,8 +2,25 @@
 
 module.exports = {
     dropbox: {
-        actions: [],
-        reactions: []
+        actions: [
+            {
+                name: 'dropbox_new_content',
+                displayName: 'New content on Dropbox',
+                description: 'New content on Dropbox',
+                params: {
+                }
+            }
+        ],
+        reactions: [
+            {
+                name: 'dropbox_add_folder',
+                displayName: 'Create folder',
+                description: 'Create a new folder on Dropbox',
+                params: {
+                    path: 'string'
+                }
+            }
+        ]
     },
     github: {
         actions: [
@@ -26,6 +43,28 @@ module.exports = {
                     repo: 'string',
                     title: 'string',
                     body: 'string'
+                }
+            },
+            {
+                name: 'github_add_reaction_issue_comment',
+                displayName: 'Add reaction to issue comment',
+                description: 'Add reaction to issue comment',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    commentId: 'string',
+                    reaction: 'string'
+                }
+            },
+            {
+                name: 'github_add_reaction_issue',
+                displayName: 'Add reaction to issue',
+                description: 'Add reaction to issue',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    issueNumber: 'integer',
+                    reaction: 'string'
                 }
             }
         ]
