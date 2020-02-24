@@ -198,7 +198,27 @@ module.exports = {
         reactions: []
     },
     gitlab: {
-        actions: [],
-        reactions: []
+        actions: [
+            {
+                name: 'gitlab_new_project',
+                displayName: 'New project',
+                description: 'A project has been created',
+                params: {
+                    user: 'string'
+                }
+            }
+        ],
+        reactions: [
+            {
+                name: 'gitlab_add_project',
+                displayName: 'Add project',
+                description: 'Add project on GitLab',
+                params: {
+                    name: 'string',
+                    description: 'string',
+                    visibility: 'string'
+                }
+            }
+        ]
     }
 };
