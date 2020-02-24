@@ -12,6 +12,20 @@ async function getStreamerId(axios, oauthToken, streamer) {
     return users.data.data[0].id;
 }
 
+async function getGameId(axios, oauthToken, game) {
+    const url = 'https://api.twitch.tv/helix/games?name=' + game;
+    const games = await axios.get(url, {
+        headers: {
+            Authorization: `Bearer ${oauthToken}`
+        }
+    });
+
+    if (games.data.data.length === 0) {
+        return null;
+    }
+    return games.data.data[0].id;
+}
+
 export default {
     async twitch_streamer_connected(area, reaction, ctx) {
         return;
@@ -70,6 +84,35 @@ export default {
         }
 
         const url = 'https://api.twitch.tv/helix/videos?first=1&user_id=' + streamerId;
+        const { data } = await ctx._axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${area.action.service.oauth_token}`
+            }
+        });
+
+        if (data.data.length === 0) {
+            // No videos
+            return;
+        }
+
+        const lastId = area.action.buffer;
+        if (lastId === null) {
+            ctx.db.updateBuffer(area.action.id, data.data[0].id);
+        } else if (data.data[0].id !== lastId) {
+            ctx.db.updateBuffer(area.action.id, data.data[0].id);
+            await reaction(area, ctx);
+        }
+    },
+
+    async twitch_new_video_of_game(area, reaction, ctx) {
+        const gameId = await getGameId(ctx._axios, area.action.service.oauth_token, area.action.args.game);
+
+        if (gameId === null) {
+            // Game not found
+            return;
+        }
+
+        const url = 'https://api.twitch.tv/helix/videos?first=1&game_id=' + gameId;
         const { data } = await ctx._axios.get(url, {
             headers: {
                 Authorization: `Bearer ${area.action.service.oauth_token}`

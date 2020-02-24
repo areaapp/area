@@ -98,6 +98,14 @@ module.exports = {
                 params: {
                     streamer: 'string'
                 }
+            },
+            {
+                name: 'twitch_new_video_of_game',
+                displayName: 'New video of a game',
+                description: 'A new video of a game is available',
+                params: {
+                    game: 'string'
+                }
             }
         ],
         reactions: []
