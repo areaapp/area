@@ -75,6 +75,14 @@ module.exports = {
                 params: {
                     device: 'string'
                 }
+            },
+            {
+                name: 'spotify_resume_music',
+                displayName: 'Resume/start music',
+                description: 'The current music is resume/start',
+                params: {
+                    device: 'string'
+                }
             }
         ]
     },
