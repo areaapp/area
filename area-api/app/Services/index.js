@@ -8,4 +8,5 @@ module.exports = {
     'dropbox': require('./Dropbox.js'),
     'spotify': require('./Spotify.js'),
     'gitlab': require('./Gitlab.js'),
+    'openweathermap': require('./OpenWeatherMap.js'),
 };
