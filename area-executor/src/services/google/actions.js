@@ -1,6 +1,5 @@
 export default {
     async google_gmail_new_email(area, reaction, ctx) {
-        console.log('NEW MAIL');
         const email = area.user.email;
         const route = `https://www.googleapis.com/gmail/v1/users/me/messages?q=is:unread`;
         const { data } = await ctx._axios.get(route, {
