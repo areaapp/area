@@ -11,8 +11,8 @@
                     class="mx-auto"
                 />
                 <div
-                    v-if="loaded"
                     v-for="service in services"
+                    v-if="loaded && service.authType !== 'none'"
                 >
                     <v-tooltip top>
                         <template v-slot:activator="{ on }">
