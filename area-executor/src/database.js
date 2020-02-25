@@ -91,11 +91,35 @@ export default class Database {
      * @function updateBuffer
      * Update buffer of an action
      *
-     * @param {String} areaId
+     * @param {String} actionId
      * @param {String} value
      */
     async updateBuffer(actionId, value) {
         await this._updateWhere('actions', 'buffer', value, `id = ${actionId}`);
+    }
+
+    /**
+     * @function updateLastExecution
+     * Update last_execution field of an area
+     *
+     * @param {String} areaId
+     */
+    async updateLastExecution(areaId) {
+        await this._updateWhere('areas', 'last_execution', new Date().toISOString(), `id = ${areaId}`);
+    }
+
+    /**
+     * @function createNotification
+     * Create a notification
+     *
+     * @param {String} userId
+     * @param {String} message
+     */
+    async createNotification(userId, message) {
+        const date = new Date().toISOString();
+        let req = 'INSERT INTO notifications (user_id, message, readed, created_at)';
+        req += ` VALUES (${userId}, '${message}', 'FALSE', '${date}')`;
+        await this._request(req);
     }
 
     /**
