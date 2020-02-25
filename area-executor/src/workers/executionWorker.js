@@ -10,20 +10,19 @@ import Database from '../database.js';
 
 
 async function executeArea(area, ctx) {
-    console.log('EXECUTE AREA');
     const action = services[area.action.service_name].default.actions.default[area.action.name];
     const reaction = services[area.reaction.service_name].default.reactions.default[area.reaction.name];
 
     try {
         await action(area, reaction, ctx);
     } catch (e) {
+        ctx.notifier.notifie(area.user.id, `${area.name} execution failure`);
         consola.error(e.message);
     }
 }
 
 
 (async function executionWorker() {
-    console.log('Thread spawned');
     const areas = workerData.areas;
     const services = workerData.services;
     const dbConfig = workerData.dbConfig;
