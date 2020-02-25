@@ -106,6 +106,11 @@ class LogWithServicesFragment : Fragment() {
         while (iter.hasNext()) {
             val serviceName = iter.next()
             val service: JSONObject = data.getJSONObject(serviceName)
+
+            if (service.getString("authType") == "none") {
+                continue
+            }
+
             val icon = service.getString("iconName").replace('-', '_').toUpperCase()
             var iconValue: MaterialDrawableBuilder.IconValue? = null
 
