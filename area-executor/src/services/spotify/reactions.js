@@ -39,6 +39,7 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     },
 
     async spotify_resume_music(area, ctx) {
@@ -66,6 +67,7 @@ export default {
             }
         })
         ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     },
 
     async spotify_next_music(area, ctx) {
@@ -84,6 +86,7 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     },
 
     async spotify_previous_music(area, ctx) {
@@ -102,6 +105,7 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     },
 
     async spotify_set_volume(area, ctx) {
@@ -127,5 +131,6 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     }
 };

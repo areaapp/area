@@ -15,7 +15,6 @@ async function executeArea(area, ctx) {
 
     try {
         await action(area, reaction, ctx);
-        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     } catch (e) {
         ctx.notifier.notifie(area.user.id, `${area.name} execution failure`);
         consola.error(e.message);

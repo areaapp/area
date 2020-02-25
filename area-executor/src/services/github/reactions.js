@@ -15,6 +15,7 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     },
 
     async github_add_reaction_issue_comment(area, ctx) {
@@ -31,6 +32,7 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     },
 
     async github_add_reaction_issue(area, ctx) {
@@ -47,5 +49,6 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     }
 };
