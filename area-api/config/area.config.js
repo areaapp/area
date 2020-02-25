@@ -2,28 +2,80 @@
 
 module.exports = {
     dropbox: {
-        actions: [],
-        reactions: []
+        actions: [
+            {
+                name: 'dropbox_new_content',
+                displayName: 'New content on Dropbox',
+                description: 'New content on Dropbox',
+                params: {
+                }
+            }
+        ],
+        reactions: [
+            {
+                name: 'dropbox_add_folder',
+                displayName: 'Create folder',
+                description: 'Create a new folder on Dropbox',
+                params: {
+                    path: 'string'
+                }
+            }
+        ]
     },
     github: {
-        actions: [],
-        reactions: []
+        actions: [
+            {
+                name: 'github_new_repo_of_user',
+                displayName: 'New repository of a user',
+                description: 'Triggered when a new repository is created',
+                params: {
+                    user: 'string'
+                }
+            }
+        ],
+        reactions: [
+            {
+                name: 'github_create_issue',
+                displayName: 'Create an issue',
+                description: 'Create an issue',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    title: 'string',
+                    body: 'string'
+                }
+            },
+            {
+                name: 'github_add_reaction_issue_comment',
+                displayName: 'Add reaction to issue comment',
+                description: 'Add reaction to issue comment',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    commentId: 'string',
+                    reaction: 'string'
+                }
+            },
+            {
+                name: 'github_add_reaction_issue',
+                displayName: 'Add reaction to issue',
+                description: 'Add reaction to issue',
+                params: {
+                    owner: 'string',
+                    repo: 'string',
+                    issueNumber: 'integer',
+                    reaction: 'string'
+                }
+            }
+        ]
     },
     google: {
         actions: [
             {
                 name: 'google_gmail_new_email',
                 displayName: 'New email on Gmail',
-                description: 'Triggered when a email is received in gmail',
+                description: 'Triggered when a email is received on gmail',
                 params: {
-                }
-            },
-            {
-                name: 'google_youtube_new_video',
-                displayName: 'New video uploaded on a Youtube channel',
-                description: 'Triggered when a video is uploaded on youtube channel',
-                params: {
-                    channel: 'string'
                 }
             }
         ],
@@ -36,14 +88,6 @@ module.exports = {
                     to: 'string',
                     subject: 'string',
                     content: 'string'
-                }
-            },
-            {
-                name: 'google_youtube_add_to_watch_later',
-                displayName: 'Add to watch later',
-                description: 'Add a video to "watch later" playlist',
-                params: {
-                    video: 'string'
                 }
             }
         ]
@@ -67,11 +111,71 @@ module.exports = {
                 }
             }
         ],
-        reactions: []
+        reactions: [
+            {
+                name: 'spotify_pause_music',
+                displayName: 'Pause music',
+                description: 'The current music is stopped',
+                params: {
+                    device: 'string'
+                }
+            },
+            {
+                name: 'spotify_resume_music',
+                displayName: 'Resume/start music',
+                description: 'The current music is resume/start',
+                params: {
+                    device: 'string'
+                }
+            },
+            {
+                name: "spotify_next_music",
+                displayName: 'Next music',
+                description: 'The device skip to the next music in queue',
+                params: {
+                    device: 'string'
+                }
+            },
+            {
+                name: "spotify_previous_music",
+                displayName: 'Previous music',
+                description: 'The device skip to the previous music in queue',
+                params: {
+                    device: 'string'
+                }
+            },
+            {
+                name: "spotify_set_volume",
+                displayName: 'Set volume',
+                description: 'Change the volume (percentage)',
+                params: {
+                    device: 'string',
+                    volume_percent: 'integer'
+                }
+            }
+        ]
     },
     office: {
-        actions: [],
-        reactions: []
+        actions: [
+            {
+                name: 'office_outlook_new_email',
+                displayName: 'new email on Outlook',
+                description: 'Triggered when a email is received on outlook',
+                params: {}
+            }
+        ],
+        reactions: [
+            {
+                name: 'office_outlook_send_email',
+                displayName: 'Send email with Outlook',
+                description: 'Send email with Outlook',
+                params: {
+                    to: 'string',
+                    subject: 'string',
+                    content: 'string'
+                }
+            },
+        ]
     },
     twitch: {
         actions: [
@@ -84,23 +188,74 @@ module.exports = {
                 }
             },
             {
-                name: 'twitch_game_has_x_viewers',
-                displayName: 'Game has X viewers',
-                description: 'Triggered when a game exceeds X viewers on Twitch',
+                name: 'twitch_new_follow',
+                displayName: 'New follower',
+                description: 'A streamer has a new follower',
                 params: {
-                    game: 'string',
-                    viewers: 'integer'
+                    streamer: 'string',
+                }
+            },
+            {
+                name: 'twitch_new_video_of_streamer',
+                displayName: 'New video of a streamer',
+                description: 'A new video of a streamer is available',
+                params: {
+                    streamer: 'string'
+                }
+            },
+            {
+                name: 'twitch_new_video_of_game',
+                displayName: 'New video of a game',
+                description: 'A new video of a game is available',
+                params: {
+                    game: 'string'
+                }
+            },
+            {
+                name: 'twitch_new_clip_of_game',
+                displayName: 'New clip of a game',
+                description: 'A new clip of a game is available',
+                params: {
+                    game: 'string'
+                }
+            },
+            {
+                name: 'twitch_new_clip_of_streamer',
+                displayName: 'New clip of a streamer',
+                description: 'A new clip of a streamer is available',
+                params: {
+                    streamer: 'string'
                 }
             }
         ],
         reactions: []
     },
     gitlab: {
-        actions: [],
-        reactions: []
+        actions: [
+            {
+                name: 'gitlab_new_project',
+                displayName: 'New project',
+                description: 'A project has been created',
+                params: {
+                    user: 'string'
+                }
+            }
+        ],
+        reactions: [
+            {
+                name: 'gitlab_add_project',
+                displayName: 'Add project',
+                description: 'Add project on GitLab',
+                params: {
+                    name: 'string',
+                    description: 'string',
+                    visibility: 'string'
+                }
+            }
+        ]
     },
     openweathermap: {
         actions: [],
-        reactions: [],
+        reactions: []
     }
 };

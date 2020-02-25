@@ -20,7 +20,8 @@ module.exports = {
     scopeSeparator: '%20',
     scopes: [
         'profile',
-        'read_user'
+        'read_user',
+        'api'
     ],
 
     async getUser(accessToken) {

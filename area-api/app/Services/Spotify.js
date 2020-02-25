@@ -19,7 +19,9 @@ module.exports = {
     accessTokenUrl: 'https://accounts.spotify.com/api/token',
     scopeSeparator: '%20',
     scopes: [
-        'user-read-email'
+        'user-read-email',
+        'user-read-playback-state',
+        'user-modify-playback-state',
     ],
 
     async getUser(accessToken) {

@@ -19,7 +19,10 @@ module.exports = {
     accessTokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
     scopeSeparator: '%20',
     scopes: [
-        'User.Read'
+        'User.Read',
+        'mail.read',
+        'mail.send',
+        'Mail.ReadWrite'
     ],
 
     async getUser(accessToken) {

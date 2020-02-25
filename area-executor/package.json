@@ -6,14 +6,17 @@
     "type": "module",
     "scripts": {
         "build": "webpack --mode production && chmod +x dist/executor",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "webpack --dev && chmod +x dist/executor"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@std/esm": "^0.26.0",
         "axios": "^0.19.2",
         "consola": "^2.11.3",
         "dotenv": "^8.2.0",
+        "esm": "^3.2.25",
         "js-base64": "^2.5.2",
         "pg": "^7.18.1",
         "yargs": "^15.1.0"

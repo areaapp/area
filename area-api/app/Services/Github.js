@@ -20,7 +20,8 @@ module.exports = {
     accessTokenUrl: 'https://github.com/login/oauth/access_token',
     scopeSeparator: '%20',
     scopes: [
-        'user'
+        'user',
+        'repo'
     ],
 
     async getAccessToken(oauthHelper, code, clientType) {
