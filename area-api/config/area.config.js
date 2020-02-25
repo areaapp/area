@@ -97,5 +97,9 @@ module.exports = {
     gitlab: {
         actions: [],
         reactions: []
+    },
+    openweathermap: {
+        actions: [],
+        reactions: [],
     }
 };
