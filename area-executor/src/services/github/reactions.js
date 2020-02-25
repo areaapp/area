@@ -14,6 +14,7 @@ export default {
                 Authorization: `token ${area.reaction.service.oauth_token}`
             }
         });
+        ctx.db.updateLastExecution(area.id);
     },
 
     async github_add_reaction_issue_comment(area, ctx) {
@@ -29,6 +30,7 @@ export default {
                 Authorization: `token ${area.reaction.service.oauth_token}`
             }
         });
+        ctx.db.updateLastExecution(area.id);
     },
 
     async github_add_reaction_issue(area, ctx) {
@@ -44,5 +46,6 @@ export default {
                 Authorization: `token ${area.reaction.service.oauth_token}`
             }
         });
+        ctx.db.updateLastExecution(area.id);
     }
 };

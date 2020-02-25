@@ -39,6 +39,7 @@ export default {
                 Authorization: `Bearer ${area.reaction.service.oauth_token}`
             }
         });
+        ctx.db.updateLastExecution(area.id);
     },
 
     async spotify_resume_music(area, ctx) {
@@ -52,12 +53,12 @@ export default {
 
         const resumeMusicUrl = 'https://api.spotify.com/v1/me/player/play?device_id=' + device.id;
         const track = await getCurrentTrack(area, ctx);
-        
+
         if (track == undefined) {
             console.log("No track to resume");
             return;
         }
-        
+
         const uris = ["spotify:track:" + track.data.item.id];
         const data = {uris};
 
@@ -66,6 +67,7 @@ export default {
                 Authorization: `Bearer ${area.reaction.service.oauth_token}`
             }
         })
+        ctx.db.updateLastExecution(area.id);
     },
 
     async spotify_next_music(area, ctx) {
@@ -83,7 +85,8 @@ export default {
             headers: {
                 Authorization: `Bearer ${area.reaction.service.oauth_token}`
             }
-        })
+        });
+        ctx.db.updateLastExecution(area.id);
     },
 
     async spotify_previous_music(area, ctx) {
@@ -101,13 +104,14 @@ export default {
             headers: {
                 Authorization: `Bearer ${area.reaction.service.oauth_token}`
             }
-        })
+        });
+        ctx.db.updateLastExecution(area.id);
     },
 
     async spotify_set_volume(area, ctx) {
         console.log("SET VOLUME");
         const device = await getDevice(area, ctx);
-        
+
         if (device == undefined || !device.is_active) {
             console.log("Device unknown or inactive");
             return;
@@ -127,6 +131,6 @@ export default {
                 Authorization: `Bearer ${area.reaction.service.oauth_token}`
             }
         });
-
+        ctx.db.updateLastExecution(area.id);
     }
 };

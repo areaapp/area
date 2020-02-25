@@ -27,5 +27,6 @@ ${area.reaction.args.content}\
                 'Authorization': `Bearer ${area.reaction.service.oauth_token}`
             }
         });
+        ctx.db.updateLastExecution(area.id);
     }
 };
