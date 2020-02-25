@@ -31,6 +31,7 @@
                                 :color="allServices[i].foreground"
                                 :value="`${i}-${action.name}`"
                                 on-icon="mdi-check-circle"
+                                light
                             />
                         </Action>
                     </v-row>

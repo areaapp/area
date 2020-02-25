@@ -15,7 +15,9 @@ export const mutations = {
     },
 
     addService (state, service) {
-        state.services[service.name] = service;
+        const obj = Object.assign({}, state.services);
+        obj[service.name] = service;
+        state.services = obj;
         state.servicesNb += 1;
     },
 

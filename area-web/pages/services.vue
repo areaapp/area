@@ -101,10 +101,26 @@
              this.editService = serviceName;
          },
 
-         addService (serviceName) {
-             this.$store.dispatch('userAction/setAction', 'addService');
-             this.$store.dispatch('userAction/setUrl', this.$nuxt.$route.path);
-             this.$router.push(`/auth/oauth/${serviceName}/redirect`);
+         async addService (serviceName) {
+             if (this.services[serviceName].authType === 'oauth') {
+                 this.$store.dispatch('userAction/setAction', 'addService');
+                 this.$store.dispatch('userAction/setUrl', this.$nuxt.$route.path);
+                 this.$router.push(`/auth/oauth/${serviceName}/redirect`);
+             } else {
+                 try {
+                     await this.$store.dispatch('user/addService', {
+                         name: serviceName
+                     });
+                     this.$store.dispatch('messages/setSuccess', {
+                         message: `${this.services[serviceName].displayName} successfully added !`,
+                         icon: 'mdi-check-decagram'
+                     });
+                 } catch (e) {
+                     this.errors.push({
+                         message: e.response.data.message
+                     });
+                 }
+             }
          },
 
          async deleteService (serviceName) {
