@@ -7,7 +7,7 @@ module.exports = {
     authType: 'oauth',
     name: 'google',
     displayName: 'Google',
-    description: 'plus tard',
+    description: 'Really ? You don\'t know what Google is ?',
     baseUrl: 'www.google.com',
     iconName: 'google',
     foreground: '#ffffff',

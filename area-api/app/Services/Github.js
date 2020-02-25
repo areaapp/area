@@ -8,7 +8,7 @@ module.exports = {
     authType: 'oauth',
     name: 'github',
     displayName: 'Github',
-    description: 'plus tard',
+    description: 'GitHub is a Git repository hosting service, but it adds many of its own features.',
     baseUrl: 'www.github.com',
     iconName: 'github-circle',
     foreground: '#ffffff',

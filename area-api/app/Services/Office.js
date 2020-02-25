@@ -7,7 +7,7 @@ module.exports = {
     authType: 'oauth',
     name: 'office',
     displayName: 'Office 365',
-    decription: 'plus tard',
+    description: 'Microsoft Office 365 is a Software as a Service (SaaS) solution that includes Microsoft Office and other services, such as email and collaboration, from Microsoft\'s cloud server. Microsoft Office 365 provides desktop functionalities and is available by subscription.',
     baseUrl: 'www.office.com',
     iconName: 'office',
     foreground: '#ffffff',
