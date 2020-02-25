@@ -57,12 +57,17 @@ export const actions = {
         await dispatch('initUser');
     },
 
+    async pollData ({ dispatch }) {
+        await dispatch('user/getNotifications');
+    },
+
     async initUser ({ dispatch }) {
         if (this.$auth.loggedIn) {
             await dispatch('user/getServices');
             await dispatch('user/getAreas');
 
             dispatch('user/setAvatar', this.$auth.user.avatar);
+            setInterval(() => dispatch('pollData'), 10000);
         }
     },
 

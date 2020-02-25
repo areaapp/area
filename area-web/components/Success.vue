@@ -7,8 +7,6 @@
 
 <script>
  export default {
-     props: ['errors'],
-
      data () {
          return {
              message: '',
@@ -24,6 +22,24 @@
              this.message = success.message;
              this.icon = success.icon;
              this.snackInfo = true;
+         }
+     },
+
+     computed: {
+         success () {
+             return this.$store.state.messages.success;
+         }
+     },
+
+     watch: {
+         success () {
+             const success = this.$getSuccess();
+
+             if (success && success.message) {
+                 this.message = success.message;
+                 this.icon = success.icon;
+                 this.snackInfo = true;
+             }
          }
      }
  };

@@ -4,7 +4,8 @@ export const state = () => ({
     services: [],
     servicesNb: 0,
     areas: [],
-    avatar: null
+    avatar: null,
+    notifications: []
 });
 
 export const mutations = {
@@ -19,8 +20,6 @@ export const mutations = {
     },
 
     deleteService (state, serviceName) {
-        // const services = state.services;
-
         delete state.services[serviceName];
         state.servicesNb -= 1;
     },
@@ -33,12 +32,47 @@ export const mutations = {
         state.areas.push(area);
     },
 
+    updateArea (state, area) {
+        const i = state.areas.findIndex(a => a.id === area.id);
+        Object.assign(state.areas[i], area);
+    },
+
+    deleteArea (state, id) {
+        const i = state.areas.findIndex(a => a.id === id);
+        state.areas.splice(i, 1);
+    },
+
     setAvatar (state, value) {
         state.avatar = value;
+    },
+
+    setNotifications (state, value) {
+        state.notifications = value;
+    },
+
+    setNotification (state, notif) {
+        const i = state.areas.findIndex(n => n.id === notif.id);
+        Object.assign(state.areas[i], notif);
     }
 };
 
 export const actions = {
+    async getNotifications ({ commit }) {
+        const resNotifs = await this.$axios.$get('/me/notifications');
+
+        if (resNotifs.status === 'success') {
+            commit('setServices', resNotifs.data);
+        }
+    },
+
+    async readNotification ({ commit }, id) {
+        const resNotif = await this.$axios.$put(`/me/notification/${id}`);
+
+        if (resNotif.status === 'success') {
+            commit('setService', resNotif.data);
+        }
+    },
+
     async getServices ({ commit }) {
         const resServices = await this.$axios.$get('/me/services');
 
@@ -63,7 +97,27 @@ export const actions = {
         }
     },
 
-    async addService ({ commit }, { name, authCode, accessToken }) {
+    async updateArea ({ commit }, { id, action_args, reaction_args, name }) { //eslint-disable-line
+        const resArea = await this.$axios.$put(`/me/area/${id}`, {
+            action_args,
+            reaction_args,
+            name
+        });
+
+        if (resArea.status === 'success') {
+            commit('updateArea', resArea.data);
+        }
+    },
+
+    async deleteArea ({ commit }, id) {
+        const resArea = await this.$axios.$delete(`/me/area/${id}`);
+
+        if (resArea.status === 'success') {
+            commit('deleteArea', id);
+        }
+    },
+
+    async addService ({ commit }, { name, authCode, accessToken }) { //eslint-disable-line
         const resService = await this.$axios.$post(`/me/services/${name}`, {
             authCode,
             accessToken,
