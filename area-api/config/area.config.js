@@ -263,6 +263,15 @@ module.exports = {
                 params: {
                     city: 'string'
                 }
+            },
+            {
+                name: 'openweathermap_wind_exceeds_speed',
+                displayName: 'Wind exceeds X meter/sec in a city',
+                description: 'Triggered when the wind speed exceeds a certain value in a city',
+                params: {
+                    city: 'string',
+                    speed: 'integer'
+                }
             }
         ],
         reactions: []
