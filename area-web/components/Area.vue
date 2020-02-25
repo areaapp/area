@@ -144,7 +144,7 @@
 
      computed: {
          execDate () {
-             const date = new Date(lastExecution);
+             const date = new Date(this.lastExecution);
              return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
          }
      }

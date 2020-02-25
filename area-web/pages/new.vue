@@ -74,7 +74,7 @@
                         <v-card
                             :color="$vuetify.theme.themes[theme].background"
                             class="mb-12 scrollable"
-                            height="50vh"
+                            height="65vh"
                         >
                             <v-container fluid>
                                 <h1 class="subtitle-2 mb-2">Global configuration:</h1>

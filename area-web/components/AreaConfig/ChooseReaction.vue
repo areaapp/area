@@ -2,7 +2,7 @@
     <v-card
         :color="color"
         class="mb-12 scrollable"
-        height="50vh"
+        height="65vh"
     >
         <v-container fluid>
             <v-radio-group v-model="checked" @change="updateChecked()" :mandatory="true">
@@ -31,6 +31,7 @@
                                 :color="allServices[i].foreground"
                                 :value="`${i}-${reaction.name}`"
                                 on-icon="mdi-check-circle"
+                                dark
                             />
                         </Reaction>
                     </v-row>

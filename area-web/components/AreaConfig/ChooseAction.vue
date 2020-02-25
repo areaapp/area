@@ -2,7 +2,7 @@
     <v-card
         :color="color"
         class="mb-12 scrollable"
-        height="50vh"
+        height="65vh"
     >
         <v-container fluid>
             <v-radio-group v-model="checked" @change="updateChecked()" :mandatory="true">
@@ -28,10 +28,10 @@
                             :nooverlay="true"
                         >
                             <v-radio
-                                :color="allServices[i].foreground"
+                                color="allServices[i].foreground"
                                 :value="`${i}-${action.name}`"
                                 on-icon="mdi-check-circle"
-                                light
+                                dark
                             />
                         </Action>
                     </v-row>
