@@ -8,6 +8,7 @@
             app
             class="secondary elevation-0 accent--text"
             dark
+            style="z-index: 150"
         >
             <v-flex class="py-4">
                 <v-row class="justify-center">
@@ -56,7 +57,22 @@
                 <v-col>
                     <v-flex class="pa-3">
                         <v-row class="px-4" align="center">
-                            <v-avatar color="primary" class="mr-3">
+                            <v-badge
+                                color="error"
+                                v-if="notifications.length"
+                                :content="notifications.length"
+                                class="mr-3"
+                                overlap
+                            >
+                                <v-avatar color="primary">
+                                    <img :src="userAvatar" :alt="user.username">
+                                </v-avatar>
+                            </v-badge>
+                            <v-avatar
+                                v-else
+                                color="primary"
+                                class="mr-3"
+                            >
                                 <img :src="userAvatar" :alt="user.username">
                             </v-avatar>
                             <v-col>
@@ -106,6 +122,7 @@
             app
             flat
             dark
+            style="z-index: 110"
         >
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="accent--text" />
             <v-spacer />
@@ -177,6 +194,10 @@
 
          userAvatar () {
              return this.$store.state.user.avatar;
+         },
+
+         notifications () {
+             return this.$store.state.user.notifications;
          },
 
          items () {

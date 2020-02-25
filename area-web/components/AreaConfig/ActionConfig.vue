@@ -10,14 +10,14 @@
                 {{ action.displayName }} - Configuration
             </span>
             <v-chip
-                x-small
-                class="mx-4"
                 :color="service.foreground"
                 :text-color="service.background"
+                x-small
+                class="mx-4"
             >
                 action
             </v-chip>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-icon :color="service.foreground" right>mdi-{{ service.iconName }}</v-icon>
         </v-card-title>
         <v-card-text>
@@ -26,14 +26,14 @@
                     <div v-for="(type, key) in action.params">
                         <v-combobox
                             v-if="type === 'Array'"
-                            :label="key"
+                            :label="prettyKey(key)"
                             v-model="config[key]"
+                            :rules="[x => !!x || `${key} is required.`]"
+                            :color="service.foreground"
                             multiple
                             chips
                             outlined
                             required
-                            :rules="[x => !!x || `${key} is required.`]"
-                            :color="service.foreground"
                             dark
                         >
                             <template v-slot:selection="data">
@@ -43,26 +43,26 @@
                                     color="secondary"
                                 >
                                     <v-avatar
-                                        left
                                         :text-color="service.foreground"
                                         :color="service.background"
                                         v-text="data.item.slice(0, 1).toUpperCase()"
-                                    ></v-avatar>
+                                        left
+                                    />
                                     {{ data.item }}
                                 </v-chip>
                             </template>
                         </v-combobox>
                         <v-textarea
                             v-else
-                            clearable
-                            :label="key"
+                            :label="prettyKey(key)"
                             v-model="config[key]"
+                            :rules="[x => !!x || `${key} is required.`]"
+                            :color="service.foreground"
+                            clearable
                             outlined
                             auto-grow
                             rows="1"
                             required
-                            :rules="[x => !!x || `${key} is required.`]"
-                            :color="service.foreground"
                             dark
                         />
                     </div>
@@ -87,6 +87,12 @@
          };
      },
 
+     methods: {
+         prettyKey (key) {
+             return key.replace(/^\w/, c => c.toUpperCase());
+         }
+     },
+
      watch: {
          form () {
              if (this.form) {
@@ -94,5 +100,5 @@
              }
          }
      }
- }
+ };
 </script>

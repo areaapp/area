@@ -12,14 +12,14 @@ class AboutController {
         for (var i = 0; i < Area[service].actions.length; i++) {
             obj = {
                 name: Area[service].actions[i].displayName,
-                description: Area[service].actions[i].description 
+                description: Area[service].actions[i].description
             };
             actions.push(obj);
         }
         for (var i = 0; i < Area[service].reactions.length; i++) {
             obj = {
                 name: Area[service].reactions[i].displayName,
-                description: Area[service].reactions[i].description 
+                description: Area[service].reactions[i].description
             };
             reactions.push(obj);
         }
@@ -34,7 +34,7 @@ class AboutController {
     }
 
     async generateAbout({request, response}) {
-        
+
         const client = {
             host: request.ip()
         };
