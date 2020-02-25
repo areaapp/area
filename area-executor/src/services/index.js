@@ -5,4 +5,6 @@ export default {
     office: require('./office'),
     spotify: require('./spotify'),
     dropbox: require('./dropbox'),
+    gitlab: require('./gitlab'),
+    openweathermap: require('./openweathermap'),
 };

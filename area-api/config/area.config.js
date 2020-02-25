@@ -255,7 +255,16 @@ module.exports = {
         ]
     },
     openweathermap: {
-        actions: [],
+        actions: [
+            {
+                name: 'openweathermap_is_raining',
+                displayName: 'Is raining',
+                description: 'Triggered when it is raining in a city',
+                params: {
+                    city: 'string'
+                }
+            }
+        ],
         reactions: []
     }
 };
