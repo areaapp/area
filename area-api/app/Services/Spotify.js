@@ -7,7 +7,7 @@ module.exports = {
     authType: 'oauth',
     name: 'spotify',
     displayName: 'Spotify',
-    description: 'plus tard',
+    description: 'Spotify is a digital music, podcast, and video streaming service that gives you access to millions of songs and other content from artists all over the world. Basic functions such as playing music are totally free, but you can also choose to upgrade to Spotify Premium.',
     baseUrl: 'www.spotify.com',
     iconName: 'spotify',
     foreground: '#ffffff',
