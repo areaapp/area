@@ -4,6 +4,18 @@
             align="center"
             justify="center"
         >
+            <v-col v-if="!areas.length" align="center" class="mt-5">
+                <h1 class="display-1">No areas here</h1>
+                <v-btn
+                    class="mt-12"
+                    color="primary"
+                    nuxt
+                    to="/new"
+                >
+                    Create a new area
+                    <v-icon right>mdi-plus-circle</v-icon>
+                </v-btn>
+            </v-col>
             <Area
                 v-for="(area, i) in areas"
                 :key="i"
