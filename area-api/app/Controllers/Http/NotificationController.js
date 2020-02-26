@@ -5,9 +5,9 @@ const Notification = use('App/Models/Notification');
 class NotificationController {
 
     async getNotifications({auth, response}) {
-        const userNotifications = await Notification.query()
-        .where("user_id", auth.current.user.id)
-        .fetch();
+        const userNotifications = await auth.current.user.notifications()
+              .orderBy('created_at', 'desc')
+              .fetch();
 
         const notificationInfos = userNotifications.toJSON();
         let notifications = [];
@@ -15,10 +15,10 @@ class NotificationController {
 
         for (var i = 0; i < notificationInfos.length; i++) {
             notification = {
-                user_id: auth.current.user.id,
                 message: notificationInfos[i].message,
                 readed: notificationInfos[i].readed,
-                created_at: notificationInfos[i].created_at
+                created_at: notificationInfos[i].created_at,
+                status: notificationInfos[i].status
             };
             notifications.push(notification);
         }
@@ -68,14 +68,14 @@ class NotificationController {
                 status: 'error',
                 message: 'Invalid parameter'
             });
-        
+
         notification.readed = readed;
         await notification.save();
 
         const notificationInfo = {
-            user_id: notification.user_id,
             message: notification.message,
-            readed: notification.readed
+            readed: notification.readed,
+            status: notification.status
         };
 
         return response.json({
@@ -85,15 +85,16 @@ class NotificationController {
     }
 
     async addNotif({auth, request, response}) {
-        const parameters = request.only(['message'])
+        const parameters = request.only(['message', 'status'])
         const notif = {
             user_id: auth.current.user.id,
             message: parameters.message,
-            readed: false
+            readed: false,
+            status: status
         }
 
         const newNotif = await Notification.create(notif);
-        
+
         return response.json({
             status: 'success',
             data: newNotif

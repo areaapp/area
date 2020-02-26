@@ -45,6 +45,10 @@ class User extends Model {
         return this.hasMany('App/Models/Area');
     }
 
+    notifications() {
+        return this.hasMany('App/Models/Notification');
+    }
+
     static get createdAtColumn () {
         return null;
     }
