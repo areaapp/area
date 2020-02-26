@@ -18,6 +18,10 @@ services:
       - net-web
       - net-api
       - net-proxy
+    depends_on:
+      - client_web
+      - release_android
+      - docs
 
   # Area database (postgresql)
   db:
@@ -34,6 +38,8 @@ services:
 
   # Area api (adonis)
   server:
+    depends_on:
+      - db
     networks:
       - net-api
       - net-db
@@ -51,6 +57,8 @@ services:
 
   # Area web SSR (nuxt)
   client_web:
+    depends_on:
+      - server
     networks:
       - net-web
       - net-proxy
@@ -60,6 +68,8 @@ services:
 
   # Area android build
   release_android:
+    depends_on:
+      - client_web
     container_name: "area_android"
     build: ./area-android
     volumes:
@@ -67,6 +77,8 @@ services:
 
   # Executor build
   executor:
+    depends_on:
+      - nginx
     container_name: "area_executor"
     build: ./area-executor
     restart: always

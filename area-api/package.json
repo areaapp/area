@@ -5,8 +5,9 @@
     "description": "A web-based automation tool",
     "main": "index.js",
     "scripts": {
-        "start": "node server.js",
-        "migration": "adonis migration:run",
+        "start": "npm run migration && node server.js",
+        "migration": "node ace migration:run --force",
+        "migration:dev": "adonis migration:run",
         "dev": "adonis serve --dev",
         "migrate:reset": "adonis migration:reset",
         "test": "jest",
