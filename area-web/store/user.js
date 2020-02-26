@@ -63,7 +63,7 @@ export const actions = {
         const resNotifs = await this.$axios.$get('/me/notifications');
 
         if (resNotifs.status === 'success') {
-            commit('setServices', resNotifs.data);
+            commit('setNotifications', resNotifs.data);
         }
     },
 
@@ -71,7 +71,7 @@ export const actions = {
         const resNotif = await this.$axios.$put(`/me/notification/${id}`);
 
         if (resNotif.status === 'success') {
-            commit('setService', resNotif.data);
+            commit('setNotification', resNotif.data);
         }
     },
 

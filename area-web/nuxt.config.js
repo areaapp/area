@@ -8,6 +8,7 @@ const docUrl = isProd ? process.env.PROD_DOC_URL : process.env.DEV_DOC_URL;
 
 export default {
     mode: 'universal',
+
     /*
     ** Headers of the page
     */
@@ -26,7 +27,7 @@ export default {
     /*
     ** Customize the progress-bar color
     */
-    loading: { color: '#fff' },
+    loading: true,
     /*
     ** Global CSS
     */

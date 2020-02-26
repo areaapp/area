@@ -3,6 +3,49 @@
         :style="{ background: $vuetify.theme.themes[theme].background }"
     >
         <v-navigation-drawer
+            v-model="notifsDrawer"
+            v-if="$auth.loggedIn"
+            fixed
+            app
+            class="secondary elevation-0 accent--text"
+            dark
+            style="z-index: 150"
+            right
+            width="25vw"
+        >
+            <v-toolbar dark class="primary mb-4" flat>
+                <v-toolbar-title>Notifications</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon @click.stop="notifsDrawer = !notifsDrawer">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-toolbar>
+            <v-list dense>
+                <v-list-item
+                    v-for="notif in notifications"
+                    class="align-center"
+                >
+                    <v-list-item-content>
+                        <v-alert
+                            color="light-blue darken-4"
+                            dense
+                            prominent
+                            type="info"
+                        >
+                            <v-row class="justify-center align-center">
+                                <v-col>
+                                    <span class="caption">{{ notif.message }}</span>
+                                </v-col>
+                                <v-btn icon>
+                                    <v-icon small>mdi-close</v-icon>
+                                </v-btn>
+                            </v-row>
+                        </v-alert>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+        <v-navigation-drawer
             v-model="drawer"
             fixed
             app
@@ -64,9 +107,15 @@
                                 class="mr-3"
                                 overlap
                             >
-                                <v-avatar color="primary">
-                                    <img :src="userAvatar" :alt="user.username">
-                                </v-avatar>
+                                <v-btn
+                                    @click.stop="notifsDrawer = !notifsDrawer"
+                                    fab
+                                    color="transparent"
+                                >
+                                    <v-avatar color="primary">
+                                        <img :src="userAvatar" :alt="user.username">
+                                    </v-avatar>
+                                </v-btn>
                             </v-badge>
                             <v-avatar
                                 v-else
@@ -128,6 +177,18 @@
             <v-spacer />
             <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer />
+            <v-badge
+                color="error"
+                v-if="$auth.loggedIn && notifications.length"
+                dot
+                overlap
+                offset-y="21"
+                offset-x="21"
+                bordered
+            >
+                <v-btn @click.stop="notifsDrawer = !notifsDrawer" icon><v-icon>mdi-bell</v-icon></v-btn>
+            </v-badge>
+            <v-btn v-else-if="$auth.loggedIn" @click.stop="notifsDrawer = !notifsDrawer" icon><v-icon>mdi-bell</v-icon></v-btn>
         </v-app-bar>
         <v-content>
             <v-container>
@@ -153,7 +214,9 @@
 
      data () {
          return {
-             drawer: true
+             drawer: true,
+             interval: null,
+             notifsDrawer: false
          };
      },
 
@@ -239,9 +302,25 @@
          this.$vuetify.theme.isDark = this.darkTheme;
      },
 
+     created () {
+         if (this.$auth.loggedIn) {
+             this.interval = setInterval(() => this.pollData(), 5000);
+         }
+     },
+
+     beforeDestroy () {
+         if (this.$auth.loggedIn) {
+             clearInterval(this.interval);
+         }
+     },
+
      methods: {
          async signout () {
              await this.$auth.logout();
+         },
+
+         async pollData () {
+             await this.$store.dispatch('pollData');
          }
      }
  };
