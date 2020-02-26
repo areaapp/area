@@ -8,4 +8,4 @@ RUN npm i -g webpack webpack-cli
 RUN npm i
 RUN npm run build
 
-CMD ["node", "/dist/executor"]
+CMD ["node", "./dist/executor"]
