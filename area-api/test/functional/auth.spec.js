@@ -1,9 +1,10 @@
 'use strict'
 
-const { test, trait } = use('Test/Suite')('Create User')
+const { test, trait } = use('Test/Suite')('Basic Auth')
 const User = use('App/Models/User')
 
 trait('Test/ApiClient');
+trait('DatabaseTransactions');
 
 test('Signup user with basic authentication', async({assert, client}) => {
   const userCreate = {
