@@ -1,6 +1,6 @@
 'use strict'
 
-const { test, trait } = use('Test/Suite')('Services')
+const { test, trait } = use('Test/Suite')('Actions')
 const User = use('App/Models/User')
 const Factory = use('Factory')
 
