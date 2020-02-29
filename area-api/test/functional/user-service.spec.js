@@ -52,7 +52,7 @@ test('Add a service (authCode missing)', async ({ client, assert }) => {
 })
 
 test('Get user services', async ({ client, assert }) => {
-  const user = await User.find(1);
+  const user = await User.find(2);
 
   const response = await client.get('/me/services')
   .loginVia(user)
@@ -72,7 +72,7 @@ test('Delete user services (Service unknown for this user)', async ({ client, as
 })
 
 test('Delete user services', async ({ client, assert }) => {
-  const user = await User.find(1);
+  const user = await User.find(2);
 
   const response = await client.delete('/me/services/google')
   .loginVia(user)

@@ -32,3 +32,11 @@ Factory.blueprint('App/Models/Service', (faker) => {
       oauth_refresh_token: null
     }
  })
+
+Factory.blueprint('App/Models/Notification', (faker) => {
+  return {
+    user_id: 1,
+    message: faker.string(),
+    readed: faker.bool()
+  }
+})
