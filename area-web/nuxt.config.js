@@ -77,9 +77,9 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: baseUrl,
-        browserUrl: baseUrl,
-        prefix: baseUrl,
+        baseURL: 'http://localhost:5001/api',
+        browserUrl: 'http://localhost:8081/api',
+        prefix: 'http://localhost:8081/api',
         proxy: true
     },
 

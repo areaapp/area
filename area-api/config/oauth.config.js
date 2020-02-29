@@ -10,7 +10,7 @@ module.exports = {
         google: {
             client_id: '940097047883-9hos8tpf9gsn2pucktvc98l8rgfdr3ht.apps.googleusercontent.com',
             client_secret: 'lDYoBNZOlZ9Dva4R4msqeOyk',
-            redirect_uri: 'http://localhost:3000/auth/oauth/google/callback'
+            redirect_uri: 'http://localhost:8081/auth/oauth/google/callback'
         },
         office: {
             client_id: '5ba4dcd1-3338-4896-b2b4-a3253ab044b8',
