@@ -93,7 +93,6 @@
                 >
                     <v-btn
                         href="/client.apk"
-                        target="_blank"
                         class="white--text"
                         color="green"
                         light
