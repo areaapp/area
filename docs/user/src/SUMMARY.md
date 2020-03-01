@@ -8,4 +8,5 @@
   - [Add area](./Add_area.md)
   - [Update/Delete area](./Update_delete_area.md)
   - [Update parameter](./Update_parameter.md)
+- [Settings](./Settings.md)
 - [Sign out](./Signout.md)
