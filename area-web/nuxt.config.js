@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const isProd = process.env.NODE_ENV === 'production';
 const baseUrl = `${isProd ? process.env.PROD_BASE_URL : process.env.DEV_BASE_URL}/api`;
+const browserUrl = `${isProd ? process.env.PROD_BROWSER_URL : process.env.DEV_BROWSER_URL}/api`;
 const apiUrl = isProd ? process.env.PROD_API_URL : process.env.DEV_API_URL;
 
 export default {
@@ -77,9 +78,9 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: 'http://localhost:5001/api',
-        browserUrl: 'http://localhost:8081/api',
-        prefix: 'http://localhost:8081/api',
+        baseURL: baseUrl,
+        browserUrl: browserUrl,
+        prefix: browserUrl,
         proxy: true
     },
 
