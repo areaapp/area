@@ -2,7 +2,7 @@ async function oauthConnect ({ $auth, store, app, query, params, redirect, route
     const userAction = app.$cookies.get('userAction');
     const fUrl = app.$cookies.get('userActionFUrl');
     const sUrl = app.$cookies.get('userActionSUrl');
-    const match = route.hash.match(/(access_token=)(\w+)/);
+    const match = route.hash.match(/(access_token=)([a-zA-Z0-9-_]+)/);
     const accessToken = match ? match[2] : undefined;
 
     store.dispatch('userAction/clear');
