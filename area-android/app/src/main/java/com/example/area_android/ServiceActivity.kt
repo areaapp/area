@@ -134,14 +134,14 @@ class ServiceActivity : AppCompatActivity() {
     private fun redirectToService(serviceName: String) {
         val app = this.application as AreaApplication
 
-        if (serviceName == "dropbox") {
+        /*if (serviceName == "dropbox") {
             val intent = Intent(this, DropboxAuthActivity::class.java)
 
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             this.finish()
             return
-        }
+        }*/
 
 
         val url = app.serverUrl + "/auth/oauth/authorize_url/$serviceName/android"

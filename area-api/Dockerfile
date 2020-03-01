@@ -1,5 +1,5 @@
 # Build api
-FROM node:12
+FROM node:12.10.0
 
 WORKDIR . /opt/area/server
 

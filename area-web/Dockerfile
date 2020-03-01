@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:12.10.0
 
 # Client build directory
 RUN mkdir -p /opt/area/web

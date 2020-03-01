@@ -147,7 +147,11 @@ Route.group(() => {
      * @apiName ModifyUser
      * @apiGroup User
      * @apiParam {String} password New password
-     * @apiSuccess {String} username New username
+     * @apiParam {String} username New username
+     * @apiSuccess {String} username Username
+     * @apiSuccess {String} email Email of the user
+     * @apiSuccess {String} register_source Source from which the use sign up
+     * @apiSuccess {String} avatar String use to generate an avatar
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *        {
