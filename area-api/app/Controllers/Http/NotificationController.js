@@ -63,7 +63,7 @@ class NotificationController {
                 status: 'error',
                 message: 'Notification not found'
             });
-
+            
         if (readed === undefined || typeof readed != "boolean")
             return response.status(404).json({
                 status: 'error',
