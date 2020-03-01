@@ -37,6 +37,7 @@ Factory.blueprint('App/Models/Notification', (faker) => {
   return {
     user_id: 1,
     message: faker.string(),
-    readed: faker.bool()
+    readed: faker.bool(),
+    status: faker.bool()
   }
 })
