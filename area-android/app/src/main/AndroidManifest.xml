@@ -17,7 +17,7 @@
         <activity android:name=".ModifyAreaActivity" />
         <activity android:name=".NewAreaActivity" />
         <activity android:name=".ServiceActivity" />
-        <activity android:name=".DropboxAuthActivity">
+        <!--<activity android:name=".DropboxAuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -26,7 +26,7 @@
 
                 <data android:scheme="db-rloqxt3qhdnqeyf" />
             </intent-filter>
-        </activity>
+        </activity>-->
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -54,6 +54,14 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="com.googleusercontent.apps.414833544494-3mp46u11g0k3d1hn13nbmu27b85uvuea" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="db-rloqxt3qhdnqeyf" />
             </intent-filter>
         </activity>
         <activity
