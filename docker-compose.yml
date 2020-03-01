@@ -95,25 +95,13 @@ services:
 
 volumes:
   v-releases:
-    driver_opts:
-      device: "${PWD}/volumes/releases"
-      type: none
-      o: bind
   v-db:
-    driver_opts:
-      device: "${PWD}/volumes/db"
-      type: none
-      o: bind
   v-nginx:
     driver_opts:
       device: "${PWD}/volumes/nginx"
       type: none
       o: bind
   v-docs:
-    driver_opts:
-      device: "${PWD}/volumes/docs"
-      type: none
-      o: bind
 
 networks:
   net-web:
