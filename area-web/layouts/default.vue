@@ -89,11 +89,11 @@
             <template v-slot:append>
                 <v-row
                     class="justify-center my-5"
-                    v-if="$device.isAndroid"
+                    v-if="isAndroid"
                 >
                     <v-btn
-                        nuxt
-                        to="/client.apk"
+                        href="/client.apk"
+                        target="_blank"
                         class="white--text"
                         color="green"
                         light
@@ -250,6 +250,10 @@
                  this.$vuetify.theme.isDark = value;
                  this.$store.dispatch('setDarkTheme', value);
              }
+         },
+
+         isAndroid () {
+             return this.$device.isAndroid;
          },
 
          title () {
