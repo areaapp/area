@@ -53,12 +53,33 @@ export const mutations = {
     },
 
     setNotification (state, notif) {
-        const i = state.areas.findIndex(n => n.id === notif.id);
-        Object.assign(state.areas[i], notif);
+        const i = state.notifications.findIndex(n => n.id === notif.id);
+        Object.assign(state.notifications[i], notif);
+    },
+
+    deleteNotification (state, id) {
+        const i = state.notifications.findIndex(n => n.id === id);
+        state.notifications.splice(i, 1);
     }
 };
 
 export const actions = {
+    async updateUsername (_, username) {
+        const resUser = await this.$axios.$put('/me', { username });
+
+        if (resUser.status === 'success') {
+            await this.$auth.fetchUser();
+        }
+    },
+
+    async updatePassword (_, password) {
+        const resUser = await this.$axios.$put('/me', { password });
+
+        if (resUser.status === 'success') {
+            await this.$auth.fetchUser();
+        }
+    },
+
     async getNotifications ({ commit }) {
         const resNotifs = await this.$axios.$get('/me/notifications');
 
@@ -72,6 +93,14 @@ export const actions = {
 
         if (resNotif.status === 'success') {
             commit('setNotification', resNotif.data);
+        }
+    },
+
+    async deleteNotification ({ commit }, id) {
+        const resNotif = await this.$axios.$delete(`/me/notification/${id}`);
+
+        if (resNotif.status === 'success') {
+            commit('deleteNotification', id);
         }
     },
 

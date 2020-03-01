@@ -21,28 +21,35 @@
                 </v-btn>
             </v-toolbar>
             <v-list dense>
-                <v-list-item
-                    v-for="notif in notifications"
-                    class="align-center"
-                >
-                    <v-list-item-content>
-                        <v-alert
-                            color="light-blue darken-4"
-                            dense
-                            prominent
-                            type="info"
-                        >
-                            <v-row class="justify-center align-center">
-                                <v-col>
-                                    <span class="caption">{{ notif.message }}</span>
-                                </v-col>
-                                <v-btn icon>
-                                    <v-icon small>mdi-close</v-icon>
-                                </v-btn>
-                            </v-row>
-                        </v-alert>
-                    </v-list-item-content>
-                </v-list-item>
+                <v-scroll-x-transition group>
+                    <v-list-item
+                        v-for="notif in notifications"
+                        :key="notif.id"
+                        class="align-center"
+                    >
+                        <v-list-item-content>
+
+                            <v-alert
+                                :color="notif.status ? 'light-blue darken-4' : 'error'"
+                                dense
+                                prominent
+                                :type="notif.status ? 'info' : 'error'"
+                            >
+                                <v-row class="justify-center align-center">
+                                    <v-col>
+                                        <span class="caption">{{ notif.message }}</span>
+                                    </v-col>
+                                    <v-btn
+                                        v-on:click="deleteNotification(notif.id)"
+                                        icon
+                                    >
+                                        <v-icon small>mdi-close</v-icon>
+                                    </v-btn>
+                                </v-row>
+                            </v-alert>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-scroll-x-transition>
             </v-list>
         </v-navigation-drawer>
         <v-navigation-drawer
@@ -79,90 +86,103 @@
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
-            <template
-                v-if="$auth.loggedIn"
-                v-slot:append
-            >
-                <v-row class="justify-center my-5">
+            <template v-slot:append>
+                <v-row
+                    class="justify-center my-5"
+                    v-if="$device.isAndroid"
+                >
                     <v-btn
                         nuxt
-                        to="/new"
-                        class="primary--text"
-                        color="normal"
+                        to="/client.apk"
+                        class="white--text"
+                        color="green"
                         light
                     >
-                        Create a new area <v-icon right>mdi-plus-circle</v-icon>
+                        Area for Android <v-icon right>mdi-android</v-icon>
                     </v-btn>
                 </v-row>
-                <div class="px-6">
-                    <v-divider />
-                </div>
-                <v-col>
-                    <v-flex class="pa-3">
-                        <v-row class="px-4" align="center">
-                            <v-badge
-                                color="error"
-                                v-if="notifications.length"
-                                :content="notifications.length"
-                                class="mr-3"
-                                overlap
-                            >
-                                <v-btn
-                                    @click.stop="notifsDrawer = !notifsDrawer"
-                                    fab
-                                    color="transparent"
+                <div v-if="$auth.loggedIn">
+                    <v-row class="justify-center my-5">
+                        <v-btn
+                            nuxt
+                            to="/new"
+                            class="primary--text"
+                            color="normal"
+                            light
+                        >
+                            Create a new area <v-icon right>mdi-plus-circle</v-icon>
+                        </v-btn>
+                    </v-row>
+                    <div class="px-6">
+                        <v-divider />
+                    </div>
+                    <v-col>
+                        <v-flex class="pa-3">
+                            <v-row class="px-4" align="center">
+                                <v-badge
+                                    color="error"
+                                    v-if="notifications.length"
+                                    :content="notifications.length"
+                                    class="mr-3"
+                                    overlap
                                 >
-                                    <v-avatar color="primary">
-                                        <img :src="userAvatar" :alt="user.username">
-                                    </v-avatar>
+                                    <v-btn
+                                        @click.stop="notifsDrawer = !notifsDrawer"
+                                        fab
+                                        color="transparent"
+                                    >
+                                        <v-avatar color="primary">
+                                            <img :src="userAvatar" :alt="user.username">
+                                        </v-avatar>
+                                    </v-btn>
+                                </v-badge>
+                                <v-avatar
+                                    v-else
+                                    color="primary"
+                                    class="mr-3"
+                                >
+                                    <img :src="userAvatar" :alt="user.username">
+                                </v-avatar>
+                                <v-col>
+                                    <v-row>
+                                        <span class="caption font-weight-bold">{{ user.username }}</span>
+                                    </v-row>
+                                    <v-row>
+                                        <span class="caption mr-2">
+                                            {{ userServicesNb }}
+                                            <v-icon x-small>mdi-puzzle</v-icon>
+                                        </span>
+                                        <span class="caption">
+                                            {{ userAreas.length }}
+                                            <v-icon x-small>mdi-vector-square</v-icon>
+                                        </span>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                            <v-row class="py-4 justify-center">
+                                <v-switch
+                                    v-model="darkTheme"
+                                    hide-details
+                                    inset
+                                    label="Toggle dark theme"
+                                    color="primary"
+                                    class="accent--text"
+                                />
+                            </v-row>
+                            <v-row class="ma-4">
+                                <v-btn
+                                    v-on:click="signout"
+                                    block
+                                    small
+                                    class="error"
+                                >
+                                    <v-icon small>mdi-exit-run</v-icon>
+                                    Sign out
                                 </v-btn>
-                            </v-badge>
-                            <v-avatar
-                                v-else
-                                color="primary"
-                                class="mr-3"
-                            >
-                                <img :src="userAvatar" :alt="user.username">
-                            </v-avatar>
-                            <v-col>
-                                <v-row>
-                                    <span class="caption font-weight-bold">{{ user.username }}</span>
-                                </v-row>
-                                <v-row>
-                                    <span class="caption mr-2">
-                                        {{ userServicesNb }}
-                                        <v-icon x-small>mdi-puzzle</v-icon>
-                                    </span>
-                                    <span class="caption">
-                                        {{ userAreas.length }}
-                                        <v-icon x-small>mdi-vector-square</v-icon>
-                                    </span>
-                                </v-row>
-                            </v-col>
-                        </v-row>
-                        <v-row class="py-4 justify-center">
-                            <v-switch
-                                v-model="darkTheme"
-                                hide-details
-                                inset
-                                label="Toggle dark theme"
-                                color="primary"
-                                class="accent--text"
-                            />
-                        </v-row>
-                        <v-row class="ma-4">
-                            <v-btn
-                                v-on:click="signout"
-                                block
-                                small
-                                class="error"
-                            >
-                                <v-icon small>mdi-exit-run</v-icon>
-                                Sign out
-                            </v-btn>
-                        </v-row>
-                    </v-flex>
-                </v-col>
+                            </v-row>
+                        </v-flex>
+                    </v-col>
+                </div>
             </template>
         </v-navigation-drawer>
         <v-app-bar
@@ -321,6 +341,10 @@
 
          async pollData () {
              await this.$store.dispatch('pollData');
+         },
+
+         async deleteNotification (id) {
+             await this.$store.dispatch('user/deleteNotification', id);
          }
      }
  };

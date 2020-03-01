@@ -18,7 +18,8 @@ class NotificationController {
                 message: notificationInfos[i].message,
                 readed: notificationInfos[i].readed,
                 created_at: notificationInfos[i].created_at,
-                status: notificationInfos[i].status
+                status: notificationInfos[i].status,
+                id: notificationInfos[i].id
             };
             notifications.push(notification);
         }
@@ -75,7 +76,9 @@ class NotificationController {
         const notificationInfo = {
             message: notification.message,
             readed: notification.readed,
-            status: notification.status
+            created_at: notification.created_at,
+            status: notification.status,
+            id: notification.id
         };
 
         return response.json({
