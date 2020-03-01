@@ -10,7 +10,7 @@
         "migration:dev": "adonis migration:run",
         "dev": "adonis serve --dev",
         "migrate:reset": "adonis migration:reset",
-        "test": "jest",
+        "test": "node ace migration:refresh && node ace seed && node ace test",
         "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
         "doc": "apidoc -i start -f start/routes.js -o doc"
     },
