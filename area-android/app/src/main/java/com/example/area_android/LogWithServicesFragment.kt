@@ -141,14 +141,14 @@ class LogWithServicesFragment : Fragment() {
     private fun redirectToService(serviceName: String) {
         val app = this.activity!!.application as AreaApplication
 
-        if (serviceName == "dropbox") {
+        /*if (serviceName == "dropbox") {
             val intent = Intent(this.activity, DropboxAuthActivity::class.java)
 
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             this.activity!!.finish()
             return
-        }
+        }*/
 
 
         val url = app.serverUrl + "/auth/oauth/authorize_url/$serviceName/android"

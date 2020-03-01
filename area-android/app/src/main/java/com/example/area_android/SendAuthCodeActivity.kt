@@ -31,7 +31,7 @@ class SendAuthCodeActivity : Activity() {
         var accessToken: String? = null
 
         if (data.fragment !== null) {
-            accessToken = Regex("(access_token=)(\\w+)").find(data.fragment!!)!!.groups[2]!!.value
+            accessToken = Regex("(access_token=)([a-zA-Z0-9-_]+)").find(data.fragment!!)!!.groups[2]!!.value
         }
 
         val url = when (app.redirectAction) {

@@ -53,7 +53,7 @@ module.exports = {
         dropbox: {
             client_id: 'rloqxt3qhdnqeyf',
             client_secret: 'xr7rz8e8wyqc9yk',
-            redirect_uri: ''
+            redirect_uri: 'area-android://auth/dropbox'
         },
         spotify: {
             client_id: '45335b4169014a4ab5375d21707fbdb4',
