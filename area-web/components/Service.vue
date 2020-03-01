@@ -43,7 +43,7 @@
                     Add <v-icon right>mdi-plus-circle</v-icon>
                 </v-btn>
             </v-card-title>
-            <v-card-subtitle class="accent--text">{{ description }}</v-card-subtitle>
+            <v-card-subtitle class="accent--text mt-4">{{ description }}</v-card-subtitle>
             <v-expansion-panels>
                 <v-expansion-panel :style="{ background: themeBg }">
                     <v-expansion-panel-header>Actions ({{ actions.length }})</v-expansion-panel-header>
