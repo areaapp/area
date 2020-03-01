@@ -32,7 +32,9 @@ class AreaController {
         }
 
         const action = parameters.action;
+        const actionModel = request.areaHelper.getActionByName(action.name);
         const reaction = parameters.reaction;
+        const reactionModel = request.areaHelper.getReactionByName(reaction.name);
 
         const actionServiceName = request.areaHelper.getServiceNameByAction(action.name);
         const reactionServiceName = request.areaHelper.getServiceNameByReaction(reaction.name);
@@ -78,7 +80,7 @@ class AreaController {
         };
 
         const area = await Area.create(newAreaInfos);
-        const data = request.areaHelper.areaSerialize(area, newAction, newReaction);
+        const data = request.areaHelper.areaSerialize(area, newAction, newReaction, actionModel, reactionModel);
 
         return response.json({
             status: 'success',
@@ -95,11 +97,21 @@ class AreaController {
         let data = [];
         let action;
         let reaction;
+        let actionModel;
+        let reactionModel;
 
         for (var i = 0; i < areasInfos.length; i++) {
             action = await Action.find(areasInfos[i].action_id);
+            actionModel = request.areaHelper.getActionByName(action.name);
             reaction = await Reaction.find(areasInfos[i].reaction_id);
-            data.push(request.areaHelper.areaSerialize(areasInfos[i], action, reaction));
+            reactionModel = request.areaHelper.getReactionByName(reaction.name);
+            data.push(request.areaHelper.areaSerialize(
+                areasInfos[i],
+                action,
+                reaction,
+                actionModel,
+                reactionModel
+            ));
         }
 
         return response.json({
@@ -118,7 +130,9 @@ class AreaController {
             });
 
         const action = await Action.find(area.action_id);
+        const actionModel = request.areaHelper.getActionByName(action.name);
         const reaction = await Reaction.find(area.reaction_id);
+        const reactionModel = request.areaHelper.getReactionByName(reaction.name);
 
         if (!action || !reaction)
             return response.status(404).json({
@@ -126,7 +140,7 @@ class AreaController {
                 message: 'Action or reaction of the area is invalid'
             });
 
-        const data = request.areaHelper.areaSerialize(area, action, reaction);
+        const data = request.areaHelper.areaSerialize(area, action, reaction, actionModel, reactionModel);
 
         return response.json({
             status: 'success',
@@ -146,7 +160,9 @@ class AreaController {
 
         const area = userArea.toJSON()[0];
         const action = await Action.find(area.action_id);
+        const actionModel = request.areaHelper.getActionByName(action.name);
         const reaction = await Reaction.find(area.reaction_id);
+        const reactionModel = request.areaHelper.getReactionByName(reaction.name);
 
         if (!action || !reaction)
             return response.status(404).json({
@@ -154,7 +170,7 @@ class AreaController {
                 message: 'Action or reaction of the area is invalid'
             });
 
-        const data = request.areaHelper.areaSerialize(area, action, reaction);
+        const data = request.areaHelper.areaSerialize(area, action, reaction, actionModel, reactionModel);
 
         await Area.query()
         .where('user_id', auth.current.user.id)
@@ -183,7 +199,9 @@ class AreaController {
         await area.save();
 
         const action = await Action.find(area.action_id);
+        const actionModel = request.areaHelper.getActionByName(action.name);
         const reaction = await Reaction.find(area.reaction_id);
+        const reactionModel = request.areaHelper.getReactionByName(reaction.name);
 
         if (!action || !reaction)
             return response.status(404).json({
@@ -201,7 +219,7 @@ class AreaController {
             await reaction.save();
         }
 
-        const data = request.areaHelper.areaSerialize(area, action, reaction);
+        const data = request.areaHelper.areaSerialize(area, action, reaction, actionModel, reactionModel);
 
         return response.json({
             status: 'success',
@@ -210,4 +228,4 @@ class AreaController {
     }
 }
 
-module.exports = AreaController
+module.exports = AreaController;

@@ -255,7 +255,25 @@ module.exports = {
         ]
     },
     openweathermap: {
-        actions: [],
+        actions: [
+            {
+                name: 'openweathermap_is_raining',
+                displayName: 'Is raining',
+                description: 'Triggered when it is raining in a city',
+                params: {
+                    city: 'string'
+                }
+            },
+            {
+                name: 'openweathermap_wind_exceeds_speed',
+                displayName: 'Wind exceeds X meter/sec in a city',
+                description: 'Triggered when the wind speed exceeds a certain value in a city',
+                params: {
+                    city: 'string',
+                    speed: 'integer'
+                }
+            }
+        ],
         reactions: []
     }
 };

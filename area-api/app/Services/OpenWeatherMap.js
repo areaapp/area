@@ -7,9 +7,9 @@ module.exports = {
     authType: 'none',
     name: 'openweathermap',
     displayName: 'OpenWeatherMap',
-    description: 'plus tard',
+    description: 'OpenWeatherMap is an online service that provides weather data.',
     baseUrl: 'https://openweathermap.org/',
     iconName: 'weather-partly-cloudy',
     foreground: '#ffffff',
-    background: '#7289da'
+    background: '#505050'
 }

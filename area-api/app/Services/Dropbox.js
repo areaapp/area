@@ -7,7 +7,7 @@ module.exports = {
     authType: 'oauth',
     name: 'dropbox',
     displayName: 'Dropbox',
-    description: 'plus tard',
+    description: 'Dropbox is a personal cloud storage service (sometimes referred to as an online backup service) that is frequently used for file sharing and collaboration.',
     baseUrl: 'www.dropbox.com',
     iconName: 'dropbox',
     foreground: '#ffffff',

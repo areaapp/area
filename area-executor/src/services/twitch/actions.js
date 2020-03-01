@@ -28,7 +28,6 @@ async function getGameId(axios, oauthToken, game) {
 
 export default {
     async twitch_streamer_connected(area, reaction, ctx) {
-        return;
         const url = 'https://api.twitch.tv/helix/streams?user_login=' + area.action.args.streamer;
         const { data } = await ctx._axios.get(url, {
             headers: {
@@ -52,7 +51,6 @@ export default {
     },
 
     async twitch_new_follow(area, reaction, ctx) {
-        return;
         const streamerId = await getStreamerId(ctx._axios, area.action.service.oauth_token, area.action.args.streamer);
 
         if (streamerId === null) {

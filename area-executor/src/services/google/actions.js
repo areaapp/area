@@ -1,8 +1,7 @@
 export default {
     async google_gmail_new_email(area, reaction, ctx) {
-        console.log('NEW MAIL');
         const email = area.user.email;
-        const route = `https://www.googleapis.com/gmail/v1/users/me/messages?q=is:unread`;
+        const route = 'https://www.googleapis.com/gmail/v1/users/me/messages?q=is:unread';
         const { data } = await ctx._axios.get(route, {
             headers: {
                 Authorization: `Bearer ${area.action.service.oauth_token}`
@@ -15,10 +14,7 @@ export default {
         }
 
         if (area.action.buffer) {
-            const lastIdx = data.messages.findIndex(x => x.id === area.action.buffer);
-            const msgs = lastIdx === -1 ? data.messages : data.messages.slice(0, lastIdx);
-
-            for (const msg in msgs) {
+            if (area.action.buffer !== data.messages[0].id) {
                 await reaction(area, ctx);
             }
         }

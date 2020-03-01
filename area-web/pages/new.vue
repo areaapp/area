@@ -72,21 +72,21 @@
                     <v-stepper-content step="3">
                         <h1 class="title mb-2" dark>Configure your area:</h1>
                         <v-card
-                            class="mb-12 scrollable"
-                            height="50vh"
                             :color="$vuetify.theme.themes[theme].background"
+                            class="mb-12 scrollable"
+                            height="65vh"
                         >
                             <v-container fluid>
                                 <h1 class="subtitle-2 mb-2">Global configuration:</h1>
                                 <v-form v-model="areaForm">
                                     <v-text-field
-                                        color="primary"
                                         v-model="areaTitle"
                                         :rules="[x => !!x || 'Area name is required.']"
+                                        :dark="theme === 'dark'"
+                                        color="primary"
                                         required
                                         label="Area name"
                                         outlined
-                                        :dark="theme === 'dark'"
                                     />
                                 </v-form>
                                 <h1 class="subtitle-2 mb-2">Selected action configuration:</h1>
@@ -236,9 +236,12 @@
 
              try {
                  await this.$store.dispatch('user/addArea', area);
+                 this.$store.dispatch('messages/setSuccess', {
+                     message: `${area.name} successfully added !`,
+                     icon: 'mdi-vector-square'
+                 });
                  this.$router.push('/');
              } catch (e) {
-                 console.log(e);
                  this.errors.push({ message: e.response.data.message });
              }
          },

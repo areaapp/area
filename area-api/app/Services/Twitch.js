@@ -7,7 +7,7 @@ module.exports = {
     authType: 'oauth',
     name: 'twitch',
     displayName: 'Twitch',
-    description: 'plus tard',
+    description: 'Twitch is designed to be a platform for content, including eSports sports tournaments, personal streams of individual players, and gaming-related talk shows.',
     baseUrl: 'https://twitch.tv/',
     iconName: 'twitch',
     foreground: '#ffffff',

@@ -394,6 +394,7 @@ Route.group(() => {
      * @apiSuccess {String} message Message of the notification
      * @apiSuccess {Boolean} readed Status of the notification (readed or not)
      * @apiSuccess {Date}   created_at Date of the notfication's creation
+     * @apiSuccess {Boolean} status True if the area executed successfuly
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
@@ -401,6 +402,7 @@ Route.group(() => {
      *       "message": "Nouveau mail",
      *       "readed": false,
      *       "created_at": "2020-02-09 00:00:00"
+     *       "status": true
      *     }
      */
     Route.get('/notifications', 'NotificationController.getNotifications').middleware('auth');
@@ -414,13 +416,15 @@ Route.group(() => {
      * @apiSuccess {String} message Message of the notification
      * @apiSuccess {Boolean} readed Status of the notification (readed or not)
      * @apiSuccess {Date}   created_at Date of the notfication's creation
+     * @apiSuccess {Boolean} status True if the area executed successfuly
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/2 200 OK
      *     {
      *       "user_id": 1,
      *       "message": "Nouveau mail",
      *       "readed": false,
-     *       "created_at": "2020-02-09 00:00:00"
+     *       "created_at": "2020-02-09 00:00:00",
+     *       "status": true
      *     }
      */
     Route.put('/notification/:id(\\d+)', 'NotificationController.modifyNotification').middleware('auth');

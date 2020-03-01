@@ -1,8 +1,8 @@
 <template>
     <v-card
-        class="mb-12 scrollable"
-        height="50vh"
         :color="color"
+        class="mb-12 scrollable"
+        height="65vh"
     >
         <v-container fluid>
             <v-radio-group v-model="checked" @change="updateChecked()" :mandatory="true">
@@ -24,13 +24,15 @@
                             :foreground="allServices[i].foreground"
                             :icon="allServices[i].iconName"
                             :title="action.displayName"
-                            :description="action.description">
+                            :description="action.description"
+                            :nooverlay="true"
+                        >
                             <v-radio
-                                :color="allServices[i].foreground"
+                                color="allServices[i].foreground"
                                 :value="`${i}-${action.name}`"
                                 on-icon="mdi-check-circle"
-                            >
-                            </v-radio>
+                                dark
+                            />
                         </Action>
                     </v-row>
                 </v-col>
@@ -43,6 +45,10 @@
  import Action from '../Action.vue';
 
  export default {
+
+     components: {
+         Action
+     },
      props: [
          'allServices',
          'userServices',
@@ -53,11 +59,7 @@
      data () {
          return {
              checked: this.value
-         }
-     },
-
-     components: {
-         Action
+         };
      },
 
      methods: {
@@ -65,5 +67,5 @@
              this.$emit('input', this.checked);
          }
      }
- }
+ };
 </script>

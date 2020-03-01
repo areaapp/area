@@ -7,7 +7,7 @@ module.exports = {
     authType: 'oauth',
     name: 'gitlab',
     displayName: 'Gitlab',
-    description: 'plus tard',
+    description: 'GitLab is a web-based DevOps lifecycle tool that provides a Git-repository manager providing wiki, issue-tracking and CI/CD pipeline features, using an open-source license, developed by GitLab Inc.',
     baseUrl: 'www.gitlab.com',
     iconName: 'gitlab',
     foreground: '#ffffff',

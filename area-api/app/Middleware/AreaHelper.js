@@ -113,16 +113,20 @@ class AreaHelper {
                 return null;
             },
 
-            areaSerialize(area, action, reaction) {
+            areaSerialize(area, action, reaction, actionModel, reactionModel) {
                 const actionInfos = {
                     name: action.name,
                     args: action.args,
-                    serviceName: action.service_name
+                    serviceName: action.service_name,
+                    displayName: actionModel.displayName,
+                    description: actionModel.description
                 };
                 const reactionInfos = {
                     name: reaction.name,
                     args: reaction.args,
-                    serviceName: reaction.service_name
+                    serviceName: reaction.service_name,
+                    displayName: reactionModel.displayName,
+                    description: reactionModel.description
                 };
                 const data = {
                     id: area.id,

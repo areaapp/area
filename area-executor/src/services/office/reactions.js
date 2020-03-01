@@ -31,5 +31,7 @@ export default {
                 Authorization: `Bearer ${area.reaction.service.oauth_token}`,
             }
         });
+        ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
     }
 };

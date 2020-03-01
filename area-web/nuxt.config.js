@@ -3,11 +3,12 @@ require('dotenv').config();
 
 const isProd = process.env.NODE_ENV === 'production';
 const baseUrl = `${isProd ? process.env.PROD_BASE_URL : process.env.DEV_BASE_URL}/api`;
+const browserUrl = `${isProd ? process.env.PROD_BROWSER_URL : process.env.DEV_BROWSER_URL}/api`;
 const apiUrl = isProd ? process.env.PROD_API_URL : process.env.DEV_API_URL;
-const docUrl = isProd ? process.env.PROD_DOC_URL : process.env.DEV_DOC_URL;
 
 export default {
     mode: 'universal',
+
     /*
     ** Headers of the page
     */
@@ -23,10 +24,11 @@ export default {
             { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
         ]
     },
+
     /*
     ** Customize the progress-bar color
     */
-    loading: { color: '#fff' },
+    loading: true,
     /*
     ** Global CSS
     */
@@ -77,8 +79,8 @@ export default {
     */
     axios: {
         baseURL: baseUrl,
-        browserUrl: baseUrl,
-        prefix: baseUrl,
+        browserUrl: browserUrl,
+        prefix: browserUrl,
         proxy: true
     },
 
@@ -90,12 +92,6 @@ export default {
             target: apiUrl,
             pathRewrite: {
                 '^/api': '/'
-            }
-        },
-        '/docs/dev': {
-            target: `${docUrl}/dev`,
-            pathRewrite: {
-                '^/docs/dev': '/'
             }
         }
     },

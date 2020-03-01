@@ -43,10 +43,10 @@ class ServiceActivity : AppCompatActivity() {
                         val data = result.get().obj().getJSONObject("data")
 
                         authType = data.getString("authType")
-                        println(authType)
                         this.supportActionBar!!.title = data.getString("displayName")
                         desc.text = data.getString("description")
                         val actionTexts: MutableList<Map<String, String>> = ArrayList()
+                        val reactionTexts: MutableList<Map<String, String>> = ArrayList()
 
                         val actions = data.getJSONArray("actions")
                         for (i in 0 until actions.length()) {
@@ -65,17 +65,17 @@ class ServiceActivity : AppCompatActivity() {
                         )
                         actionList.adapter = actionAdapter
 
-                        val reactions = data.getJSONArray("actions")
-                        for (i in 0 until actions.length()) {
+                        val reactions = data.getJSONArray("reactions")
+                        for (i in 0 until reactions.length()) {
                             val reaction = reactions.getJSONObject(i)
                             val datum: MutableMap<String, String> = HashMap()
                             datum["First Line"] = reaction.getString("displayName")
                             datum["Second Line"] = reaction.getString("description")
-                            actionTexts.add(datum)
+                            reactionTexts.add(datum)
                         }
 
                         val reactionAdapter = SimpleAdapter(this,
-                            actionTexts,
+                            reactionTexts,
                             android.R.layout.simple_list_item_2,
                             arrayOf("First Line", "Second Line"),
                             intArrayOf(android.R.id.text1, android.R.id.text2)

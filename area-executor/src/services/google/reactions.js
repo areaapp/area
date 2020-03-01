@@ -2,7 +2,6 @@ import { Base64 } from 'js-base64';
 
 export default {
     async google_gmail_send_email(area, ctx) {
-        console.log('SEND MAIL');
         const emailFormat = `\
 Content-Type: text/html; charset="us-ascii"\n\
 MIME-Version: 1.0\n\
@@ -27,5 +26,7 @@ ${area.reaction.args.content}\
                 'Authorization': `Bearer ${area.reaction.service.oauth_token}`
             }
         });
+        ctx.db.updateLastExecution(area.id);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`, true);
     }
 };

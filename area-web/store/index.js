@@ -61,9 +61,15 @@ export const actions = {
         if (this.$auth.loggedIn) {
             await dispatch('user/getServices');
             await dispatch('user/getAreas');
+            await dispatch('user/getNotifications');
 
             dispatch('user/setAvatar', this.$auth.user.avatar);
         }
+    },
+
+    async pollData ({ dispatch }) {
+        await dispatch('user/getNotifications');
+        await dispatch('user/getAreas');
     },
 
     setDarkTheme ({ commit }, value) {
