@@ -11,6 +11,7 @@ class NotificationSchema extends Schema {
       table.text('message');
       table.boolean('readed').notNullable();
       table.datetime("created_at").notNullable();
+      table.boolean("status").notNullable();
     })
   }
 

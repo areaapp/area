@@ -11,5 +11,5 @@ module.exports = {
     baseUrl: 'https://openweathermap.org/',
     iconName: 'weather-partly-cloudy',
     foreground: '#ffffff',
-    background: '#7289da'
+    background: '#505050'
 }

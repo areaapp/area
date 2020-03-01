@@ -114,11 +114,12 @@ export default class Database {
      *
      * @param {String} userId
      * @param {String} message
+     * @param {String} status
      */
-    async createNotification(userId, message) {
+    async createNotification(userId, message, status) {
         const date = new Date().toISOString();
-        let req = 'INSERT INTO notifications (user_id, message, readed, created_at)';
-        req += ` VALUES (${userId}, '${message}', 'FALSE', '${date}')`;
+        let req = 'INSERT INTO notifications (user_id, message, readed, created_at, status)';
+        req += ` VALUES (${userId}, '${message}', 'FALSE', '${date}', '${status}')`;
         await this._request(req);
     }
 
