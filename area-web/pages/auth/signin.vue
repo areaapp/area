@@ -62,7 +62,7 @@
                 <v-card-actions>
                     <v-layout justify-center>
                         <p class="font-weight-light body-2">
-                            Not a member ? <nuxt-link class="link-light" to="/auth/signin">Sign up now</nuxt-link>
+                            Not a member ? <nuxt-link class="link-light" to="/auth/signup">Sign up now</nuxt-link>
                         </p>
                     </v-layout>
                 </v-card-actions>
