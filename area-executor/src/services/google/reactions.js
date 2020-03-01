@@ -27,6 +27,6 @@ ${area.reaction.args.content}\
             }
         });
         ctx.db.updateLastExecution(area.id);
-        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`, true);
     }
 };

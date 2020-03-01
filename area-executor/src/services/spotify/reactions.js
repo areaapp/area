@@ -39,7 +39,7 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
-        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`, true);
     },
 
     async spotify_resume_music(area, ctx) {
@@ -67,7 +67,7 @@ export default {
             }
         })
         ctx.db.updateLastExecution(area.id);
-        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`, true);
     },
 
     async spotify_next_music(area, ctx) {
@@ -86,7 +86,7 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
-        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`, true);
     },
 
     async spotify_previous_music(area, ctx) {
@@ -105,7 +105,7 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
-        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`, true);
     },
 
     async spotify_set_volume(area, ctx) {
@@ -131,6 +131,6 @@ export default {
             }
         });
         ctx.db.updateLastExecution(area.id);
-        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`);
+        ctx.notifier.notifie(area.user.id, `${area.name} executed successfully`, true);
     }
 };
