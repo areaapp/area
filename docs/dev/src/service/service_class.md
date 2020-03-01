@@ -14,6 +14,7 @@ baseUrl | String | Base url of the service
 iconName | String | Icon name representing the service. Can be found [here](https://materialdesignicons.com/)
 foreground | String | Foreground color of the service, in hexadecimal
 background | String | Background color of the service, in hexadecimal
+irregularAuthorizationUrl | Boolean | True if the service use different arguments in the authorize url. You must implement the `getAuthorizeUrl` function if this parameter is true
 irregularAccessToken | Boolean | True if the service use different arguments or a different way to get the access_token. You must implement the `getAccessToken` function if this parameter is true
 codeFlow | Boolean | True if the service use the authorization code flow. If false, it will use the implicit authorization flow
 authorizeUrl | String | Url where the user will be redirected to authorize the application. Cannot contains query parameters
@@ -32,6 +33,7 @@ module.exports = {
     iconName: 'github-circle',
     foreground: '#ffffff',
     background: '#211f1f',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: true,
     codeFlow: true,
     authorizeUrl: "https://github.com/login/oauth/authorize",
@@ -77,6 +79,14 @@ async getUser(accessToken) {
     }
 }
 ```
+
+If the service use their own arguments in the authorize url, you have to write the following function:
+```javascript
+async getAuthorizeUrl(oauthHelper, clientType)
+```
+
+This function must return the authorize url.
+
 
 If the service use a irregular way to get the access_token, you have to write the following function (only for authorization code flow):
 ```javascript
