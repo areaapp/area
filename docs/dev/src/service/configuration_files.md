@@ -1,5 +1,15 @@
 # Configuration files
 
+### Api Key configuration
+
+To add a service using an api key, add it in `area-executor/config/services.config.js`.
+Example:
+```javascript
+openweathermap: {
+    apiKey: 'ac691d3701092b6ad24631e13c066303'
+}
+```
+
 ### Oauth configuration
 
 First create your application in the service you want to add.
@@ -38,7 +48,7 @@ android: {
 
 ### Area configuration
 
-One you added your new service in the oauth config file, you have to had it in the area config, to list the actions and reactions models of this service.
+One you added your new service in the config file, you have to had it in the area config, to list the actions and reactions models of this service.
 
 In `area-api/config/area.config.js`, juste add your service as a new object, containing two keys: `actions` and `reactions`, that are both arrays.
 
