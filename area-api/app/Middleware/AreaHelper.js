@@ -3,7 +3,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Area = require('../../area.config.js');
+const Config = use('Config');
+const Area = Config.get('area.config');
 
 class AreaHelper {
     /**
@@ -112,14 +113,20 @@ class AreaHelper {
                 return null;
             },
 
-            areaSerialize(area, action, reaction) {
+            areaSerialize(area, action, reaction, actionModel, reactionModel) {
                 const actionInfos = {
                     name: action.name,
-                    args: action.args
+                    args: action.args,
+                    serviceName: action.service_name,
+                    displayName: actionModel.displayName,
+                    description: actionModel.description
                 };
                 const reactionInfos = {
                     name: reaction.name,
-                    args: reaction.args
+                    args: reaction.args,
+                    serviceName: reaction.service_name,
+                    displayName: reactionModel.displayName,
+                    description: reactionModel.description
                 };
                 const data = {
                     id: area.id,

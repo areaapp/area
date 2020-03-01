@@ -8,8 +8,10 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
+import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
+import org.json.JSONObject
 
 
 class ServiceActivity : AppCompatActivity() {
@@ -28,6 +30,7 @@ class ServiceActivity : AppCompatActivity() {
 
         val actionList = findViewById<ListView>(R.id.actions)
         val reactionList = findViewById<ListView>(R.id.reactions)
+        var authType = ""
 
         val url = app.serverUrl + "/services/" + serviceName
         Fuel.get(url)
@@ -39,9 +42,11 @@ class ServiceActivity : AppCompatActivity() {
                     is Result.Success -> {
                         val data = result.get().obj().getJSONObject("data")
 
+                        authType = data.getString("authType")
                         this.supportActionBar!!.title = data.getString("displayName")
                         desc.text = data.getString("description")
                         val actionTexts: MutableList<Map<String, String>> = ArrayList()
+                        val reactionTexts: MutableList<Map<String, String>> = ArrayList()
 
                         val actions = data.getJSONArray("actions")
                         for (i in 0 until actions.length()) {
@@ -60,17 +65,17 @@ class ServiceActivity : AppCompatActivity() {
                         )
                         actionList.adapter = actionAdapter
 
-                        val reactions = data.getJSONArray("actions")
-                        for (i in 0 until actions.length()) {
+                        val reactions = data.getJSONArray("reactions")
+                        for (i in 0 until reactions.length()) {
                             val reaction = reactions.getJSONObject(i)
                             val datum: MutableMap<String, String> = HashMap()
                             datum["First Line"] = reaction.getString("displayName")
                             datum["Second Line"] = reaction.getString("description")
-                            actionTexts.add(datum)
+                            reactionTexts.add(datum)
                         }
 
                         val reactionAdapter = SimpleAdapter(this,
-                            actionTexts,
+                            reactionTexts,
                             android.R.layout.simple_list_item_2,
                             arrayOf("First Line", "Second Line"),
                             intArrayOf(android.R.id.text1, android.R.id.text2)
@@ -90,8 +95,6 @@ class ServiceActivity : AppCompatActivity() {
                     }
                     is Result.Success -> {
                         val data = result.get().obj().getJSONObject("data")
-                        println("me services")
-                        println(data)
                         if (data.has(serviceName)) {
                             add.isEnabled = false
                         } else {
@@ -102,7 +105,11 @@ class ServiceActivity : AppCompatActivity() {
             }
 
         add.setOnClickListener{
-            this.redirectToService(serviceName)
+            if (authType == "none") {
+                this.addRegularService(serviceName)
+            } else {
+                this.redirectToService(serviceName)
+            }
         }
 
         delete.setOnClickListener {
@@ -153,6 +160,32 @@ class ServiceActivity : AppCompatActivity() {
                         val intent = Intent(Intent.ACTION_VIEW, webpage)
                         startActivity(intent)
                         finish()
+                    }
+                }
+            }
+    }
+
+    private fun addRegularService(serviceName: String) {
+        val app = this.application as AreaApplication
+
+        val add = findViewById<Button>(R.id.add)
+        val delete = findViewById<Button>(R.id.delete)
+        val url = app.serverUrl + "/me/services/" + serviceName
+        Fuel.post(url)
+            .authentication()
+            .bearer(app.token!!)
+            .jsonBody("")
+            .responseJson { _, _, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        println(result.error)
+                        Toast.makeText(this, "Invalid credentials", Toast.LENGTH_LONG).show()
+                        finish()
+                    }
+                    is Result.Success -> {
+                        Toast.makeText(this, "Service added", Toast.LENGTH_SHORT).show()
+                        add.isEnabled = false
+                        delete.isEnabled = true
                     }
                 }
             }

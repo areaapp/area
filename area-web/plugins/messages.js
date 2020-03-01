@@ -1,20 +1,25 @@
 function getErrors ({ store }) {
     const err = store.state.messages.error;
 
-    store.dispatch('messages/resetError');
+    if (err) {
+        store.dispatch('messages/resetError');
 
-    return [ err ];
+        return [ err ];
+    }
+    return [];
 }
 
 function getSuccess ({ store }) {
     const success = store.state.messages.success;
 
-    store.dispatch('messages/resetSuccess');
-
-    return success;
+    if (success) {
+        store.dispatch('messages/resetSuccess');
+        return success;
+    }
+    return null;
 }
 
 export default function (ctx, inject) {
-    inject('getErrors', getErrors);
-    inject('getSuccess', getSuccess);
+    inject('getErrors', () => getErrors(ctx));
+    inject('getSuccess', () => getSuccess(ctx));
 }

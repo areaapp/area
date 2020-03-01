@@ -12,10 +12,12 @@ services:
     volumes:
       - v-nginx:/etc/nginx/conf.d
       - v-docs:/opt/area/docs
+      - v-releases:/opt/area/releases
     restart: always
     networks:
       - net-web
       - net-api
+      - net-proxy
 
   # Area database (postgresql)
   db:
@@ -35,6 +37,7 @@ services:
     networks:
       - net-api
       - net-db
+      - net-proxy
     build: ./area-api
     container_name: "area_api"
     environment:
@@ -46,17 +49,14 @@ services:
     volumes:
       - v-docs:/opt/area/docs
 
-  # Area web client (nuxt)
+  # Area web SSR (nuxt)
   client_web:
     networks:
       - net-web
-      - net-api
+      - net-proxy
     build: ./area-web
     container_name: "area_web"
     restart: always
-    volumes:
-      - v-releases:/opt/area/releases
-      - v-docs:/opt/area/docs
 
   # Area android build
   release_android:
@@ -64,6 +64,15 @@ services:
     build: ./area-android
     volumes:
       - v-releases:/opt/area/releases
+
+  # Executor build
+  executor:
+    container_name: "area_executor"
+    build: ./area-executor
+    restart: always
+    networks:
+      - net-db
+      - net-proxy
 
   docs:
     container_name: "area_docs"
@@ -100,4 +109,6 @@ networks:
   net-api:
     driver: bridge
   net-db:
+    driver: bridge
+  net-proxy:
     driver: bridge

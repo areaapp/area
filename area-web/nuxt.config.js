@@ -1,8 +1,13 @@
 import colors from 'vuetify/es5/util/colors';
 require('dotenv').config();
 
+const isProd = process.env.NODE_ENV === 'production';
+const baseUrl = `${isProd ? process.env.PROD_BASE_URL : process.env.DEV_BASE_URL}/api`;
+const apiUrl = isProd ? process.env.PROD_API_URL : process.env.DEV_API_URL;
+
 export default {
     mode: 'universal',
+
     /*
     ** Headers of the page
     */
@@ -21,7 +26,7 @@ export default {
     /*
     ** Customize the progress-bar color
     */
-    loading: { color: '#fff' },
+    loading: true,
     /*
     ** Global CSS
     */
@@ -63,7 +68,7 @@ export default {
     ],
 
     router: {
-        middleware: ['auth', 'messages']
+        middleware: ['auth']
     },
 
     /*
@@ -71,9 +76,9 @@ export default {
     ** See https://axios.nuxtjs.org/options
     */
     axios: {
-        baseURL: `http://nginx:8081/api`,
-        browserUrl: `http://nginx:8081/api`,
-        prefix: `http://nginx:8081/api`,
+        baseURL: baseUrl,
+        browserUrl: baseUrl,
+        prefix: baseUrl,
         proxy: true
     },
 
@@ -82,7 +87,7 @@ export default {
     */
     proxy: {
         '/api': {
-            target: 'http://nginx:8080',
+            target: apiUrl,
             pathRewrite: {
                 '^/api': '/'
             }

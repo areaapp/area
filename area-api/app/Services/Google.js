@@ -2,23 +2,24 @@
 
 const axios = require('axios');
 const querystring = require('querystring');
-const ApiInfos = require('../../oauth.config.js');
 
 module.exports = {
     authType: 'oauth',
     name: 'google',
     displayName: 'Google',
-    description: 'plus tard',
+    description: 'Really ? You don\'t know what Google is ?',
     baseUrl: 'www.google.com',
     iconName: 'google',
     foreground: '#ffffff',
     background: '#3484f0',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
     authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
     accessTokenUrl: 'https://oauth2.googleapis.com/token',
     scopeSeparator: '%20',
     scopes: [
+        encodeURIComponent('https://mail.google.com'),
         'profile',
         'email'
     ],
@@ -36,7 +37,7 @@ module.exports = {
             };
             return user;
         } catch (err) {
-            console.log(err.message);
+            return null;
         }
     }
 }

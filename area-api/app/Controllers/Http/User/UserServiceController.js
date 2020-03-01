@@ -7,7 +7,61 @@ const OAuthController = use('App/Controllers/Http/Auth/OAuthController');
 
 class UserServiceController {
 
+    async addRegularService(auth, service, response) {
+        const res = await auth.current.user.services().where('name', service.name).fetch();
+
+        if (res.rows.length > 0) {
+            return response.status(400).json({
+                status: 'error',
+                message: 'This service already exists'
+            });
+        }
+
+        const serviceInfos = {
+            name: service.name,
+            oauth_token: null,
+            oauth_refresh_token: null,
+            email: null,
+        };
+
+        try {
+            const newService = await auth.current.user.services().create(serviceInfos);
+
+            return response.json({
+                status: 'success',
+                data: newService
+            });
+        } catch (err) {
+            console.log(err);
+            return response.status(400).json({
+                status: 'error',
+                message: 'Cannot create regular service'
+            });
+        }
+    }
+
     async addService({ auth, params, request, response }) {
+        if (!(params.serviceName in Services)) {
+            return response.status(404).json({
+                status: 'error',
+                message: 'Invalid service'
+            });
+        }
+
+        const service = Services[params.serviceName];
+
+        if (service.authType === 'none') {
+            return await this.addRegularService(auth, service, response);
+        }
+
+        const res = await auth.current.user.services().where('name', service.name).fetch();
+        if (res.rows.length > 0) {
+            return response.status(400).json({
+                status: 'error',
+                message: 'This service already exists'
+            });
+        }
+
         const paramNames = ['authCode', 'accessToken', 'clientType'];
         const parameters = request.only(paramNames);
 
@@ -25,20 +79,12 @@ class UserServiceController {
             });
         }
 
-        if (!(params.serviceName in Services)) {
-            return response.status(404).json({
-                status: 'error',
-                message: 'Invalid service'
-            });
-        }
-
-        const service = Services[params.serviceName];
-
         let accessToken = null;
         if (typeof parameters.accessToken !== 'undefined') {
             accessToken = parameters.accessToken;
         } else {
             accessToken = await OAuthController.getAccessToken(
+                request.oauthHelper,
                 service,
                 parameters.authCode,
                 parameters.clientType

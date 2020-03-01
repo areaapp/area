@@ -49,21 +49,33 @@ export const actions = {
         }
 
         // Get success
-        const successMsg = app.$cookies.get('areaSuccess');
-        if (successMsg) {
-            commit('messages/setSuccess', successMsg);
+        const success = app.$cookies.get('areaSuccess');
+        if (success) {
+            commit('messages/setSuccess', success);
         }
 
-        if ($auth.loggedIn) {
+        await dispatch('initUser');
+    },
+
+    async initUser ({ dispatch }) {
+        if (this.$auth.loggedIn) {
             await dispatch('user/getServices');
             await dispatch('user/getAreas');
+            await dispatch('user/getNotifications');
 
-            dispatch('user/setAvatar', $auth.user.avatar);
+            dispatch('user/setAvatar', this.$auth.user.avatar);
         }
     },
 
+    async pollData ({ dispatch }) {
+        await dispatch('user/getNotifications');
+        await dispatch('user/getAreas');
+    },
+
     setDarkTheme ({ commit }, value) {
-        this.app.$cookies.set('darkTheme', value);
+        this.app.$cookies.set('darkTheme', value, {
+            maxAge: 315360000
+        });
         commit('setDarkTheme', value);
     }
 };

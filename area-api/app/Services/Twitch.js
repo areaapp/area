@@ -2,17 +2,17 @@
 
 const axios = require('axios');
 const querystring = require('querystring');
-const ApiInfos = require('../../oauth.config.js');
 
 module.exports = {
     authType: 'oauth',
     name: 'twitch',
     displayName: 'Twitch',
-    description: 'plus tard',
+    description: 'Twitch is designed to be a platform for content, including eSports sports tournaments, personal streams of individual players, and gaming-related talk shows.',
     baseUrl: 'https://twitch.tv/',
     iconName: 'twitch',
     foreground: '#ffffff',
     background: '#6441a4',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
     authorizeUrl: 'https://id.twitch.tv/oauth2/authorize',

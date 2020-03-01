@@ -2,3 +2,12 @@
     text-decoration: none;
     font-weight: bold;
 }
+
+.scrollable {
+    overflow-y: auto;
+}
+
+
+.action {
+    z-index: 10;
+}

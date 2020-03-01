@@ -2,24 +2,27 @@
 
 const axios = require('axios');
 const querystring = require('querystring');
-const ApiInfos = require('../../oauth.config.js');
 
 module.exports = {
     authType: 'oauth',
     name: 'office',
     displayName: 'Office 365',
-    decription: 'plus tard',
+    description: 'Microsoft Office 365 is a Software as a Service (SaaS) solution that includes Microsoft Office and other services, such as email and collaboration, from Microsoft\'s cloud server. Microsoft Office 365 provides desktop functionalities and is available by subscription.',
     baseUrl: 'www.office.com',
     iconName: 'office',
-    foreground: '#dc3e15',
-    background: '#ffffff',
+    foreground: '#ffffff',
+    background: '#D04423',
+    irregularAuthorizeUrl: false,
     irregularAccessToken: false,
     codeFlow: true,
     authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
     accessTokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
     scopeSeparator: '%20',
     scopes: [
-        'User.Read'
+        'User.Read',
+        'mail.read',
+        'mail.send',
+        'Mail.ReadWrite'
     ],
 
     async getUser(accessToken) {
@@ -28,7 +31,6 @@ module.exports = {
             headers: {'Authorization': 'Bearer ' + accessToken}
         });
 
-        console.log(response);
         const user = {
             username: response.data.displayName,
             email: response.data.mail
