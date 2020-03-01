@@ -1,5 +1,5 @@
 *~
-volumes/db
-volumes/releases
-volumes/docs
 docs
+volumes/db
+volumes/docs
+volumes/releases
