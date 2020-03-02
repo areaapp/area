@@ -11,11 +11,6 @@ RUN npm i -g apidoc
 
 COPY . .
 
-# Build documentation
-RUN npm run doc
-RUN mkdir -p /opt/area/docs/api
-RUN cp -rf doc/* /opt/area/docs/api
-
 EXPOSE 5002
 
-CMD [ "npm", "start" ]
+CMD apidoc -i start -f start/routes.js -o /opt/area/docs/api/ && npm start

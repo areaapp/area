@@ -411,7 +411,7 @@ Route.group(() => {
      * @api {put} /me/notification/:id Modify readed property of a notification
      * @apiName ModifyUserNotification
      * @apiGroup User
-     * @apiParams {Boolean} readed Status of the notification (readed or not)
+     * @apiParam {Boolean} readed Status of the notification (readed or not)
      * @apiSuccess {Integer} user_id Id of the user
      * @apiSuccess {String} message Message of the notification
      * @apiSuccess {Boolean} readed Status of the notification (readed or not)
