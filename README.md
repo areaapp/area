@@ -1,4 +1,4 @@
-<div style="display: flex; text-align: center; background-color: #151b2b; padding: 20%">
+<div style="text-align: center; background-color: #151b2b; padding: 10%">
     <img src="./area-web/static/area_logo.svg" />
 </div>
 
