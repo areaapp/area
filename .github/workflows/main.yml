@@ -1,0 +1,11 @@
+name: Build with docker
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build all
+      run: docker-compose build
